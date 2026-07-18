@@ -1,0 +1,1 @@
+/task/vericoding__LT0622_numpy_triple_strings_istitle.lean

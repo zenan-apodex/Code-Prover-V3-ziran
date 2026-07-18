@@ -1,0 +1,1 @@
+/task/imo_2019_p1.lean

@@ -1,0 +1,24 @@
+schema_version = "1.3"
+
+[task]
+name = "codeprover/vericoding__ld0438_dafnybench_programmverifikation-und-synthese_tmp_tmppurk6ime_"
+description = "Lean 4 verification task vericoding/LD0438_dafnybench_Programmverifikation-und-synthese_tmp_tmppurk6ime_PVS_Assignment_ex_10_Hoangkim_ex10_hoangkim_strange"
+keywords = ["lean4", "theorem-proving", "code-prover"]
+
+[metadata]
+source_id = "vericoding/LD0438_dafnybench_Programmverifikation-und-synthese_tmp_tmppurk6ime_PVS_Assignment_ex_10_Hoangkim_ex10_hoangkim_strange"
+source_dataset = "vericoding_lean"
+
+[agent]
+timeout_sec = 3600.0
+
+[verifier]
+timeout_sec = 1800.0
+
+[environment]
+build_timeout_sec = 1800.0
+
+[[environment.mcp_servers]]
+name = "lean-lsp"
+transport = "stdio"
+command = "/usr/local/bin/lean-mcp"

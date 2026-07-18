@@ -1,0 +1,16 @@
+# End-to-end smoke: the oracle agent runs each task's solution/solve.sh,
+# so the whole chain (image -> container -> verifier -> reward) is exercised
+# without any LLM. Expected result: reward = 1.0 on trivial-add.
+#
+#   .venv/bin/harbor run -c configs/smoke-oracle.yaml
+
+job_name: smoke-oracle
+jobs_dir: jobs
+n_attempts: 1
+n_concurrent_trials: 1
+
+agents:
+  - name: oracle
+
+datasets:
+  - path: tasks/_smoke

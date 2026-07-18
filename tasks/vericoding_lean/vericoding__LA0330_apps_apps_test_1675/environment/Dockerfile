@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LA0330_apps_apps_test_1675.lean

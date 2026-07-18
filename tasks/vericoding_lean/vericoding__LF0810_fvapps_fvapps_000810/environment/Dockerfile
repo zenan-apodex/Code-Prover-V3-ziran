@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LF0810_fvapps_fvapps_000810.lean

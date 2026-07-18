@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0172_dafnybench_Dafny_Learning_Experience_tmp_tmpuxvcet_u_week1_7_A2_Q1_trimmed_copy_-____FooCount.lean

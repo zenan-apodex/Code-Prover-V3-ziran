@@ -1,0 +1,1 @@
+/task/vericoding__LT0180_numpy_triple_indexing_slicing_nanargmax.lean

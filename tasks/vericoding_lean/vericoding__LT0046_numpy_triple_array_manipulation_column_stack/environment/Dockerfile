@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LT0046_numpy_triple_array_manipulation_column_stack.lean

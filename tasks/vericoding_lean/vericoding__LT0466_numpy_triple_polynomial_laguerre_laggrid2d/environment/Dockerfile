@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LT0466_numpy_triple_polynomial_laguerre_laggrid2d.lean

@@ -1,0 +1,1 @@
+/task/vericoding__LT0104_numpy_triple_constants_NZERO.lean

@@ -1,0 +1,24 @@
+schema_version = "1.3"
+
+[task]
+name = "codeprover/vericoding__lt0534_numpy_triple_polynomial_polyutils_format_float"
+description = "Lean 4 verification task vericoding/LT0534_numpy_triple_polynomial_polyutils_format_float"
+keywords = ["lean4", "theorem-proving", "code-prover"]
+
+[metadata]
+source_id = "vericoding/LT0534_numpy_triple_polynomial_polyutils_format_float"
+source_dataset = "vericoding_lean"
+
+[agent]
+timeout_sec = 3600.0
+
+[verifier]
+timeout_sec = 1800.0
+
+[environment]
+build_timeout_sec = 1800.0
+
+[[environment.mcp_servers]]
+name = "lean-lsp"
+transport = "stdio"
+command = "/usr/local/bin/lean-mcp"

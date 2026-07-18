@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0828_dafnybench_dafny_examples_tmp_tmp8qotd4ez_test_shuffle_getRandomDataEntry.lean

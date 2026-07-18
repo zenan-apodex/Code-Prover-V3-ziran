@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0059_dafnybench_Clover_double_quadruple_DoubleQuadruple.lean

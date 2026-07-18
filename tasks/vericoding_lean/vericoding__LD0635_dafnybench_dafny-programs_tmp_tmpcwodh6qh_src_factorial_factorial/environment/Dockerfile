@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0635_dafnybench_dafny-programs_tmp_tmpcwodh6qh_src_factorial_factorial.lean

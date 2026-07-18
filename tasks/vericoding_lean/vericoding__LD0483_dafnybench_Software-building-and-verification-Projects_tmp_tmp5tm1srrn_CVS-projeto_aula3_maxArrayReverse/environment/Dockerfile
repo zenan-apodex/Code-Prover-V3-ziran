@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0483_dafnybench_Software-building-and-verification-Projects_tmp_tmp5tm1srrn_CVS-projeto_aula3_maxArrayReverse.lean

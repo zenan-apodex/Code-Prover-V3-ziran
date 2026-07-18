@@ -1,0 +1,24 @@
+schema_version = "1.3"
+
+[task]
+name = "codeprover/vericoding__ld0301_dafnybench_formal-verification_tmp_tmpuyt21wjt_dafny_strings3"
+description = "Lean 4 verification task vericoding/LD0301_dafnybench_Formal-Verification_tmp_tmpuyt21wjt_Dafny_strings3_maxCommonSubstringLength"
+keywords = ["lean4", "theorem-proving", "code-prover"]
+
+[metadata]
+source_id = "vericoding/LD0301_dafnybench_Formal-Verification_tmp_tmpuyt21wjt_Dafny_strings3_maxCommonSubstringLength"
+source_dataset = "vericoding_lean"
+
+[agent]
+timeout_sec = 3600.0
+
+[verifier]
+timeout_sec = 1800.0
+
+[environment]
+build_timeout_sec = 1800.0
+
+[[environment.mcp_servers]]
+name = "lean-lsp"
+transport = "stdio"
+command = "/usr/local/bin/lean-mcp"

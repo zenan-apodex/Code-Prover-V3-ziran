@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0090_dafnybench_Clover_test_array_TestArrayElements.lean

@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0164_dafnybench_DafnyProjects_tmp_tmp2acw_s4s_Power_powerDC.lean

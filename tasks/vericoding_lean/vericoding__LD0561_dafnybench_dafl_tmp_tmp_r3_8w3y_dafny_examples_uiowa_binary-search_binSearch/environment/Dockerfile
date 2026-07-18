@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0561_dafnybench_dafl_tmp_tmp_r3_8w3y_dafny_examples_uiowa_binary-search_binSearch.lean

@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0464_dafnybench_Software-Verification_tmp_tmpv4ueky2d_Counting_Bits_counting_bits_counting_bits.lean

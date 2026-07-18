@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0463_dafnybench_Software-Verification_tmp_tmpv4ueky2d_Contains_Duplicate_contains_duplicate_contains_duplicate.lean

@@ -1,0 +1,1 @@
+/task/vericoding__LT0016_numpy_triple_array_creation_fromfunction.lean

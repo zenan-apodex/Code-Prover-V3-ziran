@@ -1,0 +1,1 @@
+/task/aime_1995_p7.lean

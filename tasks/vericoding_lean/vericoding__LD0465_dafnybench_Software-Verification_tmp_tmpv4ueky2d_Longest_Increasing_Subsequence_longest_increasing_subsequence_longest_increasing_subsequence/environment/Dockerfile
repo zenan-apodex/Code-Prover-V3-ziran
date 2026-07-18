@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0465_dafnybench_Software-Verification_tmp_tmpv4ueky2d_Longest_Increasing_Subsequence_longest_increasing_subsequence_longest_increasing_subsequence.lean

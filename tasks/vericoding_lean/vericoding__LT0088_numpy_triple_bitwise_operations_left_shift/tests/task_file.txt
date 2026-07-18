@@ -1,0 +1,1 @@
+/task/vericoding__LT0088_numpy_triple_bitwise_operations_left_shift.lean

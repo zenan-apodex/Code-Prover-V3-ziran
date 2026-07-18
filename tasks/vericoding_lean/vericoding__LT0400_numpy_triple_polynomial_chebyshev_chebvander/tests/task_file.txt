@@ -1,0 +1,1 @@
+/task/vericoding__LT0400_numpy_triple_polynomial_chebyshev_chebvander.lean

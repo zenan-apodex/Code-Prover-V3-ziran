@@ -1,0 +1,1 @@
+/task/vericoding__LS0052_numpy_simple_NpSubtract-spec.lean

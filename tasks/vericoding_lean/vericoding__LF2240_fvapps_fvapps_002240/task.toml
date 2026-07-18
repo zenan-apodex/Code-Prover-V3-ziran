@@ -1,0 +1,24 @@
+schema_version = "1.3"
+
+[task]
+name = "codeprover/vericoding__lf2240_fvapps_fvapps_002240"
+description = "Lean 4 verification task vericoding/LF2240_fvapps_fvapps_002240"
+keywords = ["lean4", "theorem-proving", "code-prover"]
+
+[metadata]
+source_id = "vericoding/LF2240_fvapps_fvapps_002240"
+source_dataset = "vericoding_lean"
+
+[agent]
+timeout_sec = 3600.0
+
+[verifier]
+timeout_sec = 1800.0
+
+[environment]
+build_timeout_sec = 1800.0
+
+[[environment.mcp_servers]]
+name = "lean-lsp"
+transport = "stdio"
+command = "/usr/local/bin/lean-mcp"

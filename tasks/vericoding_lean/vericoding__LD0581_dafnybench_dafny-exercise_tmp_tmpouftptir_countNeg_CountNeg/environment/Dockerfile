@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0581_dafnybench_dafny-exercise_tmp_tmpouftptir_countNeg_CountNeg.lean

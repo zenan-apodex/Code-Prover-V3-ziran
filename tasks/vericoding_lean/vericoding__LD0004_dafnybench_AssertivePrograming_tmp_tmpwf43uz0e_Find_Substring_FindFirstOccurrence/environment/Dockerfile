@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0004_dafnybench_AssertivePrograming_tmp_tmpwf43uz0e_Find_Substring_FindFirstOccurrence.lean

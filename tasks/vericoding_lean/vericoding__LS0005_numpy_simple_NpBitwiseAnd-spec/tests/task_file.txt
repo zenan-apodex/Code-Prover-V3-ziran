@@ -1,0 +1,1 @@
+/task/vericoding__LS0005_numpy_simple_NpBitwiseAnd-spec.lean

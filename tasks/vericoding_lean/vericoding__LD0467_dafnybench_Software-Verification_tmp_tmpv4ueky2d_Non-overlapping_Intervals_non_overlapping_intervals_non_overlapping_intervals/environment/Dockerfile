@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0467_dafnybench_Software-Verification_tmp_tmpv4ueky2d_Non-overlapping_Intervals_non_overlapping_intervals_non_overlapping_intervals.lean

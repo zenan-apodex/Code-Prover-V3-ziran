@@ -1,0 +1,1 @@
+/task/vericoding__LD0268_dafnybench_Dafny_tmp_tmpv_d3qi10_2_min_minArray.lean

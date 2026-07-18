@@ -1,0 +1,17 @@
+import Mathlib
+
+def replace (s : String) : String := sorry
+
+def countGroups (s : String) : Nat := sorry
+
+theorem replace_preserves_length {s : String} 
+  (h : ∀ c ∈ s.data, c = '!' ∨ c = '?') :
+  (replace s).length = s.length := sorry
+
+theorem replace_uses_valid_chars {s : String}
+  (h : ∀ c ∈ s.data, c = '!' ∨ c = '?') :
+  ∀ c ∈ (replace s).data, c = '!' ∨ c = '?' ∨ c = ' ' := sorry 
+
+theorem replace_groups_monotonic {s : String}
+  (h : ∀ c ∈ s.data, c = '!' ∨ c = '?') :
+  countGroups (replace s) ≤ countGroups s := sorry

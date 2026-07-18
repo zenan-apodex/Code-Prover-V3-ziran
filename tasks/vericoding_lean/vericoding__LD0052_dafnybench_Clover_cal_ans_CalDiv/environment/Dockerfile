@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0052_dafnybench_Clover_cal_ans_CalDiv.lean

@@ -1,0 +1,1 @@
+/task/vericoding__LT0224_numpy_triple_linalg_diagonal.lean

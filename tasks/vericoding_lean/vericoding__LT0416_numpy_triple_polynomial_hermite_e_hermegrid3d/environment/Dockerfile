@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LT0416_numpy_triple_polynomial_hermite_e_hermegrid3d.lean

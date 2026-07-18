@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0290_dafnybench_Formal-Verification-Project_tmp_tmp9gmwsmyp_strings3_haveCommonKSubstring.lean

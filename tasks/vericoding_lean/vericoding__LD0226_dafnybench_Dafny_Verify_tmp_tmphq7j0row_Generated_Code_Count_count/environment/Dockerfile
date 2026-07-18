@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0226_dafnybench_Dafny_Verify_tmp_tmphq7j0row_Generated_Code_Count_count.lean

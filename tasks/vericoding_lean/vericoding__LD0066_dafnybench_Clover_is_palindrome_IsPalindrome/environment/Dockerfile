@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0066_dafnybench_Clover_is_palindrome_IsPalindrome.lean

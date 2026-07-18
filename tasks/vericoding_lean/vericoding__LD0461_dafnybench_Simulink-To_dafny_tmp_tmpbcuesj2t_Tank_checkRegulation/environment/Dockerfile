@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0461_dafnybench_Simulink-To_dafny_tmp_tmpbcuesj2t_Tank_checkRegulation.lean

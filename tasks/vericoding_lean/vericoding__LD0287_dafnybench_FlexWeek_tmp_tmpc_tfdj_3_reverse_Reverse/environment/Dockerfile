@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0287_dafnybench_FlexWeek_tmp_tmpc_tfdj_3_reverse_Reverse.lean

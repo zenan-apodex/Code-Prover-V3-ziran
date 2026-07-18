@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LT0159_numpy_triple_fft_irfft2.lean

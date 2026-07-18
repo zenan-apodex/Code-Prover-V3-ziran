@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0689_dafnybench_dafny-synthesis_task_id_261_ElementWiseDivision.lean

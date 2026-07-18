@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0456_dafnybench_SENG2011_tmp_tmpgk5jq85q_flex_ex1_sum.lean

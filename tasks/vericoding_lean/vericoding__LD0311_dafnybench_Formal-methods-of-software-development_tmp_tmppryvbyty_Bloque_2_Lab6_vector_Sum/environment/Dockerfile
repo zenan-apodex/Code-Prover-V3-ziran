@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0311_dafnybench_Formal-methods-of-software-development_tmp_tmppryvbyty_Bloque_2_Lab6_vector_Sum.lean

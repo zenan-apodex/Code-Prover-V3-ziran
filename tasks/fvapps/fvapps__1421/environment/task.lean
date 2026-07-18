@@ -1,0 +1,20 @@
+import Mathlib
+
+def MOD := (10^9) + 7
+
+def getsum (n : Nat) : Nat :=
+  sorry
+
+
+
+theorem getsum_base_cases :
+  (getsum 1 = 9) ∧ (getsum 2 = 99) :=
+  sorry
+
+theorem getsum_positive (n : Nat) (h : n > 0) :
+  getsum n > 0 :=
+  sorry
+
+theorem getsum_invalid_input (n : Nat) :
+  n = 0 → getsum n = 0 :=
+  sorry

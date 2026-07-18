@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0043_dafnybench_Clover_all_digits_allDigits.lean

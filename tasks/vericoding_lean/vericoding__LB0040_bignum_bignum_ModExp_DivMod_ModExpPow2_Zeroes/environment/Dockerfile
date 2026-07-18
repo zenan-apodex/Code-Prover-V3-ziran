@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LB0040_bignum_bignum_ModExp_DivMod_ModExpPow2_Zeroes.lean

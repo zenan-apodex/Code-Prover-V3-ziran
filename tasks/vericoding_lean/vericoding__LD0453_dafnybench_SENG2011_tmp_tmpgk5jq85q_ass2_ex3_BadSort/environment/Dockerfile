@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0453_dafnybench_SENG2011_tmp_tmpgk5jq85q_ass2_ex3_BadSort.lean

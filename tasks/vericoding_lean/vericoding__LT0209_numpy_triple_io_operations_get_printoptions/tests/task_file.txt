@@ -1,0 +1,1 @@
+/task/vericoding__LT0209_numpy_triple_io_operations_get_printoptions.lean

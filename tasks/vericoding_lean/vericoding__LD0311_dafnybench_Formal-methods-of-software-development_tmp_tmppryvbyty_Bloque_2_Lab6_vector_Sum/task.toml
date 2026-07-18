@@ -1,0 +1,24 @@
+schema_version = "1.3"
+
+[task]
+name = "codeprover/vericoding__ld0311_dafnybench_formal-methods-of-software-development_tmp_tmppryv"
+description = "Lean 4 verification task vericoding/LD0311_dafnybench_Formal-methods-of-software-development_tmp_tmppryvbyty_Bloque_2_Lab6_vector_Sum"
+keywords = ["lean4", "theorem-proving", "code-prover"]
+
+[metadata]
+source_id = "vericoding/LD0311_dafnybench_Formal-methods-of-software-development_tmp_tmppryvbyty_Bloque_2_Lab6_vector_Sum"
+source_dataset = "vericoding_lean"
+
+[agent]
+timeout_sec = 3600.0
+
+[verifier]
+timeout_sec = 1800.0
+
+[environment]
+build_timeout_sec = 1800.0
+
+[[environment.mcp_servers]]
+name = "lean-lsp"
+transport = "stdio"
+command = "/usr/local/bin/lean-mcp"

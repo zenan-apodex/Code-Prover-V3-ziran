@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0545_dafnybench_cs245-verification_tmp_tmp0h_nxhqp_SortingIssues_FirstAttempt_sort.lean

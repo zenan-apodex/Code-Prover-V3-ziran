@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LT0102_numpy_triple_constants_NPY_SQRT1_2.lean

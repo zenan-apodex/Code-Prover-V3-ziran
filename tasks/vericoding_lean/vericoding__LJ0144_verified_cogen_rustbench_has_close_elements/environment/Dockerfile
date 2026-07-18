@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LJ0144_verified_cogen_rustbench_has_close_elements.lean

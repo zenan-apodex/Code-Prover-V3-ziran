@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0377_dafnybench_Program-Verification-Dataset_tmp_tmpgbdrlnu__Dafny_algorithms_and_leetcode_leetcode_FindPivotIndex_FindPivotIndex.lean

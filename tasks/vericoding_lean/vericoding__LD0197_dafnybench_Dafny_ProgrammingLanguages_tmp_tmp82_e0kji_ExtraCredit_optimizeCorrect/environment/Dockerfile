@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0197_dafnybench_Dafny_ProgrammingLanguages_tmp_tmp82_e0kji_ExtraCredit_optimizeCorrect.lean

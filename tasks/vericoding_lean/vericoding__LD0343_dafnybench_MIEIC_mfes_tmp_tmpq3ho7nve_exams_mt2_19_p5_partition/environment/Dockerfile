@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0343_dafnybench_MIEIC_mfes_tmp_tmpq3ho7nve_exams_mt2_19_p5_partition.lean

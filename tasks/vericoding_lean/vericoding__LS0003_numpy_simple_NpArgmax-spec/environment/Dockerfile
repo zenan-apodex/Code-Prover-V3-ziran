@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LS0003_numpy_simple_NpArgmax-spec.lean

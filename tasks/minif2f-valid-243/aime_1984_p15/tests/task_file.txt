@@ -1,0 +1,1 @@
+/task/aime_1984_p15.lean

@@ -1,0 +1,24 @@
+schema_version = "1.3"
+
+[task]
+name = "codeprover/oci__10__1038aee70e88157eeb21586a2570dfe1"
+description = "Lean 4 verification task oci/10/1038aee70e88157eeb21586a2570dfe1"
+keywords = ["lean4", "theorem-proving", "code-prover"]
+
+[metadata]
+source_id = "oci/10/1038aee70e88157eeb21586a2570dfe1"
+source_dataset = "nontrivial_jsonl100"
+
+[agent]
+timeout_sec = 3600.0
+
+[verifier]
+timeout_sec = 1800.0
+
+[environment]
+build_timeout_sec = 1800.0
+
+[[environment.mcp_servers]]
+name = "lean-lsp"
+transport = "stdio"
+command = "/usr/local/bin/lean-mcp"

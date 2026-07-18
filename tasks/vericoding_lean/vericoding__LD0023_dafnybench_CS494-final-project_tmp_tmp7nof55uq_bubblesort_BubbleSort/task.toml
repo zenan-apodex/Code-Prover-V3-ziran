@@ -1,0 +1,24 @@
+schema_version = "1.3"
+
+[task]
+name = "codeprover/vericoding__ld0023_dafnybench_cs494-final-project_tmp_tmp7nof55uq_bubblesort_bub"
+description = "Lean 4 verification task vericoding/LD0023_dafnybench_CS494-final-project_tmp_tmp7nof55uq_bubblesort_BubbleSort"
+keywords = ["lean4", "theorem-proving", "code-prover"]
+
+[metadata]
+source_id = "vericoding/LD0023_dafnybench_CS494-final-project_tmp_tmp7nof55uq_bubblesort_BubbleSort"
+source_dataset = "vericoding_lean"
+
+[agent]
+timeout_sec = 3600.0
+
+[verifier]
+timeout_sec = 1800.0
+
+[environment]
+build_timeout_sec = 1800.0
+
+[[environment.mcp_servers]]
+name = "lean-lsp"
+transport = "stdio"
+command = "/usr/local/bin/lean-mcp"

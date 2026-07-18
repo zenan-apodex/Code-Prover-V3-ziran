@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LT0143_numpy_triple_datetime_support_datetime_as_string.lean

@@ -1,0 +1,13 @@
+import Mathlib
+
+open scoped Real
+open scoped Nat
+open scoped Topology
+open scoped Polynomial
+
+/-- For what real value of $k$ is $\frac{13-\sqrt{131}}{4}$ a root of $2x^2-13x+k$? -/
+theorem mathd_algebra_116 (k x : ℝ) (h₀ : x = (13 - Real.sqrt 131) / 4)
+    (h₁ : 2 * x ^ 2 - 13 * x + k = 0) : k = (19 / 4) := by
+  -- !benchmark @start proof
+  sorry
+  -- !benchmark @end proof

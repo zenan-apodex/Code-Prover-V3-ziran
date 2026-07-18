@@ -1,0 +1,1 @@
+/task/vericoding__LD0676_dafnybench_dafny-synthesis_task_id_161_RemoveElements.lean

@@ -1,0 +1,1 @@
+/task/vericoding__LS0025_numpy_simple_NpIntersect-spec.lean

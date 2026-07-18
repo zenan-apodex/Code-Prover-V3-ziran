@@ -1,0 +1,1 @@
+/task/amc12a_2008_p25.lean

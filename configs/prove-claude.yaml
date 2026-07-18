@@ -1,0 +1,28 @@
+# Main proving run: claude-code agent over a converted benchmark dataset.
+#
+# Credentials come from the HOST environment (never commit keys — V2's
+# configs/prove.yaml had a live key committed; do not repeat that):
+#   export ANTHROPIC_API_KEY=...            # native Anthropic API
+# or, for an OpenAI/Anthropic-compatible gateway (MiroMind, local sglang):
+#   export ANTHROPIC_BASE_URL=http://...    # claude-code mirrors the model
+#   export ANTHROPIC_AUTH_TOKEN=...         #   name into ANTHROPIC_MODEL
+#
+# Datasets live at tasks/<name>/ (Harbor task dirs, the only format).
+#   .venv/bin/harbor run -c configs/prove-claude.yaml
+
+job_name: prove-verina189-claude
+jobs_dir: jobs
+n_attempts: 1            # k in pass@k
+n_concurrent_trials: 8
+
+retry:
+  max_retries: 1         # retries transient infra errors; timeouts excluded by default
+
+agents:
+  - name: claude-code
+    model_name: anthropic/claude-opus-4-8
+    # kwargs:
+    #   max_turns: 500
+
+datasets:
+  - path: tasks/verina_canonical_189

@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LT0315_numpy_triple_mathematical_functions_floor_divide.lean

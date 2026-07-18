@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0722_dafnybench_dafny-synthesis_task_id_435_LastDigit.lean

@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0089_dafnybench_Clover_swap_sim_SwapSimultaneous.lean

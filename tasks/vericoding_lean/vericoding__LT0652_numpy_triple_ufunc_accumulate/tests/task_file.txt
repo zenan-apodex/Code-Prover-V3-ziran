@@ -1,0 +1,1 @@
+/task/vericoding__LT0652_numpy_triple_ufunc_accumulate.lean

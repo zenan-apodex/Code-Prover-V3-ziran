@@ -1,0 +1,26 @@
+import Mathlib
+
+def remove (s : String) : String :=
+  sorry
+
+/-- If a word in the input string doesn't contain exclamation marks,
+    it remains unchanged in the output -/
+theorem words_preserved (s : String) :
+  ∀ w, w ∈ (s.split (· = ' ')) → 
+  (¬ ('!' ∈ w.data)) → 
+  w ∈ (remove s).split (· = ' ') :=
+sorry
+
+/-- No word in the output string ends with an exclamation mark -/
+theorem no_trailing_exclamations (s : String) :
+  ∀ w, w ∈ (remove s).split (· = ' ') →
+  ¬ w.endsWith "!" :=
+sorry
+
+/-- If a word starts with exclamation marks in the input,
+    it starts with the same exclamation marks in the output -/
+theorem leading_exclamations_preserved (s : String) :
+  ∀ w w', w ∈ s.split (· = ' ') →
+  w' ∈ (remove s).split (· = ' ') →
+  w.startsWith "!" → w' = w ∨ w'.startsWith "!" :=
+sorry

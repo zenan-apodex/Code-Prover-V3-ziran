@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0586_dafnybench_dafny-exercise_tmp_tmpouftptir_prac3_ex2_GetEven.lean

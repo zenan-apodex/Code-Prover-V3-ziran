@@ -1,0 +1,1 @@
+/task/amc12_2001_p21.lean

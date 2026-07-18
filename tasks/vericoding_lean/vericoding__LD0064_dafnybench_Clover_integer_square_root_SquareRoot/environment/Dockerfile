@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0064_dafnybench_Clover_integer_square_root_SquareRoot.lean

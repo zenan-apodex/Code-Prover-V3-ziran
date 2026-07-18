@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0075_dafnybench_Clover_multi_return_MultipleReturns.lean

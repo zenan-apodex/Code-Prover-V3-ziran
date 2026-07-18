@@ -1,0 +1,1 @@
+/task/vericoding__LJ0138_verified_cogen_rustbench_array_copy.lean

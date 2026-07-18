@@ -1,0 +1,11 @@
+#!/bin/bash
+# Launch wrapper for the lean-rs-mcp server inside the code-prover-lean image.
+#
+# Harbor's task.toml [environment.mcp_servers] schema carries command/args but
+# no env block, so the Lean-specific environment is baked here instead. The
+# claude-code agent registers this command in $CLAUDE_CONFIG_DIR/.claude.json.
+export LEAN_PROJECT_PATH="${LEAN_PROJECT_PATH:-/task}"
+export LEAN_REPL_PATH="${LEAN_REPL_PATH:-/task/.lake/packages/repl/.lake/build/bin/repl}"
+export LEAN_REPL_TIMEOUT="${LEAN_REPL_TIMEOUT:-300}"
+export PATH="/root/.elan/bin:$PATH"
+exec lean-lsp-mcp --repl --repl-timeout "$LEAN_REPL_TIMEOUT" "$@"

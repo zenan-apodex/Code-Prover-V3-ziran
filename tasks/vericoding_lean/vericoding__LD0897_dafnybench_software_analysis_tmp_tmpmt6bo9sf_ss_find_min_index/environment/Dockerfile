@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0897_dafnybench_software_analysis_tmp_tmpmt6bo9sf_ss_find_min_index.lean

@@ -1,0 +1,1 @@
+/task/algoveri__string_search_naive.lean

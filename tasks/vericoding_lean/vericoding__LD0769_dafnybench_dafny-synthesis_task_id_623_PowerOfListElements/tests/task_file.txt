@@ -1,0 +1,1 @@
+/task/vericoding__LD0769_dafnybench_dafny-synthesis_task_id_623_PowerOfListElements.lean

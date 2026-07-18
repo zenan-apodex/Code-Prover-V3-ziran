@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0067_dafnybench_Clover_linear_search1_LinearSearch.lean

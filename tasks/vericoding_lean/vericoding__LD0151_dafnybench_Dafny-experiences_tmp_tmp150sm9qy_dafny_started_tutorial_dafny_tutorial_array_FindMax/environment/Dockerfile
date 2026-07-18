@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0151_dafnybench_Dafny-experiences_tmp_tmp150sm9qy_dafny_started_tutorial_dafny_tutorial_array_FindMax.lean

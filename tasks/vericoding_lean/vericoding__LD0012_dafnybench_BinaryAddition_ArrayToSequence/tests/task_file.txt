@@ -1,0 +1,1 @@
+/task/vericoding__LD0012_dafnybench_BinaryAddition_ArrayToSequence.lean

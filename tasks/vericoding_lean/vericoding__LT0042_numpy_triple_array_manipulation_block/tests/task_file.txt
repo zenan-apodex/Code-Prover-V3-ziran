@@ -1,0 +1,1 @@
+/task/vericoding__LT0042_numpy_triple_array_manipulation_block.lean

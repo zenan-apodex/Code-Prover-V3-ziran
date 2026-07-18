@@ -1,0 +1,1 @@
+/task/vericoding__LJ0055_verified_cogen_proofsynthesis_tail_triangle.lean

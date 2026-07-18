@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0062_dafnybench_Clover_has_close_elements_has_close_elements.lean

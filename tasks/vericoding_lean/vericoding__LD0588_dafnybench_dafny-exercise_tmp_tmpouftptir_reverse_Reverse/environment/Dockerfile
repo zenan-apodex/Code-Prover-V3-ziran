@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0588_dafnybench_dafny-exercise_tmp_tmpouftptir_reverse_Reverse.lean

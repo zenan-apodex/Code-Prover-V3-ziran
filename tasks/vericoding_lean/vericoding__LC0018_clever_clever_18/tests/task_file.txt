@@ -1,0 +1,1 @@
+/task/vericoding__LC0018_clever_clever_18.lean

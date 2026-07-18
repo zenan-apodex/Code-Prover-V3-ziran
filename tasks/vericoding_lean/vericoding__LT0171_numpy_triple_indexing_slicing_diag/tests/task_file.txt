@@ -1,0 +1,1 @@
+/task/vericoding__LT0171_numpy_triple_indexing_slicing_diag.lean

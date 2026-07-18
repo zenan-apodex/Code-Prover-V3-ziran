@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0274_dafnybench_Final-Project-Dafny_tmp_tmpmcywuqox_Attempts_Insertion_Sort_Normal_insertionSort.lean

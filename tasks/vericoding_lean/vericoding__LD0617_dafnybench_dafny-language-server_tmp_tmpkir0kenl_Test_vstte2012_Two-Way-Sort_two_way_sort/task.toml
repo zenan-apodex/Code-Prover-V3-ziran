@@ -1,0 +1,24 @@
+schema_version = "1.3"
+
+[task]
+name = "codeprover/vericoding__ld0617_dafnybench_dafny-language-server_tmp_tmpkir0kenl_test_vstte20"
+description = "Lean 4 verification task vericoding/LD0617_dafnybench_dafny-language-server_tmp_tmpkir0kenl_Test_vstte2012_Two-Way-Sort_two_way_sort"
+keywords = ["lean4", "theorem-proving", "code-prover"]
+
+[metadata]
+source_id = "vericoding/LD0617_dafnybench_dafny-language-server_tmp_tmpkir0kenl_Test_vstte2012_Two-Way-Sort_two_way_sort"
+source_dataset = "vericoding_lean"
+
+[agent]
+timeout_sec = 3600.0
+
+[verifier]
+timeout_sec = 1800.0
+
+[environment]
+build_timeout_sec = 1800.0
+
+[[environment.mcp_servers]]
+name = "lean-lsp"
+transport = "stdio"
+command = "/usr/local/bin/lean-mcp"

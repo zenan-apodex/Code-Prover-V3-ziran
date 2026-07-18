@@ -1,0 +1,1 @@
+/task/aimeII_2020_p6.lean

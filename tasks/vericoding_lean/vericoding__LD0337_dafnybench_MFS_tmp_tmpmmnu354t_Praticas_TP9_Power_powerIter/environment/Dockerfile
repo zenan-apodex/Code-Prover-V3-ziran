@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0337_dafnybench_MFS_tmp_tmpmmnu354t_Praticas_TP9_Power_powerIter.lean

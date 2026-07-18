@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0469_dafnybench_Software-Verification_tmp_tmpv4ueky2d_Remove_Element_remove_element_remove_element.lean

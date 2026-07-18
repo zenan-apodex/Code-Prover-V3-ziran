@@ -1,0 +1,24 @@
+schema_version = "1.3"
+
+[task]
+name = "codeprover/vericoding__ld0267_dafnybench_dafny_tmp_tmpmvs2dmry_pancakesort_flip_flip"
+description = "Lean 4 verification task vericoding/LD0267_dafnybench_Dafny_tmp_tmpmvs2dmry_pancakesort_flip_flip"
+keywords = ["lean4", "theorem-proving", "code-prover"]
+
+[metadata]
+source_id = "vericoding/LD0267_dafnybench_Dafny_tmp_tmpmvs2dmry_pancakesort_flip_flip"
+source_dataset = "vericoding_lean"
+
+[agent]
+timeout_sec = 3600.0
+
+[verifier]
+timeout_sec = 1800.0
+
+[environment]
+build_timeout_sec = 1800.0
+
+[[environment.mcp_servers]]
+name = "lean-lsp"
+transport = "stdio"
+command = "/usr/local/bin/lean-mcp"

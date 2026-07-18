@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0724_dafnybench_dafny-synthesis_task_id_441_CubeSurfaceArea.lean

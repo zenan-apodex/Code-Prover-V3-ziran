@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LT0129_numpy_triple_data_type_routines_may_share_memory.lean

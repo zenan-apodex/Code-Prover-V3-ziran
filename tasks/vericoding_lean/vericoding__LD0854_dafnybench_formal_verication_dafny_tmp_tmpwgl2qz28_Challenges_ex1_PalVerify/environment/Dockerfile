@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0854_dafnybench_formal_verication_dafny_tmp_tmpwgl2qz28_Challenges_ex1_PalVerify.lean

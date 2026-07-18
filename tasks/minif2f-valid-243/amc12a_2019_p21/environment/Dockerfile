@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/amc12a_2019_p21.lean

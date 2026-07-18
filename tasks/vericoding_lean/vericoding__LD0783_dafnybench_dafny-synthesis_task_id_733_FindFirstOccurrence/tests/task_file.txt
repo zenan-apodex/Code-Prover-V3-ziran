@@ -1,0 +1,1 @@
+/task/vericoding__LD0783_dafnybench_dafny-synthesis_task_id_733_FindFirstOccurrence.lean

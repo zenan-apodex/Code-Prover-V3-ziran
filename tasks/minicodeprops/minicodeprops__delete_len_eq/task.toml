@@ -1,0 +1,24 @@
+schema_version = "1.3"
+
+[task]
+name = "codeprover/minicodeprops__delete_len_eq"
+description = "Lean 4 verification task minicodeprops/delete_len_eq"
+keywords = ["lean4", "theorem-proving", "code-prover"]
+
+[metadata]
+source_id = "minicodeprops/delete_len_eq"
+source_dataset = "minicodeprops"
+
+[agent]
+timeout_sec = 3600.0
+
+[verifier]
+timeout_sec = 1800.0
+
+[environment]
+build_timeout_sec = 1800.0
+
+[[environment.mcp_servers]]
+name = "lean-lsp"
+transport = "stdio"
+command = "/usr/local/bin/lean-mcp"

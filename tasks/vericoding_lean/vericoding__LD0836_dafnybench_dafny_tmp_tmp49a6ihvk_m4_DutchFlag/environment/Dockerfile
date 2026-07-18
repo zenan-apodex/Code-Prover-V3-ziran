@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0836_dafnybench_dafny_tmp_tmp49a6ihvk_m4_DutchFlag.lean

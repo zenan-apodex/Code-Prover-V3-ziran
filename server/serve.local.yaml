@@ -1,0 +1,5 @@
+# V3 local serving config (read by serve_sglang.sh via CONFIG=)
+model_path:    /mnt/VerifiableAILab/ziran.yang/models/codeprover-20260711-agent-proof-256k-qwen3.6-35b-a3b-ep2
+model:         code-prover-sft
+llm_base_url:  http://127.0.0.1:8000/v1
+llm_api_key:   "local"

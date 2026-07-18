@@ -1,0 +1,36 @@
+import Mathlib
+
+-- <vc-preamble>
+-- </vc-preamble>
+
+-- <vc-helpers>
+-- </vc-helpers>
+
+-- <vc-definitions>
+def implementation (n: Nat) : Nat :=
+  sorry
+-- </vc-definitions>
+
+-- <vc-theorems>
+def problem_spec
+-- function signature
+(implementation: Nat → Nat)
+-- inputs
+(n: Nat) :=
+-- spec
+let spec (result: Nat) :=
+  n > 0 →
+    (∃ i, Nat.fib i = result ∧ Nat.Prime result ∧
+      (∃! S : Finset Nat, S.card = n - 1 ∧
+      (∀ y ∈ S, (∃ k, y = Nat.fib k) ∧ y < result ∧ Nat.Prime y))
+    )
+-- program termination
+∃ result, implementation n = result ∧
+spec result
+
+theorem correctness
+(n: Nat)
+: problem_spec implementation n
+:= by
+  sorry
+-- </vc-theorems>

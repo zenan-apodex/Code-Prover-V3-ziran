@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0256_dafnybench_Dafny_tmp_tmpj88zq5zt_2-Kontrakte_max_max.lean

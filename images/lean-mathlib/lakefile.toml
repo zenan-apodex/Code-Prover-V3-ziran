@@ -1,0 +1,19 @@
+name = "code-prover-env"
+version = "0.1.0"
+
+# The task environment is a plain Mathlib project: tasks are single .lean
+# files compiled with `lake env lean <file>`. No custom Lean library (V2's
+# Tacs/quickcheck were dropped in V3 — nothing referenced them).
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+rev = "v4.28.0"
+
+# Required for lean-lsp-mcp's --repl mode: Mathlib is loaded once into a
+# persistent REPL process, so agent-side lean_run_code queries are
+# millisecond-level instead of ~60s cold loads per call.
+[[require]]
+name = "repl"
+git = "https://github.com/leanprover-community/repl"
+rev = "v4.28.0"

@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0271_dafnybench_Final-Project-Dafny_tmp_tmpmcywuqox_Attempts_Exercise3_Increment_Array_incrementArray.lean

@@ -1,0 +1,24 @@
+schema_version = "1.3"
+
+[task]
+name = "codeprover/vericoding__ld0100_dafnybench_correctness_tmp_tmpwqvg5q_4_sorting_tangent_binary"
+description = "Lean 4 verification task vericoding/LD0100_dafnybench_Correctness_tmp_tmpwqvg5q_4_Sorting_Tangent_BinarySearch"
+keywords = ["lean4", "theorem-proving", "code-prover"]
+
+[metadata]
+source_id = "vericoding/LD0100_dafnybench_Correctness_tmp_tmpwqvg5q_4_Sorting_Tangent_BinarySearch"
+source_dataset = "vericoding_lean"
+
+[agent]
+timeout_sec = 3600.0
+
+[verifier]
+timeout_sec = 1800.0
+
+[environment]
+build_timeout_sec = 1800.0
+
+[[environment.mcp_servers]]
+name = "lean-lsp"
+transport = "stdio"
+command = "/usr/local/bin/lean-mcp"

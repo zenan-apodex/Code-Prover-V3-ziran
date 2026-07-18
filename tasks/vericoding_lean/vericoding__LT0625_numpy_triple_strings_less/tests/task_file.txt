@@ -1,0 +1,1 @@
+/task/vericoding__LT0625_numpy_triple_strings_less.lean

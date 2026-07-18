@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0835_dafnybench_dafny_projects_tmp_tmpjutqwjv4_tutorial_tutorial_FindZero.lean

@@ -1,0 +1,1 @@
+/task/vericoding__LT0035_numpy_triple_array_creation_zeros.lean

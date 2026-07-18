@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0547_dafnybench_cs245-verification_tmp_tmp0h_nxhqp_quicksort-partition_QuicksortPartition.lean

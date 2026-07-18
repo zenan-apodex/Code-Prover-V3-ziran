@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LV0040_verina_verina_advanced_41_task.lean

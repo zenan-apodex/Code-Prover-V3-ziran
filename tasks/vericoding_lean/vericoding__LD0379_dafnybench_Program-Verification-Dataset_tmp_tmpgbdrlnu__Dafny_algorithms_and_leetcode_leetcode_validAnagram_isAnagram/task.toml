@@ -1,0 +1,24 @@
+schema_version = "1.3"
+
+[task]
+name = "codeprover/vericoding__ld0379_dafnybench_program-verification-dataset_tmp_tmpgbdrlnu__dafny"
+description = "Lean 4 verification task vericoding/LD0379_dafnybench_Program-Verification-Dataset_tmp_tmpgbdrlnu__Dafny_algorithms_and_leetcode_leetcode_validAnagram_isAnagram"
+keywords = ["lean4", "theorem-proving", "code-prover"]
+
+[metadata]
+source_id = "vericoding/LD0379_dafnybench_Program-Verification-Dataset_tmp_tmpgbdrlnu__Dafny_algorithms_and_leetcode_leetcode_validAnagram_isAnagram"
+source_dataset = "vericoding_lean"
+
+[agent]
+timeout_sec = 3600.0
+
+[verifier]
+timeout_sec = 1800.0
+
+[environment]
+build_timeout_sec = 1800.0
+
+[[environment.mcp_servers]]
+name = "lean-lsp"
+transport = "stdio"
+command = "/usr/local/bin/lean-mcp"

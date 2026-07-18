@@ -1,0 +1,9 @@
+.venv/
+jobs/
+images/lean-mathlib/lean-packages/
+__pycache__/
+*.pyc
+server/.sglang-venv/
+*.log
+tasks/_rerun_softlimit/
+nohup.out

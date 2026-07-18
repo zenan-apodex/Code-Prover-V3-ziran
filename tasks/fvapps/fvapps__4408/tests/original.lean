@@ -1,0 +1,10 @@
+import Mathlib
+
+def yoga (classroom : List (List Nat)) (poses : List Nat) : Nat := 
+  sorry
+
+theorem yoga_nonnegative (classroom : List (List Nat)) (poses : List Nat) :
+  yoga classroom poses ≥ 0 := sorry
+
+theorem yoga_empty_inputs (classroom : List (List Nat)) (poses : List Nat) :
+  classroom = [] ∨ poses = [] → yoga classroom poses = 0 := sorry

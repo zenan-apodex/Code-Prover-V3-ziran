@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0908_dafnybench_t1_MF_tmp_tmpi_sqie4j_exemplos_colecoes_sequences_ex3_Delete.lean

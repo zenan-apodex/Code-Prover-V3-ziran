@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0831_dafnybench_dafny_misc_tmp_tmpg4vzlnm1_rosetta_code_fibonacci_sequence_FibonacciIterative.lean

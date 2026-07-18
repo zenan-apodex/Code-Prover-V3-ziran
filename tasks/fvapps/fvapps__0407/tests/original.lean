@@ -1,0 +1,20 @@
+import Mathlib
+
+structure ParenString where
+  value : String
+
+def score_parentheses (s : ParenString) : Nat :=
+  sorry
+
+theorem nested_pairs_score {n : Nat} (h : 0 < n) (h2 : n ≤ 10) :
+  let s : ParenString := ⟨"(())"⟩
+  score_parentheses s = 2^(n-1) :=
+  sorry
+
+theorem sequential_nested_score {depths : List Nat}
+  (h1 : ∀ x ∈ depths, 0 < x ∧ x ≤ 3)
+  (h2 : depths.length ≥ 1)
+  (h3 : depths.length ≤ 5) :
+  let s : ParenString := ⟨"(())(())"⟩
+  score_parentheses s = depths.foldl (fun acc d => acc + 2^(d-1)) 0 :=
+  sorry

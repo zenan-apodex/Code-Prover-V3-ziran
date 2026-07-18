@@ -1,0 +1,1 @@
+/task/minicodeprops__splitAt_second_len_lt.lean

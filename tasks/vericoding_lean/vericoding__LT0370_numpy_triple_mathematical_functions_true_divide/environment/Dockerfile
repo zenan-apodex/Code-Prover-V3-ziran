@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LT0370_numpy_triple_mathematical_functions_true_divide.lean

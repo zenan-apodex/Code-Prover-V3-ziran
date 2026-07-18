@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0145_dafnybench_Dafny-Grind75_tmp_tmpsxfz3i4r_problems_twoSum_twoSum.lean

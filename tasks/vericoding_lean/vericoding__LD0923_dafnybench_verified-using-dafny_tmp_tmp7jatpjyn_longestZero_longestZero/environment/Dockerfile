@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0923_dafnybench_verified-using-dafny_tmp_tmp7jatpjyn_longestZero_longestZero.lean

@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0055_dafnybench_Clover_convert_map_key_convert_map_key.lean

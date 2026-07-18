@@ -1,0 +1,12 @@
+import Mathlib
+
+def problem {α : Type} (x : α) : α ⊕ String := sorry
+
+theorem formula_integers (x : Int) : 
+  problem x = Sum.inl (x * 50 + 6) := sorry
+
+theorem formula_floats (x : Float) : 
+  problem x = Sum.inl (x * 50 + 6) := sorry
+
+theorem non_numeric_error (x : String ⊕ ByteArray ⊕ List Int) : 
+  problem x = Sum.inr "Error" := sorry

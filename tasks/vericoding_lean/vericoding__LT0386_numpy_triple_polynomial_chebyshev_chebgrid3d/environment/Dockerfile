@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LT0386_numpy_triple_polynomial_chebyshev_chebgrid3d.lean

@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LT0518_numpy_triple_polynomial_polynomial_polygrid3d.lean

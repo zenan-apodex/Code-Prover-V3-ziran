@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0069_dafnybench_Clover_longest_prefix_LongestCommonPrefix.lean

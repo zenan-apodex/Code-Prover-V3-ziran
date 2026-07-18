@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0594_dafnybench_dafny-language-server_tmp_tmpkir0kenl_Test_VSComp2010_Problem1-SumMax_M.lean

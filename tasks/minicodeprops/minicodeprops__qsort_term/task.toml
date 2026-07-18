@@ -1,0 +1,24 @@
+schema_version = "1.3"
+
+[task]
+name = "codeprover/minicodeprops__qsort_term"
+description = "Lean 4 verification task minicodeprops/qsort_term"
+keywords = ["lean4", "theorem-proving", "code-prover"]
+
+[metadata]
+source_id = "minicodeprops/qsort_term"
+source_dataset = "minicodeprops"
+
+[agent]
+timeout_sec = 3600.0
+
+[verifier]
+timeout_sec = 1800.0
+
+[environment]
+build_timeout_sec = 1800.0
+
+[[environment.mcp_servers]]
+name = "lean-lsp"
+transport = "stdio"
+command = "/usr/local/bin/lean-mcp"

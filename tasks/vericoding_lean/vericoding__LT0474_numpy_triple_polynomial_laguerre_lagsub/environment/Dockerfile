@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LT0474_numpy_triple_polynomial_laguerre_lagsub.lean

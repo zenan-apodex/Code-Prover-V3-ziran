@@ -1,0 +1,1 @@
+/task/imo_1979_p1.lean

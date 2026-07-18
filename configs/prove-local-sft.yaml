@@ -1,0 +1,24 @@
+# Eval the local SFT model (Qwen3.5/3.6 code-prover, OpenAI-compatible sglang
+# endpoint from server/serve_sglang.sh) via the TRAIN-FAITHFUL qwen-native-v1
+# agent (agents/qwen_native_agent.py): native <tool_call>/<tool_response>/
+# <think> wire format + union-v1 tool surface (Claude Code core tools +
+# lean-lsp MCP tools through a warm in-container bridge).
+#
+# Run from the repo root (so `agents` is importable):
+#   .venv/bin/harbor run -c configs/prove-local-sft.yaml
+
+job_name: prove-verina189-qwen36-ep2
+jobs_dir: jobs
+n_attempts: 1
+n_concurrent_trials: 4   # 单卡 L20X，共享推理吞吐
+
+agents:
+  - import_path: agents.qwen_native_agent:QwenNativeAgent
+    model_name: code-prover-sft
+    kwargs:
+      api_base: http://127.0.0.1:8000/v1
+      max_api_calls: 128
+      max_tokens: 24576
+
+datasets:
+  - path: tasks/verina_canonical_189

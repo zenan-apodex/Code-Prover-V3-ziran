@@ -1,0 +1,22 @@
+import Mathlib
+
+def solve (nums : List Nat) : Nat := sorry
+
+theorem solve_returns_positive (nums : List Nat)
+  (h : ∀ x ∈ nums, x > 0 ∧ x ≤ 1000)
+  : solve nums > 0 := sorry
+
+def sums (l : List Nat) : List Nat := sorry
+
+def findMin (s : List Nat) : Nat := sorry
+
+theorem solve_is_min_missing_sum {nums : List Nat} 
+  (h : ∀ x ∈ nums, x > 0 ∧ x ≤ 10)
+  (h2 : nums.length ≤ 5)
+  : solve nums = findMin (sums nums) := sorry
+
+def sortList (l : List Nat) : List Nat := sorry
+
+theorem solve_order_invariant (nums : List Nat)
+  (h : ∀ x ∈ nums, x > 0 ∧ x ≤ 100)
+  : solve nums = solve (sortList nums) := sorry

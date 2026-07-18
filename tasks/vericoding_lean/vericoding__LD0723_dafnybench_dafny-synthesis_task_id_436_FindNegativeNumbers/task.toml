@@ -1,0 +1,24 @@
+schema_version = "1.3"
+
+[task]
+name = "codeprover/vericoding__ld0723_dafnybench_dafny-synthesis_task_id_436_findnegativenumbers"
+description = "Lean 4 verification task vericoding/LD0723_dafnybench_dafny-synthesis_task_id_436_FindNegativeNumbers"
+keywords = ["lean4", "theorem-proving", "code-prover"]
+
+[metadata]
+source_id = "vericoding/LD0723_dafnybench_dafny-synthesis_task_id_436_FindNegativeNumbers"
+source_dataset = "vericoding_lean"
+
+[agent]
+timeout_sec = 3600.0
+
+[verifier]
+timeout_sec = 1800.0
+
+[environment]
+build_timeout_sec = 1800.0
+
+[[environment.mcp_servers]]
+name = "lean-lsp"
+transport = "stdio"
+command = "/usr/local/bin/lean-mcp"

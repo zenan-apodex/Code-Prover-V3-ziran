@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0014_dafnybench_BinarySearchTree_tmp_tmp_bn2twp5_bst4copy_insert.lean

@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0851_dafnybench_formal-verification_tmp_tmpoepcssay_strings3_isPrefix.lean

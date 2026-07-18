@@ -1,0 +1,1 @@
+/task/clever__6.lean

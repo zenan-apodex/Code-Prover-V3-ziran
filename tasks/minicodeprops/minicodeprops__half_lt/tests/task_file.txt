@@ -1,0 +1,1 @@
+/task/minicodeprops__half_lt.lean

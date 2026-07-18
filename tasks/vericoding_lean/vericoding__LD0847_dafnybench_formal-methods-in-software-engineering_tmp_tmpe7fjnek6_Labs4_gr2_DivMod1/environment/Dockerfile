@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0847_dafnybench_formal-methods-in-software-engineering_tmp_tmpe7fjnek6_Labs4_gr2_DivMod1.lean

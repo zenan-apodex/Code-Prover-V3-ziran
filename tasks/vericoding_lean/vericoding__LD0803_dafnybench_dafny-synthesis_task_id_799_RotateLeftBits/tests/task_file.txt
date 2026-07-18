@@ -1,0 +1,1 @@
+/task/vericoding__LD0803_dafnybench_dafny-synthesis_task_id_799_RotateLeftBits.lean

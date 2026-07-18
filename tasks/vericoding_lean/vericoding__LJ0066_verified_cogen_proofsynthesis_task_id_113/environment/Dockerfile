@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LJ0066_verified_cogen_proofsynthesis_task_id_113.lean

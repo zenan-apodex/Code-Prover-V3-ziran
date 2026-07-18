@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0054_dafnybench_Clover_canyon_search_CanyonSearch.lean

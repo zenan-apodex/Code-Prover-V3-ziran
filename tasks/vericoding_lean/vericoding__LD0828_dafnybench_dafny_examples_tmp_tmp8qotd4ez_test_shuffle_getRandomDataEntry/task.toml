@@ -1,0 +1,24 @@
+schema_version = "1.3"
+
+[task]
+name = "codeprover/vericoding__ld0828_dafnybench_dafny_examples_tmp_tmp8qotd4ez_test_shuffle_getran"
+description = "Lean 4 verification task vericoding/LD0828_dafnybench_dafny_examples_tmp_tmp8qotd4ez_test_shuffle_getRandomDataEntry"
+keywords = ["lean4", "theorem-proving", "code-prover"]
+
+[metadata]
+source_id = "vericoding/LD0828_dafnybench_dafny_examples_tmp_tmp8qotd4ez_test_shuffle_getRandomDataEntry"
+source_dataset = "vericoding_lean"
+
+[agent]
+timeout_sec = 3600.0
+
+[verifier]
+timeout_sec = 1800.0
+
+[environment]
+build_timeout_sec = 1800.0
+
+[[environment.mcp_servers]]
+name = "lean-lsp"
+transport = "stdio"
+command = "/usr/local/bin/lean-mcp"

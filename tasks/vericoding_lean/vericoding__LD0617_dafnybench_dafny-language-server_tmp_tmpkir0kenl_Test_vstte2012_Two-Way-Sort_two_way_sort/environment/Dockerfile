@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0617_dafnybench_dafny-language-server_tmp_tmpkir0kenl_Test_vstte2012_Two-Way-Sort_two_way_sort.lean

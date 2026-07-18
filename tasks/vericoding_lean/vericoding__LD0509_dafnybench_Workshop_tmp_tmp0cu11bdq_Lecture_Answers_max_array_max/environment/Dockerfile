@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0509_dafnybench_Workshop_tmp_tmp0cu11bdq_Lecture_Answers_max_array_max.lean

@@ -1,0 +1,1 @@
+/task/vericoding__LT0223_numpy_triple_linalg_det.lean

@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0155_dafnybench_DafnyPrograms_tmp_tmp74_f9k_c_invertarray_InvertArray.lean

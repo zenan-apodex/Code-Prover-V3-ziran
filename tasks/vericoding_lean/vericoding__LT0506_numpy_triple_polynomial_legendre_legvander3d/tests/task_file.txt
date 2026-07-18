@@ -1,0 +1,1 @@
+/task/vericoding__LT0506_numpy_triple_polynomial_legendre_legvander3d.lean

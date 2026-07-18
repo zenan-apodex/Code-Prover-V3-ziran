@@ -1,0 +1,1 @@
+/task/minicodeprops__delete_len_eq.lean

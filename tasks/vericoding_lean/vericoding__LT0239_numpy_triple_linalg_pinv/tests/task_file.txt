@@ -1,0 +1,1 @@
+/task/vericoding__LT0239_numpy_triple_linalg_pinv.lean

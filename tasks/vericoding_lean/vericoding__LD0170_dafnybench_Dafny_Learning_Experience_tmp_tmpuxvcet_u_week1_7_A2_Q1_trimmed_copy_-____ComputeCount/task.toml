@@ -1,0 +1,24 @@
+schema_version = "1.3"
+
+[task]
+name = "codeprover/vericoding__ld0170_dafnybench_dafny_learning_experience_tmp_tmpuxvcet_u_week1_7_"
+description = "Lean 4 verification task vericoding/LD0170_dafnybench_Dafny_Learning_Experience_tmp_tmpuxvcet_u_week1_7_A2_Q1_trimmed_copy_-_副本_ComputeCount"
+keywords = ["lean4", "theorem-proving", "code-prover"]
+
+[metadata]
+source_id = "vericoding/LD0170_dafnybench_Dafny_Learning_Experience_tmp_tmpuxvcet_u_week1_7_A2_Q1_trimmed_copy_-_副本_ComputeCount"
+source_dataset = "vericoding_lean"
+
+[agent]
+timeout_sec = 3600.0
+
+[verifier]
+timeout_sec = 1800.0
+
+[environment]
+build_timeout_sec = 1800.0
+
+[[environment.mcp_servers]]
+name = "lean-lsp"
+transport = "stdio"
+command = "/usr/local/bin/lean-mcp"

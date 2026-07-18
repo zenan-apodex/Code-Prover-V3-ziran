@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0148_dafnybench_Dafny-Practice_tmp_tmphnmt4ovh_Pattern_Matching_FindAllOccurrences.lean

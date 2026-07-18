@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0472_dafnybench_Software-Verification_tmp_tmpv4ueky2d_Valid_Palindrome_valid_panlindrome_isPalindrome.lean

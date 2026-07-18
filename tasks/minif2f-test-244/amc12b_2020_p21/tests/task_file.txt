@@ -1,0 +1,1 @@
+/task/amc12b_2020_p21.lean

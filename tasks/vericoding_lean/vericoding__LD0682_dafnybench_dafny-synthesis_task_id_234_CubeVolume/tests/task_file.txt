@@ -1,0 +1,1 @@
+/task/vericoding__LD0682_dafnybench_dafny-synthesis_task_id_234_CubeVolume.lean

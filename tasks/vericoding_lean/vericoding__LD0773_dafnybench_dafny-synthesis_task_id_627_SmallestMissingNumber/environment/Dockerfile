@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0773_dafnybench_dafny-synthesis_task_id_627_SmallestMissingNumber.lean

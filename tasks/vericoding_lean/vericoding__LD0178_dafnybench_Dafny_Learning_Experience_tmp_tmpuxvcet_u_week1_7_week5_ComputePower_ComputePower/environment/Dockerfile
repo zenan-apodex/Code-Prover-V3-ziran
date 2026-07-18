@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0178_dafnybench_Dafny_Learning_Experience_tmp_tmpuxvcet_u_week1_7_week5_ComputePower_ComputePower.lean

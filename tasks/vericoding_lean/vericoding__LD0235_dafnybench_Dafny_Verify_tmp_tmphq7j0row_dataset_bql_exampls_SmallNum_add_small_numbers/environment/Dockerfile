@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0235_dafnybench_Dafny_Verify_tmp_tmphq7j0row_dataset_bql_exampls_SmallNum_add_small_numbers.lean

@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0589_dafnybench_dafny-exercise_tmp_tmpouftptir_zapNegatives_ZapNegatives.lean

@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0270_dafnybench_Dafny_tmp_tmpv_d3qi10_3_cumsum_cumsum.lean

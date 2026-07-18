@@ -1,0 +1,24 @@
+schema_version = "1.3"
+
+[task]
+name = "codeprover/vericoding__ld0465_dafnybench_software-verification_tmp_tmpv4ueky2d_longest_incr"
+description = "Lean 4 verification task vericoding/LD0465_dafnybench_Software-Verification_tmp_tmpv4ueky2d_Longest_Increasing_Subsequence_longest_increasing_subsequence_longest_increasing_subsequence"
+keywords = ["lean4", "theorem-proving", "code-prover"]
+
+[metadata]
+source_id = "vericoding/LD0465_dafnybench_Software-Verification_tmp_tmpv4ueky2d_Longest_Increasing_Subsequence_longest_increasing_subsequence_longest_increasing_subsequence"
+source_dataset = "vericoding_lean"
+
+[agent]
+timeout_sec = 3600.0
+
+[verifier]
+timeout_sec = 1800.0
+
+[environment]
+build_timeout_sec = 1800.0
+
+[[environment.mcp_servers]]
+name = "lean-lsp"
+transport = "stdio"
+command = "/usr/local/bin/lean-mcp"

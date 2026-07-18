@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0569_dafnybench_dafleet_tmp_tmpa2e4kb9v_0001-0050_0001-two-sum_twoSum.lean

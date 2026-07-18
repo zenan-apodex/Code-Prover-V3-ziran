@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LJ0162_verified_cogen_rustbench_smallest_list_length.lean

@@ -1,0 +1,1 @@
+/task/vericoding__LT0434_numpy_triple_polynomial_hermite_hermcompanion.lean

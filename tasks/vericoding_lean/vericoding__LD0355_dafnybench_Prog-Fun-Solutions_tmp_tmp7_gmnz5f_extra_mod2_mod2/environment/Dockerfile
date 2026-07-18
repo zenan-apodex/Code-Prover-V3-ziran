@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0355_dafnybench_Prog-Fun-Solutions_tmp_tmp7_gmnz5f_extra_mod2_mod2.lean

@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LT0096_numpy_triple_constants_NPY_LOG2E.lean

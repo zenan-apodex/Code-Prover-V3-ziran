@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0771_dafnybench_dafny-synthesis_task_id_625_SwapFirstAndLast.lean

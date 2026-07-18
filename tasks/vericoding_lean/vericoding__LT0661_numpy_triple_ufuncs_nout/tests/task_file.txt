@@ -1,0 +1,1 @@
+/task/vericoding__LT0661_numpy_triple_ufuncs_nout.lean

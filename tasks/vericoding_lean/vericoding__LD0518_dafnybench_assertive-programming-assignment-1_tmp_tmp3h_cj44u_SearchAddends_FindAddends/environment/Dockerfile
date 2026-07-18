@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0518_dafnybench_assertive-programming-assignment-1_tmp_tmp3h_cj44u_SearchAddends_FindAddends.lean

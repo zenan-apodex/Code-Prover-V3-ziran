@@ -1,0 +1,1 @@
+/task/vericoding__LD0824_dafnybench_dafny_examples_tmp_tmp8qotd4ez_leetcode_0027-remove-element_RemoveElement.lean

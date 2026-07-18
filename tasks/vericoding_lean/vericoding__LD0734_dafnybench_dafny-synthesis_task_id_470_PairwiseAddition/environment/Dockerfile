@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0734_dafnybench_dafny-synthesis_task_id_470_PairwiseAddition.lean

@@ -1,0 +1,1 @@
+/task/vericoding__LT0332_numpy_triple_mathematical_functions_log10.lean

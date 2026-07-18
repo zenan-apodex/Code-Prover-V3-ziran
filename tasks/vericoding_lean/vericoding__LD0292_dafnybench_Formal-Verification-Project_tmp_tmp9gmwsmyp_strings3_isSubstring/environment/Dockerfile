@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0292_dafnybench_Formal-Verification-Project_tmp_tmp9gmwsmyp_strings3_isSubstring.lean

@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0382_dafnybench_Program-Verification-Dataset_tmp_tmpgbdrlnu__Dafny_basic_examples_BubbleSort_bubbleSort.lean

@@ -1,0 +1,1 @@
+/task/vericoding__LD0253_dafnybench_Dafny_tmp_tmp0wu8wmfr_tests_Search1000_Search2PowRecursive.lean

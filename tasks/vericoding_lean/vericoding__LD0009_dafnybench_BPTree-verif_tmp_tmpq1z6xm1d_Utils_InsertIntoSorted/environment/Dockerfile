@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0009_dafnybench_BPTree-verif_tmp_tmpq1z6xm1d_Utils_InsertIntoSorted.lean

@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LT0175_numpy_triple_indexing_slicing_fill_diagonal.lean

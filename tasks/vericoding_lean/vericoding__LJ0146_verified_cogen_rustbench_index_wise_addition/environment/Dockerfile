@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LJ0146_verified_cogen_rustbench_index_wise_addition.lean

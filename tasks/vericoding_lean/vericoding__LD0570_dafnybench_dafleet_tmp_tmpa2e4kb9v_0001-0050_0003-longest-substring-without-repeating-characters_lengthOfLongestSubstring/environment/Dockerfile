@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0570_dafnybench_dafleet_tmp_tmpa2e4kb9v_0001-0050_0003-longest-substring-without-repeating-characters_lengthOfLongestSubstring.lean

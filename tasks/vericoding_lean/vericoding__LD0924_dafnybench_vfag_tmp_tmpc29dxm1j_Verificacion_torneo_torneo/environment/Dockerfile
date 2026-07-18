@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0924_dafnybench_vfag_tmp_tmpc29dxm1j_Verificacion_torneo_torneo.lean

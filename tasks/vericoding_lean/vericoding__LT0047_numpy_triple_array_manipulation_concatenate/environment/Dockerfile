@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LT0047_numpy_triple_array_manipulation_concatenate.lean

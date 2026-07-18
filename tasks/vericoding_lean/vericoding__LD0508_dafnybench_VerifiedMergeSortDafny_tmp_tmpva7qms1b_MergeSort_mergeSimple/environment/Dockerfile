@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0508_dafnybench_VerifiedMergeSortDafny_tmp_tmpva7qms1b_MergeSort_mergeSimple.lean

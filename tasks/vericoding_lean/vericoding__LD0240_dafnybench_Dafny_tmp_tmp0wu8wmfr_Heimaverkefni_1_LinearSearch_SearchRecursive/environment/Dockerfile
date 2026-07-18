@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0240_dafnybench_Dafny_tmp_tmp0wu8wmfr_Heimaverkefni_1_LinearSearch_SearchRecursive.lean

@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0417_dafnybench_Program-Verification-Dataset_tmp_tmpgbdrlnu__Dafny_mathematical_objects_verification_examples_fast_exp_FastExp.lean

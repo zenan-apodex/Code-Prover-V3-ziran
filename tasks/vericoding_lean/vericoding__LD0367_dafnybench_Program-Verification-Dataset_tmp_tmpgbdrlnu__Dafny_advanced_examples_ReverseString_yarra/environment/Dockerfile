@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0367_dafnybench_Program-Verification-Dataset_tmp_tmpgbdrlnu__Dafny_advanced_examples_ReverseString_yarra.lean

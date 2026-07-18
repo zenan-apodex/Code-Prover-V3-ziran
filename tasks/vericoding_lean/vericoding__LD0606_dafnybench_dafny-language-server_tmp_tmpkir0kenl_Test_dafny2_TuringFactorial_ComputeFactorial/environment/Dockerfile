@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0606_dafnybench_dafny-language-server_tmp_tmpkir0kenl_Test_dafny2_TuringFactorial_ComputeFactorial.lean

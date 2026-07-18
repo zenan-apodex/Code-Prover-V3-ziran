@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0791_dafnybench_dafny-synthesis_task_id_762_IsMonthWith30Days.lean

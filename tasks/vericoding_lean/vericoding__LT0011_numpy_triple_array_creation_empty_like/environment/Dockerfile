@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LT0011_numpy_triple_array_creation_empty_like.lean

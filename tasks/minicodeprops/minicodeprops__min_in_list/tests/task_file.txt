@@ -1,0 +1,1 @@
+/task/minicodeprops__min_in_list.lean

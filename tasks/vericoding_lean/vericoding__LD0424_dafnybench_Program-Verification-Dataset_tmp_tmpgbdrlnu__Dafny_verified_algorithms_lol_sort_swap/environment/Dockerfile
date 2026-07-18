@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0424_dafnybench_Program-Verification-Dataset_tmp_tmpgbdrlnu__Dafny_verified_algorithms_lol_sort_swap.lean

@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0057_dafnybench_Clover_count_lessthan_CountLessThan.lean

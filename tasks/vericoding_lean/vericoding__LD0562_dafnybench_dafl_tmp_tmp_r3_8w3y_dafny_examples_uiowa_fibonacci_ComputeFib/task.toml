@@ -1,0 +1,24 @@
+schema_version = "1.3"
+
+[task]
+name = "codeprover/vericoding__ld0562_dafnybench_dafl_tmp_tmp_r3_8w3y_dafny_examples_uiowa_fibonacc"
+description = "Lean 4 verification task vericoding/LD0562_dafnybench_dafl_tmp_tmp_r3_8w3y_dafny_examples_uiowa_fibonacci_ComputeFib"
+keywords = ["lean4", "theorem-proving", "code-prover"]
+
+[metadata]
+source_id = "vericoding/LD0562_dafnybench_dafl_tmp_tmp_r3_8w3y_dafny_examples_uiowa_fibonacci_ComputeFib"
+source_dataset = "vericoding_lean"
+
+[agent]
+timeout_sec = 3600.0
+
+[verifier]
+timeout_sec = 1800.0
+
+[environment]
+build_timeout_sec = 1800.0
+
+[[environment.mcp_servers]]
+name = "lean-lsp"
+transport = "stdio"
+command = "/usr/local/bin/lean-mcp"

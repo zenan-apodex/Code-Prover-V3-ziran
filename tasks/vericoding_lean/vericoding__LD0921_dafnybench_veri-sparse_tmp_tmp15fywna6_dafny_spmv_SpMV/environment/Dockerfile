@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0921_dafnybench_veri-sparse_tmp_tmp15fywna6_dafny_spmv_SpMV.lean

@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0000_dafnybench_630-dafny_tmp_tmpz2kokaiq_Solution_BinarySearch.lean

@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0076_dafnybench_Clover_online_max_onlineMax.lean

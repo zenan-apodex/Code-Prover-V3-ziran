@@ -1,0 +1,1 @@
+/task/vericoding__LT0349_numpy_triple_mathematical_functions_prod.lean

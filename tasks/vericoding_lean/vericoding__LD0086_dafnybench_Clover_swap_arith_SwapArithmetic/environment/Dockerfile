@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0086_dafnybench_Clover_swap_arith_SwapArithmetic.lean

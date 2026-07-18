@@ -1,0 +1,24 @@
+schema_version = "1.3"
+
+[task]
+name = "codeprover/vericoding__ld0198_dafnybench_dafny_programs_tmp_tmp99966ew4_binary_search_binar"
+description = "Lean 4 verification task vericoding/LD0198_dafnybench_Dafny_Programs_tmp_tmp99966ew4_binary_search_BinarySearch"
+keywords = ["lean4", "theorem-proving", "code-prover"]
+
+[metadata]
+source_id = "vericoding/LD0198_dafnybench_Dafny_Programs_tmp_tmp99966ew4_binary_search_BinarySearch"
+source_dataset = "vericoding_lean"
+
+[agent]
+timeout_sec = 3600.0
+
+[verifier]
+timeout_sec = 1800.0
+
+[environment]
+build_timeout_sec = 1800.0
+
+[[environment.mcp_servers]]
+name = "lean-lsp"
+transport = "stdio"
+command = "/usr/local/bin/lean-mcp"

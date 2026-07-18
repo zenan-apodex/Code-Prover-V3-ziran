@@ -1,0 +1,22 @@
+import Mathlib
+
+def findSquares (x y : Nat) : Nat := sorry
+
+-- Result should be non-negative
+theorem findSquares_nonneg (x y : Nat) : 
+  findSquares x y ≥ 0 := sorry
+
+-- For 0 dimensions, result should be 0  
+theorem findSquares_zero (x y : Nat) :
+  x = 0 ∨ y = 0 → findSquares x y = 0 := sorry
+
+-- Result should be x*y for 1xN rectangles
+theorem findSquares_stripe (x y : Nat) :
+  y = 1 → findSquares x y = x := sorry
+
+-- For a square, result should be sum of squares from 1 to side length
+def sum_squares (n : Nat) : Nat :=
+  Nat.rec 0 (fun k res => res + k*k) n
+
+theorem findSquares_square (n : Nat) : 
+  findSquares n n = sum_squares n := sorry

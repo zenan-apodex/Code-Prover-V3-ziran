@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0266_dafnybench_Dafny_tmp_tmpmvs2dmry_pancakesort_findmax_findMax.lean

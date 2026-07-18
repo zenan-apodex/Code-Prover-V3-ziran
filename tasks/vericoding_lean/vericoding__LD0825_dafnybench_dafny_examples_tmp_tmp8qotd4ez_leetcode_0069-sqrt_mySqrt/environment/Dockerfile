@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0825_dafnybench_dafny_examples_tmp_tmp8qotd4ez_leetcode_0069-sqrt_mySqrt.lean

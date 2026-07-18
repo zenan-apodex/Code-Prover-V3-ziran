@@ -1,0 +1,1 @@
+/task/amc12b_2003_p6.lean

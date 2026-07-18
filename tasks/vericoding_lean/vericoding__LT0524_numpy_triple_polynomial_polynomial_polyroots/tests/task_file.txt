@@ -1,0 +1,1 @@
+/task/vericoding__LT0524_numpy_triple_polynomial_polynomial_polyroots.lean

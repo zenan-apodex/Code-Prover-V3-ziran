@@ -1,0 +1,1 @@
+/task/vericoding__LT0068_numpy_triple_array_manipulation_rot90.lean

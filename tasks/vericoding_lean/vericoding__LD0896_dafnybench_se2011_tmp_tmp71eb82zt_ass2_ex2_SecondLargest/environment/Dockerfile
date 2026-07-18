@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0896_dafnybench_se2011_tmp_tmp71eb82zt_ass2_ex2_SecondLargest.lean

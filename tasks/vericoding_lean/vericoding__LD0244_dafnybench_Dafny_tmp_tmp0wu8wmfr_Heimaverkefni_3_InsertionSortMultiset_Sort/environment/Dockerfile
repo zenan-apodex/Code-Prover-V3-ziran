@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0244_dafnybench_Dafny_tmp_tmp0wu8wmfr_Heimaverkefni_3_InsertionSortMultiset_Sort.lean

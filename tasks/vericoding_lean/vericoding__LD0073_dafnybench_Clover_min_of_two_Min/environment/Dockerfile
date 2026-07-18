@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0073_dafnybench_Clover_min_of_two_Min.lean

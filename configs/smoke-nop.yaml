@@ -1,0 +1,16 @@
+# Verifier smoke on real benchmark tasks: the nop agent does nothing, so every
+# task must grade to reward = 0.0 with sorry_free=0 (and the verifier must not
+# crash). Also validates the per-task image builds for a converted dataset.
+#
+#   .venv/bin/harbor run -c configs/smoke-nop.yaml
+
+job_name: smoke-nop
+jobs_dir: jobs
+n_attempts: 1
+n_concurrent_trials: 2
+
+agents:
+  - name: nop
+
+datasets:
+  - path: tasks/smoke5

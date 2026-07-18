@@ -1,0 +1,24 @@
+schema_version = "1.3"
+
+[task]
+name = "codeprover/vericoding__ld0843_dafnybench_dafny_tmp_tmp59p638nn_examples_realexponent_pow"
+description = "Lean 4 verification task vericoding/LD0843_dafnybench_dafny_tmp_tmp59p638nn_examples_realExponent_pow"
+keywords = ["lean4", "theorem-proving", "code-prover"]
+
+[metadata]
+source_id = "vericoding/LD0843_dafnybench_dafny_tmp_tmp59p638nn_examples_realExponent_pow"
+source_dataset = "vericoding_lean"
+
+[agent]
+timeout_sec = 3600.0
+
+[verifier]
+timeout_sec = 1800.0
+
+[environment]
+build_timeout_sec = 1800.0
+
+[[environment.mcp_servers]]
+name = "lean-lsp"
+transport = "stdio"
+command = "/usr/local/bin/lean-mcp"

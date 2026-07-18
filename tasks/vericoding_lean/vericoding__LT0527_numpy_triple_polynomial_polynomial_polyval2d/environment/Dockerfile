@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LT0527_numpy_triple_polynomial_polynomial_polyval2d.lean

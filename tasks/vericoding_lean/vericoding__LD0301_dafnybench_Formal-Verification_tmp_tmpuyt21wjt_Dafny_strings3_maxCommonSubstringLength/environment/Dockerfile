@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0301_dafnybench_Formal-Verification_tmp_tmpuyt21wjt_Dafny_strings3_maxCommonSubstringLength.lean

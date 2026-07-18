@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0147_dafnybench_Dafny-Practice_tmp_tmphnmt4ovh_BST_InsertBST.lean

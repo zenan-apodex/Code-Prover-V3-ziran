@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0845_dafnybench_feup-mfes_tmp_tmp6_a1y5a5_examples_SelectionSort_selectionSort.lean

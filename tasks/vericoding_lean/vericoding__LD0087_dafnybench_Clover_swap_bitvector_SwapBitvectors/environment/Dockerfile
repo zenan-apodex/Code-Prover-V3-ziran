@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0087_dafnybench_Clover_swap_bitvector_SwapBitvectors.lean

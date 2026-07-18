@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LT0271_numpy_triple_logic_functions_isposinf.lean

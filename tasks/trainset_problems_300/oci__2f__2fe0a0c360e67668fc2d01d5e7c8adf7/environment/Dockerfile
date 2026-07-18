@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/oci__2f__2fe0a0c360e67668fc2d01d5e7c8adf7.lean

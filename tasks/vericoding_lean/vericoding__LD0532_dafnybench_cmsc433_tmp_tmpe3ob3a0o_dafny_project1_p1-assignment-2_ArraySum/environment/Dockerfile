@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0532_dafnybench_cmsc433_tmp_tmpe3ob3a0o_dafny_project1_p1-assignment-2_ArraySum.lean

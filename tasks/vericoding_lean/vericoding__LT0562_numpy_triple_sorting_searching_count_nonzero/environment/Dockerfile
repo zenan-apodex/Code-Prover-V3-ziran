@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LT0562_numpy_triple_sorting_searching_count_nonzero.lean

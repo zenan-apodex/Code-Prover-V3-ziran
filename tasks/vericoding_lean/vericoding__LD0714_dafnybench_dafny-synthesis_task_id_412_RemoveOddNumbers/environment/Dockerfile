@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0714_dafnybench_dafny-synthesis_task_id_412_RemoveOddNumbers.lean

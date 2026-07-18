@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0100_dafnybench_Correctness_tmp_tmpwqvg5q_4_Sorting_Tangent_BinarySearch.lean

@@ -1,0 +1,19 @@
+import Mathlib
+
+def count_distinct_names (words: List String) : Nat := sorry
+
+theorem count_distinct_names_bounded (words: List String) (h: words ≠ []) :
+  let result := count_distinct_names words
+  result ≤ words.length ∧ result ≥ 1 := sorry
+
+/-- Helper function to process a string by replacing kh sequences -/
+def processKh (s: String) : String := sorry
+
+/-- Helper function to process a string by replacing u with oo -/
+def processU (s: String) : String := sorry
+
+/-- Helper function to fully process a string with all replacements -/
+def processString (s: String) : String := processKh (processU s)
+
+def unique {α} [BEq α] (l: List α) : List α :=
+  l.foldl (fun acc x => if acc.elem x then acc else x :: acc) []

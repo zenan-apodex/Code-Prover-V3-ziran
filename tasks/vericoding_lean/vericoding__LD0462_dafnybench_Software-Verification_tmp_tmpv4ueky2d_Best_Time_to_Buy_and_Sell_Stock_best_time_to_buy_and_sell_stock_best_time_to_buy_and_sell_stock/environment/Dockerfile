@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0462_dafnybench_Software-Verification_tmp_tmpv4ueky2d_Best_Time_to_Buy_and_Sell_Stock_best_time_to_buy_and_sell_stock_best_time_to_buy_and_sell_stock.lean

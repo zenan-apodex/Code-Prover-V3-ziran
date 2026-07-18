@@ -1,0 +1,2 @@
+FROM code-prover-lean:latest
+COPY task.lean /task/vericoding__LD0928_dafnybench_vfag_tmp_tmpc29dxm1j_sumar_componentes_suma_componentes.lean
