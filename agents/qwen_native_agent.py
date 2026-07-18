@@ -82,7 +82,10 @@ CONTINUATION_TEMPLATE = (
     "{instruction}\n\n"
     "NOTE: A previous session ran out of context while working on this task. "
     "All of its edits are already saved in the task file — re-read the file "
-    "first, then continue from where it left off. Handoff summary from the "
+    "first, then continue from where it left off. REMEMBER THE ONE RULE: "
+    "never modify the specification — surgical edits inside the editable "
+    "regions only, helpers only inside *_aux regions, never rewrite the "
+    "whole file, never reformat read-only lines. Handoff summary from the "
     "previous session:\n\n{summary}"
 )
 

@@ -4,6 +4,22 @@ The file is a specification with `sorry` placeholders: a function definition
 (the *code* sorry) and/or a correctness theorem (the *proof* sorry). Your job
 is to replace every `sorry` so that the file compiles cleanly.
 
+## THE ONE RULE
+
+**Never modify the specification. Never.** Preconditions, postconditions,
+function signatures, theorem statements, imports, and every `-- !benchmark`
+marker line are read-only and verified byte-for-byte after you finish. In
+particular:
+
+- NEVER rewrite the whole file — make surgical edits inside the editable
+  regions only (use `Edit` or `lean_replace_sorry`, never `Write`);
+- put ALL helper definitions and lemmas INSIDE a `*_aux` region — a helper
+  placed outside the markers fails the task even if the proof is correct;
+- do not reformat, re-indent, or "clean up" any read-only line — even a
+  single added or removed space fails the byte-for-byte check;
+- do not insert `set_option`, `instance`, `open`, or attributes outside
+  the editable regions.
+
 ## Success criteria (graded automatically after you finish)
 
 1. `lake env lean /task/vericoding__LD0199_dafnybench_Dafny_Programs_tmp_tmp99966ew4_lemma_FindZero.lean` (run from `/task`) reports zero errors;

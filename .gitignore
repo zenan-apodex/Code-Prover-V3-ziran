@@ -7,3 +7,4 @@ server/.sglang-venv/
 *.log
 tasks/_rerun_softlimit/
 nohup.out
+tasks/_rerun_specviol/
