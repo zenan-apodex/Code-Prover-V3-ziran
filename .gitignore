@@ -8,3 +8,4 @@ server/.sglang-venv/
 tasks/_rerun_softlimit/
 nohup.out
 tasks/_rerun_specviol/
+code-prover-lean.tar

@@ -102,16 +102,3 @@ verifier 的 `tests/` 在 agent 阶段结束后才被上传进容器，agent 无
 
 # 断点续跑：同一 job_name + jobs_dir 重新执行即可（Harbor 自动恢复已完成 trial）
 ```
-
-## 与 V2 的差异 / 迁移说明
-
-- V2 的 formalize `pipeline/` **已弃用**（2026-07-17 决定，不再造新 spec 数据）；
-  `server/`（sglang 本地 SFT 服务脚本）已拷入 V3 `server/` 备用。本地 SFT 评测见
-  `configs/prove-local-sft.yaml`（V2 的 Qwen native tool protocol 需要自定义
-  agent，见 DESIGN.md §5 待定项）。
-- V2 的 warm REPL 中央判分器不再需要：判分在各自容器内进行，Mathlib oleans 已烘焙。
-- 镜像已完全自持：预构建包树在 `images/lean-mathlib/lean-packages/`（gitignore），
-  不再依赖 V2 checkout；V2 的 Tacs/quickcheck 自定义 Lean 库、codex CLI 预装、
-  code/proof 模式概念、V2 风格 summary.json 均已移除（2026-07-17 清理）。
-- 安全提醒：V2 `configs/prove.yaml` 里提交过一个真实 API key，请尽快轮换；V3 的凭证
-  一律走环境变量。

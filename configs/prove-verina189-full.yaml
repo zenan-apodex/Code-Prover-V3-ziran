@@ -1,0 +1,27 @@
+# Verina-189 全量正式评测 — 充足预算版。
+#
+# 预算对齐历史参照 run（中位任务 ~65min、最长 8h）：每任务 4h 墙钟、384 次
+# API 调用、compaction 兜底。多卡机器把 sglang 起成 TP=<卡数> 后 n 可放开。
+#
+#   PYTHONPATH=$PWD .venv/bin/harbor run -c configs/prove-verina189-full.yaml
+#
+# 注意：任务侧的 agent timeout 由 task.toml 提供（refresh --agent-timeout 14400
+# 已写入 verina_canonical_189）；此处的 override 只是双保险。
+
+job_name: prove-verina189-qwen36-full
+jobs_dir: jobs
+n_attempts: 1
+n_concurrent_trials: 8        # 单卡建议 4；8 卡 TP=8 可到 8-16
+
+agents:
+  - import_path: agents.qwen_native_agent:QwenNativeAgent
+    model_name: code-prover-sft
+    override_timeout_sec: 14400.0
+    kwargs:
+      api_base: http://127.0.0.1:8000/v1
+      max_api_calls: 384
+      max_tokens: 24576
+      max_compactions: 6
+
+datasets:
+  - path: tasks/verina_canonical_189
