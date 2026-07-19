@@ -10,7 +10,7 @@ source_id = "verina_advanced_4"
 source_dataset = "verina_canonical_189"
 
 [agent]
-timeout_sec = 3600.0
+timeout_sec = 14400.0
 
 [verifier]
 timeout_sec = 1800.0
