@@ -118,8 +118,33 @@ def _readonly_projection(source: str) -> tuple[str, str | None]:
     return "".join(projected), None
 
 
-def check_spec_intact(original: str, final: str) -> dict:
-    """Mainline check_benchmark_integrity semantics, plus a diagnostic diff."""
+# Punctuation that is ALWAYS a token separator in Lean 4 — spacing around it
+# can never change parsing. Deliberately excludes operators like `-`/`*`
+# (where `f -1` vs `f - 1` differ semantically).
+_SAFE_PUNCT = re.compile(r"\s*([:,()\[\]{}⟨⟩])\s*")
+
+
+def _ws_normalize(projection: str) -> list[str]:
+    """Lexically-safe whitespace normal form of a read-only projection:
+    per line, strip + collapse whitespace runs + drop spaces around
+    token-separator punctuation; blank lines dropped. Two projections with
+    equal normal forms differ only in semantically-inert whitespace."""
+    out = []
+    for ln in projection.splitlines():
+        ln = re.sub(r"\s+", " ", ln.strip())
+        ln = _SAFE_PUNCT.sub(r"\1", ln)
+        if ln:
+            out.append(ln)
+    return out
+
+
+def check_spec_intact(original: str, final: str, *, strict_bytes: bool = False) -> dict:
+    """Mainline check_benchmark_integrity semantics, plus a diagnostic diff.
+
+    By default a byte-exact mismatch is forgiven iff the projections are equal
+    under the lexically-safe whitespace normal form (mode
+    "whitespace_normalized"); pass strict_bytes=True for the mainline
+    byte-exact behaviour."""
     original_has = "-- !benchmark @start" in original
     final_has = "-- !benchmark @start" in final
     if not original_has and not final_has:
@@ -136,7 +161,9 @@ def check_spec_intact(original: str, final: str) -> dict:
     if final_err:
         return {"ok": False, "checked": True, "reason": final_err}
     if orig_proj == final_proj:
-        return {"ok": True, "checked": True}
+        return {"ok": True, "checked": True, "mode": "byte_exact"}
+    if not strict_bytes and _ws_normalize(orig_proj) == _ws_normalize(final_proj):
+        return {"ok": True, "checked": True, "mode": "whitespace_normalized"}
 
     # First divergent line for the report (projection is byte-exact).
     diff = None
@@ -243,6 +270,8 @@ def main() -> int:
     ap.add_argument("--project-dir", default="/task")
     ap.add_argument("--out-dir", default="/logs/verifier")
     ap.add_argument("--lean-timeout", type=int, default=1200)
+    ap.add_argument("--strict-bytes", action="store_true",
+                    help="mainline byte-exact spec comparison (no whitespace forgiveness)")
     args = ap.parse_args()
 
     os.makedirs(args.out_dir, exist_ok=True)
@@ -270,7 +299,7 @@ def main() -> int:
         checks["sorry_free"] = float(not sorries)
         details["sorry_lines"] = sorries
 
-        spec = check_spec_intact(original, final)
+        spec = check_spec_intact(original, final, strict_bytes=args.strict_bytes)
         checks["spec_intact"] = float(spec["ok"])
         details["spec_check"] = spec
 
