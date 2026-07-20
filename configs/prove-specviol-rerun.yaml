@@ -1,0 +1,23 @@
+# Rerun of the 18 spec-violation tasks from prove-verina189-qwen36-full,
+# with the hardened instruction template (self-check protocol, forward-
+# reference and bridge-lemma rules). Same budget as the full run.
+#
+#   PYTHONPATH=$PWD .venv/bin/harbor run -c configs/prove-specviol-rerun.yaml
+
+job_name: prove-specviol-rerun-qwen36
+jobs_dir: jobs
+n_attempts: 1
+n_concurrent_trials: 8
+
+agents:
+  - import_path: agents.qwen_native_agent:QwenNativeAgent
+    model_name: code-prover-sft
+    override_timeout_sec: 14400.0
+    kwargs:
+      api_base: http://127.0.0.1:8000/v1
+      max_api_calls: 384
+      max_tokens: 24576
+      max_compactions: 6
+
+datasets:
+  - path: tasks/_rerun_specviol

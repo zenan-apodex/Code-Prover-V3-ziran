@@ -1,0 +1,22 @@
+# Verina-189 全量 — 守卫版基线：agent 侧 spec 守卫（编辑后核对+回滚）+ 加固指令
+# （自查协议/前向引用/桥接引理），预算与 prove-verina189-full 相同。
+#
+#   PYTHONPATH=$PWD .venv/bin/harbor run -c configs/prove-verina189-guarded.yaml
+
+job_name: prove-verina189-qwen36-guarded
+jobs_dir: jobs
+n_attempts: 1
+n_concurrent_trials: 8        # 单卡建议 4；8 卡 TP=8 可到 8-16
+
+agents:
+  - import_path: agents.qwen_native_agent:QwenNativeAgent
+    model_name: code-prover-sft
+    override_timeout_sec: 14400.0
+    kwargs:
+      api_base: http://127.0.0.1:8000/v1
+      max_api_calls: 384
+      max_tokens: 24576
+      max_compactions: 6
+
+datasets:
+  - path: tasks/verina_canonical_189

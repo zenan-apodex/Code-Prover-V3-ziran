@@ -9,3 +9,4 @@ tasks/_rerun_softlimit/
 nohup.out
 tasks/_rerun_specviol/
 code-prover-lean.tar
+tasks/_rerun_specviol2/
