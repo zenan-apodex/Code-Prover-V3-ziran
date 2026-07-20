@@ -37,6 +37,10 @@ from harbor.environments.base import BaseEnvironment
 from harbor.models.agent.context import AgentContext
 
 from . import qwen_native_v1 as codec
+from . import spec_guard
+
+# Tool calls that cannot touch the task file — skipped by the spec guard.
+_READONLY_TOOLS = frozenset({"Read", "Glob", "Grep", "TodoWrite", "Task"})
 
 MCP_PREFIX = "mcp_lean_lsp_"
 CONTAINER_AGENT_DIR = "/agents"
@@ -77,6 +81,17 @@ HANDOFF_SUMMARY_PROMPT = (
     "task goal, what you have already tried (including tactic attempts that "
     "FAILED and why), the current state of the task file, what remains to be "
     "done, and your concrete plan for the next steps. Do not call any tools."
+)
+# A generation cut off by max_tokens usually dies mid-<think> with no tool
+# call; treating that as a final answer ends the rollout with most of the
+# call budget unused. Cap consecutive nudges so a model stuck emitting
+# over-long thinks cannot loop forever.
+MAX_TRUNCATION_NUDGES = 3
+TRUNCATION_NUDGE_PROMPT = (
+    "Your previous response was cut off by the output token limit before you "
+    "issued any tool call, so nothing was executed. Do not restate the full "
+    "reasoning — summarize your conclusion in a sentence or two, then act: "
+    "either call the next tool, or if the task is complete, say so briefly."
 )
 CONTINUATION_TEMPLATE = (
     "{instruction}\n\n"
@@ -145,8 +160,73 @@ class QwenNativeAgent(BaseAgent):
 
     # ------------------------------------------------------------- tools --
 
+    # ------------------------------------------------------ spec guard --
+
+    _TASK_PATH_RE = __import__("re").compile(r"/task/\S+?\.lean\b")
+
+    async def _read_task_file(self, env: BaseEnvironment, path: str) -> str | None:
+        try:
+            r = await env.exec(f"cat {shlex.quote(path)}", timeout_sec=60)
+        except Exception:  # noqa: BLE001
+            return None
+        return r.stdout if not r.return_code else None
+
+    async def _guard_task_file(self, env: BaseEnvironment, emit) -> str:
+        """After a tool call: if the task file's read-only projection changed,
+        revert to the last good content and tell the model. Returns a warning
+        string to append to the tool result ('' when clean)."""
+        if not self._guard_path or self._guard_original is None:
+            return ""
+        current = await self._read_task_file(env, self._guard_path)
+        if current is None:
+            # File moved or deleted (a plain `mv` is invisible to the content
+            # check below) — put the last good content back where the verifier
+            # will look for it.
+            b64 = __import__("base64").b64encode(self._guard_last_good.encode()).decode()
+            try:
+                await env.exec(
+                    f"printf %s {shlex.quote(b64)} | base64 -d > {shlex.quote(self._guard_path)}",
+                    timeout_sec=60,
+                )
+            except Exception:  # noqa: BLE001
+                return ""
+            emit("spec_guard_restore_missing", {"path": self._guard_path})
+            return (
+                "\n\n[SPEC GUARD] The task file no longer existed at"
+                f" {self._guard_path} and has been RESTORED there. The verifier"
+                " grades exactly this path — the file MUST stay at its original"
+                " location. If you need it visible elsewhere (e.g. for lake),"
+                " copy it; never move, rename, or delete the original."
+            )
+        if current == self._guard_last_good:
+            return ""
+        verdict = spec_guard.check_spec_intact(self._guard_original, current)
+        if verdict["ok"]:
+            self._guard_last_good = current
+            return ""
+        b64 = __import__("base64").b64encode(self._guard_last_good.encode()).decode()
+        try:
+            await env.exec(
+                f"printf %s {shlex.quote(b64)} | base64 -d > {shlex.quote(self._guard_path)}",
+                timeout_sec=60,
+            )
+        except Exception:  # noqa: BLE001
+            return ""  # revert failed; leave it to the verifier
+        detail = verdict.get("first_divergence") or verdict.get("reason", "")
+        emit("spec_guard_revert", {"detail": detail})
+        return (
+            "\n\n[SPEC GUARD] That edit modified READ-ONLY benchmark text"
+            f" ({json.dumps(detail, ensure_ascii=False)}). The task file has been"
+            " REVERTED to its previous state. Re-apply your change strictly inside"
+            " an editable `-- !benchmark @start/@end` region"
+            " (code, proof, solution_aux, code_aux, proof_aux)."
+        )
+
     async def _exec_capped(self, env: BaseEnvironment, command: str, timeout: int = 300) -> str:
-        r = await env.exec(command, timeout_sec=timeout)
+        try:
+            r = await env.exec(command, timeout_sec=timeout)
+        except Exception as exc:  # noqa: BLE001 — a hung command must not kill the trial
+            return f"[tool error] {exc}"
         out = (r.stdout or "") + (("\n[stderr]\n" + r.stderr) if r.stderr else "")
         if r.return_code:
             out += f"\n[exit code: {r.return_code}]"
@@ -248,10 +328,19 @@ class QwenNativeAgent(BaseAgent):
             log.write(json.dumps({"type": kind, **payload}, ensure_ascii=False) + "\n")
             log.flush()
 
+        m = self._TASK_PATH_RE.search(instruction)
+        self._guard_path = m.group(0) if m else None
+        self._guard_original = (
+            await self._read_task_file(environment, self._guard_path)
+            if self._guard_path else None
+        )
+        self._guard_last_good = self._guard_original
+
         messages: list[dict] = [{"role": "user", "content": instruction}]
         n_in = n_out = 0
         last_prompt_tokens = 0
         n_compactions = 0
+        n_truncation_nudges = 0
         stop_reason = "final_answer"
         async with httpx.AsyncClient(timeout=self._request_timeout) as client:
             for call_idx in range(self._max_api_calls):
@@ -284,11 +373,24 @@ class QwenNativeAgent(BaseAgent):
                     "max_tokens": self._max_tokens,
                     "temperature": self._temperature,
                 })
-                resp = await client.post(
-                    f"{self._api_base}/chat/completions",
-                    json=wire,
-                    headers={"Authorization": f"Bearer {self._api_key}"},
-                )
+                resp = None
+                for attempt in range(3):
+                    try:
+                        resp = await client.post(
+                            f"{self._api_base}/chat/completions",
+                            json=wire,
+                            headers={"Authorization": f"Bearer {self._api_key}"},
+                        )
+                        break
+                    except httpx.HTTPError as exc:
+                        emit("request_retry", {"attempt": attempt + 1,
+                                               "error": repr(exc)})
+                if resp is None:
+                    # Model endpoint unreachable/overloaded: end gracefully so
+                    # the verifier still grades the current file state.
+                    stop_reason = "request_transport_error"
+                    emit("stop", {"reason": stop_reason})
+                    break
                 if resp.status_code == 400:
                     # Context overflow (or another unrecoverable request error):
                     # end the rollout gracefully so the verifier still grades
@@ -298,6 +400,7 @@ class QwenNativeAgent(BaseAgent):
                     break
                 resp.raise_for_status()
                 data = resp.json()
+                finish_reason = data["choices"][0].get("finish_reason")
                 choice = data["choices"][0]["message"]
                 usage = data.get("usage") or {}
                 last_prompt_tokens = usage.get("prompt_tokens") or last_prompt_tokens
@@ -339,10 +442,28 @@ class QwenNativeAgent(BaseAgent):
                         })
                     continue
                 if not decoded.tool_calls:
+                    # A turn cut off by max_tokens is not a final answer: the
+                    # model ran out of budget mid-think and never reached a
+                    # <tool_call>. Nudge it to continue instead of stopping.
+                    if finish_reason == "length" and n_truncation_nudges < MAX_TRUNCATION_NUDGES:
+                        n_truncation_nudges += 1
+                        emit("truncation_nudge", {"n": n_truncation_nudges})
+                        messages.append({
+                            "role": "user",
+                            "content": TRUNCATION_NUDGE_PROMPT,
+                        })
+                        continue
+                    if finish_reason == "length":
+                        stop_reason = "truncated_without_tool_call"
+                        emit("stop", {"reason": stop_reason})
+                        break
                     break  # final answer turn
+                n_truncation_nudges = 0
 
                 for tc in decoded.tool_calls:
                     result = await self._dispatch(environment, tc.name, tc.arguments)
+                    if tc.name not in _READONLY_TOOLS:
+                        result += await self._guard_task_file(environment, emit)
                     emit("tool", {"name": tc.name, "result_chars": len(result)})
                     messages.append({
                         "role": "tool", "tool_call_id": tc.call_id,
