@@ -125,6 +125,8 @@ class QwenNativeAgent(BaseAgent):
         summary_max_tokens: int = 4096,
         tool_primer: bool = False,
         extra_headers: dict[str, str] | None = None,
+        save_transcript: bool = False,
+        extra_request_fields: dict | None = None,
         **kwargs,
     ):
         super().__init__(logs_dir, model_name, *args, **kwargs)
@@ -143,6 +145,8 @@ class QwenNativeAgent(BaseAgent):
         self._enable_compaction = bool(enable_compaction)
         self._max_compactions = int(max_compactions)
         self._summary_max_tokens = int(summary_max_tokens)
+        self._save_transcript = bool(save_transcript)
+        self._extra_request_fields = dict(extra_request_fields or {})
 
     @staticmethod
     def name() -> str:
@@ -383,19 +387,26 @@ class QwenNativeAgent(BaseAgent):
                     "messages": messages,
                     "max_tokens": self._max_tokens,
                     "temperature": self._temperature,
+                    **self._extra_request_fields,
                 })
                 resp = None
-                for attempt in range(3):
+                for attempt in range(5):
                     try:
-                        resp = await client.post(
+                        r = await client.post(
                             f"{self._api_base}/chat/completions",
                             json=wire,
                             headers=self._headers,
                         )
-                        break
                     except httpx.HTTPError as exc:
                         emit("request_retry", {"attempt": attempt + 1,
                                                "error": repr(exc)})
+                    else:
+                        if r.status_code < 500:
+                            resp = r
+                            break
+                        emit("request_retry", {"attempt": attempt + 1,
+                                               "error": f"HTTP {r.status_code}"})
+                    await __import__("asyncio").sleep(10 * (attempt + 1))
                 if resp is None:
                     # Model endpoint unreachable/overloaded: end gracefully so
                     # the verifier still grades the current file state.
@@ -485,4 +496,17 @@ class QwenNativeAgent(BaseAgent):
         context.n_output_tokens = n_out
         context.metadata = {"protocol": "qwen-native-v1", "api_calls": call_idx + 1,
                             "stop_reason": stop_reason, "n_compactions": n_compactions}
+        if self._save_transcript:
+            # Full messages history: assistant content carries <think> inline
+            # (reasoning_content is merged at decode time) plus structured
+            # tool_calls; codec.encode_messages can replay the exact wire form.
+            (self.logs_dir / "transcript.json").write_text(json.dumps({
+                "protocol": "qwen-native-v1",
+                "model": self.model_name,
+                "stop_reason": stop_reason,
+                "api_calls": call_idx + 1,
+                "n_compactions": n_compactions,
+                "usage": {"input_tokens": n_in, "output_tokens": n_out},
+                "messages": messages,
+            }, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
         log.close()

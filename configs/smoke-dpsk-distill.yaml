@@ -1,0 +1,29 @@
+# Distillation smoke: one trivial task through deepseek-v4-pro with the full
+# transcript dump on. Validates that (a) reasoning_content comes back and is
+# inlined as <think> in every assistant turn, (b) agent/transcript.json holds
+# the complete messages history (tool_calls args + tool results included).
+#
+#   PYTHONPATH=$PWD DPSK_API_KEY=... .venv/bin/harbor run -c configs/smoke-dpsk-distill.yaml
+
+job_name: smoke-dpsk-distill
+jobs_dir: jobs
+n_attempts: 1
+n_concurrent_trials: 1
+
+agents:
+  - import_path: agents.qwen_native_agent:QwenNativeAgent
+    model_name: deepseek-v4-pro
+    kwargs:
+      api_base: https://llm-hub.apodex.app/v1
+      api_key: $DPSK_API_KEY
+      tool_primer: true
+      extra_headers: {"X-Llmhub-Channel": "7"}
+      max_api_calls: 64
+      max_tokens: 16384
+      save_transcript: true
+      # thinking is on by default for deepseek-v4-pro; pin it so a gateway
+      # default flip can never silently drop the CoT we distill on.
+      extra_request_fields: {"thinking": {"type": "enabled"}}
+
+datasets:
+  - path: tasks/_smoke

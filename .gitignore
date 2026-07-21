@@ -10,3 +10,7 @@ nohup.out
 tasks/_rerun_specviol/
 code-prover-lean.tar
 tasks/_rerun_specviol2/
+rl/_prover_config.generated.yaml
+/data/
+.env
+solved_problems/
