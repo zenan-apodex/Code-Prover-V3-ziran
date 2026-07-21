@@ -1,0 +1,37 @@
+# Verina-189 全量评测 — E2B 云沙箱版（环境跑在 E2B，LLM 走本机 SGLang）。
+#
+# 前置：
+#   - export E2B_API_KEY=<公司 team key>
+#   - Docker Hub 凭证在 ~/.docker/config.json（docker login lizenan1995）
+#   - SGLang 已起在 127.0.0.1:8000（server/serve_sglang.sh）
+#   - verina 数据集 Dockerfile FROM 已指向 lizenan1995/code-prover-lean:latest
+#
+#   PYTHONPATH=$PWD .venv/bin/harbor run -c configs/prove-verina189-e2b.yaml
+#
+# 费用参考：4c/8GB ≈ $0.33/沙箱·小时；沙箱在等 LLM 时也计费。
+# 并发与公司账号共享配额，首跑建议 8，与同事确认水位后再放开。
+
+job_name: prove-verina189-qwen36-e2b
+jobs_dir: jobs
+n_attempts: 1
+n_concurrent_trials: 8
+
+environment:
+  import_path: tools.e2b_env:ACRE2BEnvironment
+  # E2B 模板默认 2c/1GB 跑不动 Mathlib；资源在模板 BUILD 时固化，首次跑
+  # verina 的 189 个模板都是新建所以直接生效；以后改数字需临时 force_build。
+  override_cpus: 4
+  override_memory_mb: 8192
+
+agents:
+  - import_path: agents.qwen_native_agent:QwenNativeAgent
+    model_name: code-prover-sft
+    override_timeout_sec: 14400.0
+    kwargs:
+      api_base: http://127.0.0.1:8000/v1
+      max_api_calls: 384
+      max_tokens: 24576
+      max_compactions: 6
+
+datasets:
+  - path: tasks/verina_canonical_189

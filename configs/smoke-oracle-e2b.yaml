@@ -1,0 +1,32 @@
+# E2E smoke on E2B cloud sandboxes: oracle agent + trivial-add, exercising
+# template build (base image pulled from our private ACR), sandbox exec,
+# tests upload and verifier grading — no LLM involved.
+#
+# Requires:
+#   - E2B_API_KEY exported
+#   - ACR credentials (docker login to the ACR, or ACR_PULL_USERNAME/PASSWORD)
+#   - the ACR instance's PUBLIC endpoint enabled + ACL open (E2B builds
+#     outside the VPC); tasks/_smoke Dockerfiles FROM the public-endpoint ref
+#
+#   PYTHONPATH=$PWD .venv/bin/harbor run -c configs/smoke-oracle-e2b.yaml
+
+job_name: smoke-oracle-e2b
+jobs_dir: jobs
+n_attempts: 1
+n_concurrent_trials: 1
+
+environment:
+  import_path: tools.e2b_env:ACRE2BEnvironment
+  # E2B templates default to 2 vCPU / 1 GB — far too small for `import
+  # Mathlib` (local smoke: 7 s; on 1 GB the compile thrashes until the agent
+  # times out). Resources are baked into the template at BUILD time: existing
+  # aliases keep their size, so set force_build: true for ONE run after
+  # changing these numbers, then remove it again.
+  override_cpus: 4
+  override_memory_mb: 8192
+
+agents:
+  - name: oracle
+
+datasets:
+  - path: tasks/_smoke

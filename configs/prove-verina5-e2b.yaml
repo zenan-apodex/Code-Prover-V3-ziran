@@ -1,0 +1,33 @@
+# E2B 真实负载试跑：5 个 verina 任务（3 basic + 2 advanced），qwen agent。
+# 验证点：模板并发新建、沙箱里 MCP/lean 工具链、4h 预算下的真实耗时与费用。
+#
+#   PYTHONPATH=$PWD .venv/bin/harbor run -c configs/prove-verina5-e2b.yaml
+
+job_name: prove-verina5-e2b
+jobs_dir: jobs
+n_attempts: 1
+n_concurrent_trials: 5
+
+environment:
+  import_path: tools.e2b_env:ACRE2BEnvironment
+  override_cpus: 4
+  override_memory_mb: 8192
+
+agents:
+  - import_path: agents.qwen_native_agent:QwenNativeAgent
+    model_name: code-prover-sft
+    override_timeout_sec: 14400.0
+    kwargs:
+      api_base: http://127.0.0.1:8000/v1
+      max_api_calls: 384
+      max_tokens: 24576
+      max_compactions: 6
+
+datasets:
+  - path: tasks/verina_canonical_189
+    task_names:
+      - verina_basic_1
+      - verina_basic_2
+      - verina_basic_5
+      - verina_advanced_1
+      - verina_advanced_10
