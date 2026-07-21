@@ -1,0 +1,45 @@
+# Distillation round 1/6: 5,000 randomly sampled tasks (seed 20260721, see
+# data/coding-v2.1-full-20260721/rounds_assignment.json) through
+# deepseek-v4-pro with full transcript dump. Calibration round: measures
+# solve rate, cache-hit ratio, and per-task cost before rounds 2-6.
+#
+# Decisions (2026-07-21): max_api_calls stays 384; compaction off — compacted
+# trajectories are non-linear and get discarded for SFT anyway, so stop at the
+# context soft limit instead of paying for a summarize-and-restart.
+#
+#   PYTHONPATH=$PWD DPSK_API_KEY=... .venv/bin/harbor run -c configs/distill-dpsk-round1.yaml
+
+job_name: distill-dpsk-round1
+jobs_dir: jobs
+n_attempts: 1
+n_concurrent_trials: 24
+
+# E2B shared template (per Zenan: no local docker for the distillation runs).
+# One prebuilt 4c/8GB template for all trials; per-task task.lean is delivered
+# by replaying the Dockerfile COPY at sandbox start (tools/e2b_env.py).
+# NOTE: concurrency shares the july-20-zenan team cap with RL rollout sandboxes.
+environment:
+  import_path: tools.e2b_env:ACRE2BEnvironment
+  override_cpus: 4
+  override_memory_mb: 8192
+  kwargs:
+    generic_template: code-prover-lean-eval-4c8g
+
+agents:
+  - import_path: agents.qwen_native_agent:QwenNativeAgent
+    model_name: deepseek-v4-pro
+    kwargs:
+      api_base: https://llm-hub.apodex.app/v1
+      api_key: $DPSK_API_KEY
+      tool_primer: true
+      extra_headers: {"X-Llmhub-Channel": "7"}
+      max_api_calls: 384
+      max_tokens: 16384
+      enable_compaction: false
+      save_transcript: true
+      # thinking is gateway-default-on for deepseek-v4-pro; pinned so a
+      # default flip can never silently drop the CoT we distill on.
+      extra_request_fields: {"thinking": {"type": "enabled"}}
+
+datasets:
+  - path: data/coding-v2.1-full-20260721/rounds/round1

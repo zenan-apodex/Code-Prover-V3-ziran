@@ -20,10 +20,25 @@ Usage (run config):
 
 Requires E2B_API_KEY. The FROM registry must be reachable from E2B's cloud
 (public internet) — VPC-only endpoints won't work.
+
+Generic-template mode (for large datasets):
+    environment:
+      import_path: tools.e2b_env:ACRE2BEnvironment
+      generic_template: code-prover-lean-eval-4c8g
+      override_cpus: 4
+      override_memory_mb: 8192
+
+Stock harbor builds ONE E2B TEMPLATE PER TASK (per-task Dockerfile), which is
+unusable at 5k tasks/round. With ``generic_template`` set, every trial shares
+that single template (built once from the task's FROM image if the alias is
+missing) and the per-task files are delivered at sandbox start instead: the
+task Dockerfile's COPY lines are replayed via upload_file. This matches the
+RL path (rl/sandbox.py: one generic template + runtime task upload).
 """
 
 from __future__ import annotations
 
+import asyncio
 import base64
 import json
 import os
@@ -34,6 +49,11 @@ from e2b import AsyncTemplate, Template
 from tenacity import retry, stop_after_attempt, wait_exponential
 
 from harbor.environments.e2b import E2BEnvironment
+
+_COPY_RE = re.compile(r"^\s*COPY\s+(?!--)(\S+)\s+(\S+)\s*$", re.MULTILINE)
+
+# One build per process even when many trials race the missing alias.
+_GENERIC_BUILD_LOCK = asyncio.Lock()
 
 # docker config.json auth keys to try for a given image registry host.
 _DOCKER_HUB_KEYS = (
@@ -79,6 +99,63 @@ def _registry_credentials(image_ref: str | None) -> tuple[str, str] | None:
 
 
 class ACRE2BEnvironment(E2BEnvironment):
+    def __init__(self, *args, generic_template: str | None = None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._generic_template = generic_template
+        if generic_template:
+            self._template_name = generic_template
+
+    async def start(self, force_build: bool):
+        if not self._generic_template:
+            return await super().start(force_build)
+
+        async with _GENERIC_BUILD_LOCK:
+            if force_build or not await self._does_template_exist():
+                self.logger.info("Building generic template %s", self._template_name)
+                await self._create_generic_template()
+
+        await self._create_sandbox()
+        if not self._sandbox:
+            raise RuntimeError("Sandbox not found but was just created.")
+        await self.ensure_dirs(self._mount_targets(writable_only=True))
+        await self._upload_environment_dir_after_start()
+        await self._replay_dockerfile_copies()
+
+    async def _create_generic_template(self):
+        """Build the shared template from the task's base (FROM) image only —
+        per-task COPY lines are replayed at sandbox start instead."""
+        base_ref = self.task_env_config.docker_image
+        if not base_ref:
+            dockerfile = self._environment_definition_path.read_text(encoding="utf-8")
+            m = re.search(r"^FROM\s+(\S+)", dockerfile, re.MULTILINE)
+            if not m:
+                raise RuntimeError("generic_template: cannot determine FROM image")
+            base_ref = m.group(1)
+        template = Template().from_image(image=base_ref)
+        creds = _registry_credentials(base_ref)
+        if creds:
+            template._registry_config = {
+                "type": "registry", "username": creds[0], "password": creds[1],
+            }
+        build_kwargs = {}
+        if self._effective_cpus is not None:
+            build_kwargs["cpu_count"] = self._effective_cpus
+        if self._effective_memory_mb is not None:
+            build_kwargs["memory_mb"] = self._effective_memory_mb
+        await AsyncTemplate.build(
+            template=template, alias=self._template_name, **build_kwargs
+        )
+
+    async def _replay_dockerfile_copies(self):
+        df = self._environment_definition_path
+        if not df.is_file():
+            return
+        for src, dst in _COPY_RE.findall(df.read_text(encoding="utf-8")):
+            target = dst if not dst.endswith("/") else dst + Path(src).name
+            await self.exec(f"mkdir -p {Path(target).parent}")
+            await self.upload_file(self.environment_dir / src, target)
+            self.logger.debug("Replayed COPY %s -> %s", src, target)
+
     async def _create_sandbox(self):
         # Log the sandbox ID so external terminations (e.g. by another system
         # sharing the E2B team) can be matched against provider audit logs.
