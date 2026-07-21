@@ -36,9 +36,14 @@ def main() -> int:
             tests = task_dir / "tests" / "grade.py"
             if not instruction.exists() or not tests.exists():
                 continue
+            text = instruction.read_text(encoding="utf-8")
+            # prompt as a messages list: the SFT ckpt is a multimodal wrapper,
+            # so miles loads an AutoProcessor and its Dataset asserts list-form
+            # prompts. Our generate() ignores non-str prompts and reads
+            # metadata.instruction instead (token stream is built there).
             f.write(json.dumps({
-                "prompt": instruction.read_text(encoding="utf-8"),
-                "metadata": {"task_name": task_dir.name},
+                "prompt": [{"role": "user", "content": text}],
+                "metadata": {"task_name": task_dir.name, "instruction": text},
             }, ensure_ascii=False) + "\n")
             n += 1
     print(f"wrote {n} prompts -> {out}")
