@@ -1,0 +1,25 @@
+# DeepSeek v4 pro through the miromind OpenAI-compatible gateway, driven by
+# the qwen-native agent with tool_primer=true (third-party models need the
+# union-v1 tool catalog + <tool_call> convention spelled out in the prompt).
+# Credential: export DPSK_API_KEY=... before running (never in configs).
+#
+#   PYTHONPATH=$PWD DPSK_API_KEY=... .venv/bin/harbor run -c configs/smoke-dpsk.yaml
+
+job_name: smoke-dpsk
+jobs_dir: jobs
+n_attempts: 1
+n_concurrent_trials: 1
+
+agents:
+  - import_path: agents.qwen_native_agent:QwenNativeAgent
+    model_name: deepseek-v4-pro
+    kwargs:
+      api_base: https://llm-hub.apodex.app/v1
+      api_key: $DPSK_API_KEY
+      tool_primer: true
+      extra_headers: {"X-Llmhub-Channel": "7"}
+      max_api_calls: 64
+      max_tokens: 16384
+
+datasets:
+  - path: tasks/_smoke

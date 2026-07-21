@@ -1,0 +1,25 @@
+# Verina-189 全量 — deepseek-v4-pro（apodex llm-hub 网关）。
+# 第三方模型：tool_primer 注入工具目录；凭证走环境变量。
+#
+#   PYTHONPATH=$PWD DPSK_API_KEY=... .venv/bin/harbor run -c configs/prove-verina189-dpsk.yaml
+
+job_name: prove-verina189-dpsk-v4pro
+jobs_dir: jobs
+n_attempts: 1
+n_concurrent_trials: 8
+
+agents:
+  - import_path: agents.qwen_native_agent:QwenNativeAgent
+    model_name: deepseek-v4-pro
+    override_timeout_sec: 14400.0
+    kwargs:
+      api_base: https://llm-hub.apodex.app/v1
+      api_key: $DPSK_API_KEY
+      tool_primer: true
+      extra_headers: {"X-Llmhub-Channel": "7"}
+      max_api_calls: 384
+      max_tokens: 16384
+      max_compactions: 6
+
+datasets:
+  - path: tasks/verina_canonical_189

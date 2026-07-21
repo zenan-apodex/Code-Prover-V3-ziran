@@ -1,0 +1,798 @@
+[
+ {
+  "name": "lean_build",
+  "description": "Build the Lean project and restart the LSP session. Use only when imports change or rebuilding is needed.",
+  "required": [],
+  "properties": {
+   "lean_project_path": {
+    "type": [
+     "string",
+     "null"
+    ],
+    "description": "Override the project root (defaults to --lean-project-path)."
+   },
+   "clean": {
+    "type": "boolean",
+    "description": "Run `lake clean` before building (slow)."
+   },
+   "output_lines": {
+    "type": "integer",
+    "description": "Tail lines of build output to return (0 = none)."
+   }
+  }
+ },
+ {
+  "name": "lean_check_statement",
+  "description": "Autoformalization helper: verify that a Lean type / statement elaborates correctly (types check, all names resolve) WITHOUT requiring a proof. Wraps the statement as `theorem _check : <statement> := b",
+  "required": [
+   "statement"
+  ],
+  "properties": {
+   "statement": {
+    "type": "string",
+    "description": "The Lean type / statement to check (e.g. `∀ n : Nat, n + 0 = n`,\n`Real.exp 0 = 1`). The tool wraps it as\n`theorem _check"
+   },
+   "imports": {
+    "type": [
+     "array",
+     "null"
+    ],
+    "description": "Imports to add at the top of the snippet. Defaults to `[\"Mathlib\"]`\nso most of Mathlib is in scope."
+   }
+  }
+ },
+ {
+  "name": "lean_check_visibility",
+  "description": "Position-aware visibility check: does `<name>` resolve at line `line` of `file_path` given that file's imports / opens / namespace context? Returns the inferred signature, whether the declaration carr",
+  "required": [
+   "file_path",
+   "line",
+   "name"
+  ],
+  "properties": {
+   "file_path": {
+    "type": "string",
+    "description": "File whose import / open / namespace scope provides the lookup\ncontext."
+   },
+   "line": {
+    "type": "integer",
+    "description": "1-indexed line at which to evaluate visibility. The tool inserts a\n`#check @<name>` line before this line."
+   },
+   "name": {
+    "type": "string",
+    "description": "Name to look up (qualified or unqualified)."
+   }
+  }
+ },
+ {
+  "name": "lean_code_actions",
+  "description": "Get LSP code actions for a line. Returns resolved edits for TryThis suggestions (simp?, exact?, apply?) and other quick fixes.",
+  "required": [
+   "file_path",
+   "line"
+  ],
+  "properties": {
+   "file_path": {
+    "type": "string"
+   },
+   "line": {
+    "type": "integer"
+   }
+  }
+ },
+ {
+  "name": "lean_completions",
+  "description": "Get IDE autocompletions. Use on INCOMPLETE code (after `.` or partial name).",
+  "required": [
+   "file_path",
+   "line",
+   "column"
+  ],
+  "properties": {
+   "file_path": {
+    "type": "string"
+   },
+   "line": {
+    "type": "integer"
+   },
+   "column": {
+    "type": "integer"
+   },
+   "max_completions": {
+    "type": "integer"
+   }
+  }
+ },
+ {
+  "name": "lean_declaration_file",
+  "description": "Get file where a symbol is declared. Symbol must be present in file first.",
+  "required": [
+   "file_path",
+   "symbol"
+  ],
+  "properties": {
+   "file_path": {
+    "type": "string"
+   },
+   "symbol": {
+    "type": "string"
+   }
+  }
+ },
+ {
+  "name": "lean_diagnostic_messages",
+  "description": "Get compiler diagnostics (errors, warnings, infos) for a Lean file.",
+  "required": [
+   "file_path"
+  ],
+  "properties": {
+   "file_path": {
+    "type": "string"
+   },
+   "start_line": {
+    "type": [
+     "integer",
+     "null"
+    ]
+   },
+   "end_line": {
+    "type": [
+     "integer",
+     "null"
+    ]
+   },
+   "declaration_name": {
+    "type": [
+     "string",
+     "null"
+    ]
+   },
+   "interactive": {
+    "type": "boolean"
+   },
+   "severity": {
+    "type": "any"
+   }
+  }
+ },
+ {
+  "name": "lean_explain_error",
+  "description": "Classify Lean diagnostics by category (type_mismatch / unknown_identifier / failed_to_synthesize / motive_not_type_correct / universe_inconsistency / unsolved_goals / tactic_failed / parse_error / imp",
+  "required": [
+   "file_path"
+  ],
+  "properties": {
+   "file_path": {
+    "type": "string"
+   },
+   "start_line": {
+    "type": [
+     "integer",
+     "null"
+    ],
+    "description": "1-indexed start line. Optional — when omitted, all diagnostics for\nthe file are returned."
+   },
+   "end_line": {
+    "type": [
+     "integer",
+     "null"
+    ]
+   },
+   "include_warnings": {
+    "type": "boolean",
+    "description": "Include warnings and infos as well as errors. Default: false."
+   }
+  }
+ },
+ {
+  "name": "lean_file_outline",
+  "description": "Get imports and declarations with type signatures. Token-efficient.",
+  "required": [
+   "file_path"
+  ],
+  "properties": {
+   "file_path": {
+    "type": "string"
+   },
+   "max_declarations": {
+    "type": [
+     "integer",
+     "null"
+    ]
+   }
+  }
+ },
+ {
+  "name": "lean_find_usages",
+  "description": "Find concrete usage examples of a named declaration (lemma / def / class). Greps the project + stdlib via ripgrep, skips declaration sites, and returns up to `limit` lines showing how the symbol is ac",
+  "required": [
+   "name"
+  ],
+  "properties": {
+   "name": {
+    "type": "string",
+    "description": "Symbol name; can be fully qualified (`Nat.add_zero`) or unqualified\n(`add_zero`). For unqualified queries every dot-qual"
+   },
+   "limit": {
+    "type": "integer",
+    "description": "Max usage examples. Default 5."
+   },
+   "project_root": {
+    "type": [
+     "string",
+     "null"
+    ]
+   }
+  }
+ },
+ {
+  "name": "lean_get_widget_source",
+  "description": "Get the JavaScript source of a widget by hash. Returns the full JS module; may be large.",
+  "required": [
+   "file_path",
+   "javascript_hash"
+  ],
+  "properties": {
+   "file_path": {
+    "type": "string"
+   },
+   "javascript_hash": {
+    "type": "string"
+   }
+  }
+ },
+ {
+  "name": "lean_get_widgets",
+  "description": "Get panel widgets at a position (proof visualisations, #html, custom widgets). Returns raw widget data; may be large.",
+  "required": [
+   "file_path",
+   "line",
+   "column"
+  ],
+  "properties": {
+   "file_path": {
+    "type": "string"
+   },
+   "line": {
+    "type": "integer"
+   },
+   "column": {
+    "type": "integer"
+   }
+  }
+ },
+ {
+  "name": "lean_goal",
+  "description": "Get proof goals at a position. MOST IMPORTANT tool - use often! Omit `column` to see goals_before (line start) and goals_after (line end), showing how the tactic transforms the state. \"no goals\" = pro",
+  "required": [
+   "file_path",
+   "line"
+  ],
+  "properties": {
+   "file_path": {
+    "type": "string",
+    "description": "Absolute or project-root-relative path to a Lean file."
+   },
+   "line": {
+    "type": "integer",
+    "description": "Line number (1-indexed)."
+   },
+   "column": {
+    "type": [
+     "integer",
+     "null"
+    ],
+    "description": "Optional column (1-indexed). Omit for goals_before / goals_after."
+   },
+   "format": {
+    "type": "any",
+    "description": "`text` (default) or `structured`."
+   }
+  }
+ },
+ {
+  "name": "lean_goal_diff",
+  "description": "Structured diff between two proof states. Compare the goal at `before_line` (typically the line before a tactic) with the goal at `after_line` (typically the line after). Returns added / removed / ret",
+  "required": [
+   "file_path",
+   "before_line",
+   "after_line"
+  ],
+  "properties": {
+   "file_path": {
+    "type": "string"
+   },
+   "before_line": {
+    "type": "integer",
+    "description": "Position BEFORE the tactic (1-indexed)."
+   },
+   "after_line": {
+    "type": "integer",
+    "description": "Position AFTER the tactic (1-indexed)."
+   },
+   "before_column": {
+    "type": [
+     "integer",
+     "null"
+    ],
+    "description": "Optional explicit columns (1-indexed UTF-16). Default for each: end\nof the line."
+   },
+   "after_column": {
+    "type": [
+     "integer",
+     "null"
+    ]
+   }
+  }
+ },
+ {
+  "name": "lean_hammer_premise",
+  "description": "Get premise suggestions for automation tactics at a goal position. Returns lemma names suitable for `simp only [...]`, `aesop`, or hints.",
+  "required": [
+   "file_path",
+   "line",
+   "column"
+  ],
+  "properties": {
+   "file_path": {
+    "type": "string"
+   },
+   "line": {
+    "type": "integer"
+   },
+   "column": {
+    "type": "integer"
+   },
+   "num_results": {
+    "type": "integer"
+   }
+  }
+ },
+ {
+  "name": "lean_hover_info",
+  "description": "Get type signature and docs for a symbol at a position.",
+  "required": [
+   "file_path",
+   "line",
+   "column"
+  ],
+  "properties": {
+   "file_path": {
+    "type": "string"
+   },
+   "line": {
+    "type": "integer"
+   },
+   "column": {
+    "type": "integer"
+   }
+  }
+ },
+ {
+  "name": "lean_leanfinder",
+  "description": "Semantic search by mathematical meaning via Lean Finder (HuggingFace).",
+  "required": [
+   "query"
+  ],
+  "properties": {
+   "query": {
+    "type": "string"
+   },
+   "num_results": {
+    "type": "integer"
+   }
+  }
+ },
+ {
+  "name": "lean_leansearch",
+  "description": "Search Mathlib via leansearch.net using natural language. Examples: \"Cauchy-Schwarz inequality\", \"sum of two even numbers is even\".",
+  "required": [
+   "query"
+  ],
+  "properties": {
+   "query": {
+    "type": "string"
+   },
+   "num_results": {
+    "type": "integer"
+   }
+  }
+ },
+ {
+  "name": "lean_list_sorries",
+  "description": "Enumerate every proof-placeholder token in a file — both `sorry` and Lean's synonym `admit` (skipping comments, strings, identifier substrings, and escaped identifiers `«sorry»` / `«admit»`). Each ite",
+  "required": [
+   "file_path"
+  ],
+  "properties": {
+   "file_path": {
+    "type": "string"
+   },
+   "include_goals": {
+    "type": "boolean",
+    "description": "Also fetch the first goal at each sorry position. Adds one\n`$/lean/plainGoal` request per sorry. Default: true."
+   }
+  }
+ },
+ {
+  "name": "lean_local_search",
+  "description": "Fast local search to verify declarations exist via ripgrep. Use BEFORE trying a lemma name to make sure it's available in the project.",
+  "required": [
+   "query"
+  ],
+  "properties": {
+   "query": {
+    "type": "string"
+   },
+   "limit": {
+    "type": "integer"
+   },
+   "project_root": {
+    "type": [
+     "string",
+     "null"
+    ]
+   }
+  }
+ },
+ {
+  "name": "lean_loogle",
+  "description": "Search Mathlib by type signature via loogle.lean-lang.org. Examples: `Real.sin`, `(?a → ?b) → List ?a → List ?b`.",
+  "required": [
+   "query"
+  ],
+  "properties": {
+   "query": {
+    "type": "string"
+   },
+   "num_results": {
+    "type": "integer"
+   }
+  }
+ },
+ {
+  "name": "lean_multi_attempt",
+  "description": "Try multiple tactics without modifying the file on disk. Returns the goal state and diagnostics for each snippet. With `--repl` enabled and a `repl` binary present, snippets are evaluated in tactic mo",
+  "required": [
+   "file_path",
+   "line",
+   "snippets"
+  ],
+  "properties": {
+   "file_path": {
+    "type": "string"
+   },
+   "line": {
+    "type": "integer"
+   },
+   "snippets": {
+    "type": "array"
+   },
+   "column": {
+    "type": [
+     "integer",
+     "null"
+    ]
+   },
+   "stop_on_success": {
+    "type": "boolean",
+    "description": "Stop after the first snippet that closes the goal (no remaining goals\nAND no error-severity diagnostics on the inserted "
+   }
+  }
+ },
+ {
+  "name": "lean_ping",
+  "description": "Health check: echo the supplied message and return the server version. Use this to verify the MCP transport is working.",
+  "required": [],
+  "properties": {
+   "message": {
+    "type": [
+     "string",
+     "null"
+    ]
+   }
+  }
+ },
+ {
+  "name": "lean_profile_proof",
+  "description": "Run `lean --profile` on a theorem. Returns per-line timing and per-category cumulative time. SLOW — avoid on theorems that already hit heartbeat limits.",
+  "required": [
+   "file_path",
+   "line"
+  ],
+  "properties": {
+   "file_path": {
+    "type": "string"
+   },
+   "line": {
+    "type": "integer"
+   },
+   "top_n": {
+    "type": "integer"
+   },
+   "timeout": {
+    "type": "number"
+   }
+  }
+ },
+ {
+  "name": "lean_project_overview",
+  "description": "Project-level structure summary: every `.lean` module under the project root with its first-line docstring and top-level declaration names. Pure static scan (no LSP), so it stays fast on Mathlib-scale",
+  "required": [],
+  "properties": {
+   "project_root": {
+    "type": [
+     "string",
+     "null"
+    ],
+    "description": "Override the project root. Defaults to `--lean-project-path`."
+   },
+   "max_declarations": {
+    "type": "integer",
+    "description": "Per-module cap on how many declaration names to return. Default 32."
+   },
+   "include_dependencies": {
+    "type": "boolean",
+    "description": "When true, also descend into `.lake/packages/*` (dependency\nmodules). Default false — Mathlib alone is ~25k modules, tha"
+   }
+  }
+ },
+ {
+  "name": "lean_quick_check",
+  "description": "Quickly verify a Lean name exists + report its type signature, without attempting any proof. Runs `#check @<name>` through the LSP and parses the info diagnostic. Pair with `lean_local_search` (which ",
+  "required": [
+   "name"
+  ],
+  "properties": {
+   "name": {
+    "type": "string",
+    "description": "Fully qualified or unqualified Lean name to look up (e.g.\n`Nat.add_zero`, `Real.exp`)."
+   },
+   "imports": {
+    "type": [
+     "array",
+     "null"
+    ],
+    "description": "Imports to use. Default: `[\"Mathlib\"]`."
+   }
+  }
+ },
+ {
+  "name": "lean_references",
+  "description": "Find all references to a symbol (including the declaration). Position cursor at the symbol.",
+  "required": [
+   "file_path",
+   "line",
+   "column"
+  ],
+  "properties": {
+   "file_path": {
+    "type": "string"
+   },
+   "line": {
+    "type": "integer"
+   },
+   "column": {
+    "type": "integer"
+   }
+  }
+ },
+ {
+  "name": "lean_replace_sorry",
+  "description": "Replace a single proof placeholder (`sorry` or `admit`, located by 1-indexed line) with a proof. Verifies the edit by diffing pre/post diagnostics (only NEW errors block success) and rejects replaceme",
+  "required": [
+   "file_path",
+   "line",
+   "proof"
+  ],
+  "properties": {
+   "file_path": {
+    "type": "string"
+   },
+   "line": {
+    "type": "integer",
+    "description": "1-indexed line of the sorry to replace. Use `lean_list_sorries`\nfirst if you have multiple sorries in the file."
+   },
+   "column": {
+    "type": [
+     "integer",
+     "null"
+    ],
+    "description": "Optional 1-indexed UTF-16 column to disambiguate when a single line\ncontains multiple `sorry` tokens (e.g. the skeleton "
+   },
+   "proof": {
+    "type": "string",
+    "description": "Replacement text. May span multiple lines; the existing indent of\nthe sorry is preserved and applied to every line of `p"
+   },
+   "persist": {
+    "type": "boolean",
+    "description": "If `true` (default), the file is overwritten on disk when the\nreplacement compiles cleanly. If `false`, the edit is eval"
+   },
+   "allow_sorries": {
+    "type": "boolean",
+    "description": "Opt-in to **skeleton mode**: by default the tool rejects\nreplacements whose proof text still contains placeholder tokens"
+   }
+  }
+ },
+ {
+  "name": "lean_run_code",
+  "description": "Run a self-contained Lean snippet (must include imports) and return compiler diagnostics.",
+  "required": [
+   "code"
+  ],
+  "properties": {
+   "code": {
+    "type": "string",
+    "description": "Self-contained Lean code (must include any imports needed)."
+   }
+  }
+ },
+ {
+  "name": "lean_slow_proofs",
+  "description": "File-level performance audit. Iterates every theorem / lemma / def in a file, runs `lean --profile` per theorem, and returns the slowest `top_n` whose elaboration exceeds `threshold_ms` ms. **Slow**: ",
+  "required": [
+   "file_path"
+  ],
+  "properties": {
+   "file_path": {
+    "type": "string"
+   },
+   "top_n": {
+    "type": "integer",
+    "description": "Number of slowest theorems to return. Default 5."
+   },
+   "threshold_ms": {
+    "type": "number",
+    "description": "Skip theorems whose elaboration time is below this (ms). Default 500."
+   },
+   "timeout_per_theorem_secs": {
+    "type": "number",
+    "description": "Per-theorem profiling timeout in seconds. Default 60."
+   },
+   "max_theorems_to_profile": {
+    "type": "integer",
+    "description": "Hard cap on how many theorems to profile (safety: each one spawns\na full Lean process). Default 20."
+   }
+  }
+ },
+ {
+  "name": "lean_state_search",
+  "description": "Find lemmas that may close the goal at a position. Searches premise-search.com.",
+  "required": [
+   "file_path",
+   "line",
+   "column"
+  ],
+  "properties": {
+   "file_path": {
+    "type": "string"
+   },
+   "line": {
+    "type": "integer"
+   },
+   "column": {
+    "type": "integer"
+   },
+   "num_results": {
+    "type": "integer"
+   }
+  }
+ },
+ {
+  "name": "lean_stuck_helper",
+  "description": "Comprehensive 'what can close this goal?' helper. Tries a curated tactic list (`rfl`, `decide`, `omega`, `simp_all`, `aesop`, `linarith`, `ring`, `trivial`, `tauto`, `norm_num`), then `exact <h>` for ",
+  "required": [
+   "file_path",
+   "line",
+   "column"
+  ],
+  "properties": {
+   "file_path": {
+    "type": "string"
+   },
+   "line": {
+    "type": "integer"
+   },
+   "column": {
+    "type": "integer"
+   },
+   "include_premises": {
+    "type": "boolean",
+    "description": "Pull premises from `lean_state_search` and try `exact` / `apply` for\neach. Default: true. Set false to skip a network ca"
+   },
+   "premises_limit": {
+    "type": "integer",
+    "description": "Max premises to try. Default: 5."
+   },
+   "include_slow": {
+    "type": "boolean",
+    "description": "Include slow heavyweights (`aesop`, `simp_all`). Default: true."
+   },
+   "include_progress": {
+    "type": "boolean",
+    "description": "Also return tactics that progressed (didn't close) — useful even when\nno closer is found. Default: true."
+   }
+  }
+ },
+ {
+  "name": "lean_suggest_definitions",
+  "description": "Autoformalization helper: given a natural-language concept (e.g. \"derivative of a real function\", \"polynomial ring\"), suggests Mathlib **definitions** that may match. Fans out to leanfinder + leansear",
+  "required": [
+   "concept"
+  ],
+  "properties": {
+   "concept": {
+    "type": "string",
+    "description": "Natural-language description or mixed query, e.g. \"derivative of a\nreal function\" or \"polynomial ring\"."
+   },
+   "num_results": {
+    "type": "integer",
+    "description": "Number of suggestions to return after merging. Default 8."
+   },
+   "kinds": {
+    "type": [
+     "array",
+     "null"
+    ],
+    "description": "Filter to these declaration kinds. Default:\n[\"def\",\"class\",\"structure\",\"inductive\",\"abbrev\"]. Pass an empty\nlist to disa"
+   }
+  }
+ },
+ {
+  "name": "lean_tactic_stats",
+  "description": "Count tactic-name occurrences across a file (static scan; no elaboration). Returns the most-used tactic identifiers sorted by count. Useful for self-reflection (\"am I leaning too heavily on `simp_all`",
+  "required": [
+   "file_path"
+  ],
+  "properties": {
+   "file_path": {
+    "type": "string"
+   },
+   "limit": {
+    "type": "integer",
+    "description": "Max distinct tactic names to return. Default 20."
+   }
+  }
+ },
+ {
+  "name": "lean_term_goal",
+  "description": "Get the expected type at a position.",
+  "required": [
+   "file_path",
+   "line"
+  ],
+  "properties": {
+   "file_path": {
+    "type": "string"
+   },
+   "line": {
+    "type": "integer"
+   },
+   "column": {
+    "type": [
+     "integer",
+     "null"
+    ]
+   }
+  }
+ },
+ {
+  "name": "lean_verify",
+  "description": "Check the axioms a theorem depends on + optionally scan the source file for suspicious patterns (unsafe, @[extern], opaque, etc.).",
+  "required": [
+   "file_path",
+   "theorem_name"
+  ],
+  "properties": {
+   "file_path": {
+    "type": "string"
+   },
+   "theorem_name": {
+    "type": "string"
+   },
+   "scan_source": {
+    "type": "boolean"
+   }
+  }
+ }
+]
