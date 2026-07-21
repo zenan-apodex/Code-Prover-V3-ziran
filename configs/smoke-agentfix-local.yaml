@@ -1,0 +1,23 @@
+# One-task LOCAL-docker e2e smoke for the qwen agent loop changes
+# (truncation nudge + spec-guard restore-on-move).
+#
+#   PYTHONPATH=$PWD .venv/bin/harbor run -c configs/smoke-agentfix-local.yaml
+
+job_name: smoke-agentfix-local
+jobs_dir: jobs
+n_attempts: 1
+n_concurrent_trials: 1
+
+agents:
+  - import_path: agents.qwen_native_agent:QwenNativeAgent
+    model_name: code-prover-sft
+    kwargs:
+      api_base: http://127.0.0.1:8000/v1
+      max_api_calls: 384
+      max_tokens: 24576
+      max_compactions: 6
+
+datasets:
+  - path: tasks/verina_canonical_189
+    task_names:
+      - verina_basic_1

@@ -123,11 +123,18 @@ class QwenNativeAgent(BaseAgent):
         enable_compaction: bool = True,
         max_compactions: int = 3,
         summary_max_tokens: int = 4096,
+        tool_primer: bool = False,
+        extra_headers: dict[str, str] | None = None,
         **kwargs,
     ):
         super().__init__(logs_dir, model_name, *args, **kwargs)
         self._api_base = api_base.rstrip("/")
+        if api_key.startswith("$"):  # credentials via env, never in configs
+            api_key = __import__("os").environ.get(api_key[1:], "dummy")
         self._api_key = api_key
+        self._tool_primer = bool(tool_primer)
+        self._headers = {"Authorization": f"Bearer {self._api_key}",
+                         **(extra_headers or {})}
         self._max_api_calls = int(max_api_calls)
         self._max_tokens = int(max_tokens)
         self._temperature = float(temperature)
@@ -306,7 +313,7 @@ class QwenNativeAgent(BaseAgent):
             resp = await client.post(
                 f"{self._api_base}/chat/completions",
                 json=wire,
-                headers={"Authorization": f"Bearer {self._api_key}"},
+                headers=self._headers,
             )
             resp.raise_for_status()
             msg = resp.json()["choices"][0]["message"]
@@ -327,6 +334,10 @@ class QwenNativeAgent(BaseAgent):
         def emit(kind: str, payload: dict) -> None:
             log.write(json.dumps({"type": kind, **payload}, ensure_ascii=False) + "\n")
             log.flush()
+
+        if self._tool_primer:
+            from .tool_primer import build_primer
+            instruction = build_primer() + instruction
 
         m = self._TASK_PATH_RE.search(instruction)
         self._guard_path = m.group(0) if m else None
@@ -379,7 +390,7 @@ class QwenNativeAgent(BaseAgent):
                         resp = await client.post(
                             f"{self._api_base}/chat/completions",
                             json=wire,
-                            headers={"Authorization": f"Bearer {self._api_key}"},
+                            headers=self._headers,
                         )
                         break
                     except httpx.HTTPError as exc:
