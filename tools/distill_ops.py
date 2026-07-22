@@ -62,12 +62,36 @@ def cmd_rounds(args) -> int:
 
 
 def _clean_task_names(job: Path) -> set[str]:
-    """Task names with a clean finish (result.json, no exception) in a job."""
+    """Task names whose trial doesn't deserve a re-run in this job.
+
+    A finish counts as clean when result.json has no exception AND the
+    rollout wasn't gutted by infrastructure: trials that ended in
+    request_transport_error/request_rejected_400 without solving (round3
+    2026-07-22: 1,683 trials quit early inside a gateway 502/503 storm)
+    look clean to harbor but carry a truncated, unusable rollout — unless
+    they happened to be solved anyway, they belong in the rescue set.
+    """
     clean = set()
     for p in job.glob("*/result.json"):
         d = json.loads(p.read_text())
-        if d.get("exception_info") is None:
-            clean.add(Path(d["task_id"]["path"]).name)
+        if d.get("exception_info") is not None:
+            continue
+        name = Path(d["task_id"]["path"]).name
+        trial = p.parent
+        tp = trial / "agent" / "transcript.json"
+        if tp.is_file():
+            try:
+                stop = json.loads(tp.read_text()).get("stop_reason")
+            except ValueError:
+                stop = None
+            if stop in ("request_transport_error", "request_rejected_400"):
+                reward = None
+                rw = trial / "verifier" / "reward.json"
+                if rw.is_file():
+                    reward = parse_reward(rw.read_text())
+                if reward != 1.0:
+                    continue
+        clean.add(name)
     return clean
 
 

@@ -341,7 +341,7 @@ class QwenNativeAgent(BaseAgent):
         exponentially with jitter and honours Retry-After — treating it as
         fatal burned 1.4k tasks on 2026-07-21. Returns the response, or None
         when every attempt failed (caller ends the rollout gracefully)."""
-        for attempt in range(10):
+        for attempt in range(16):
             try:
                 r = await client.post(
                     f"{self._api_base}/chat/completions",
@@ -367,9 +367,16 @@ class QwenNativeAgent(BaseAgent):
                 await asyncio.sleep(delay)
                 continue
             if r.status_code >= 500:
+                # Gateway 502/503 storms run for tens of minutes (round3
+                # 2026-07-22: 57k retries, 1,683 trials exhausted the old
+                # 10x10s ladder and quit as request_transport_error). Back
+                # off like 429 — waiting out a storm inside the agent budget
+                # beats burning the task.
+                delay = min(120.0, 15.0 * 2 ** attempt) * (0.5 + random.random())
                 emit("request_retry", {"attempt": attempt + 1,
-                                       "error": f"HTTP {r.status_code}"})
-                await asyncio.sleep(10 * (attempt + 1))
+                                       "error": f"HTTP {r.status_code}",
+                                       "sleep_sec": round(delay, 1)})
+                await asyncio.sleep(delay)
                 continue
             if r.status_code < 300:
                 # The gateway occasionally returns 2xx with an empty/garbage
