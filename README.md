@@ -134,3 +134,25 @@ verifier 的 `tests/` 在 agent 阶段结束后才被上传进容器，agent 无
     --jobs jobs/distill-dpsk-round1 jobs/distill-dpsk-round1-rescue \
     --out data/coding-v2.1-full-20260721/sft/round1.jsonl --solved-only
 ```
+
+## 内部 Aliyun 沙箱平台（e2b-proxy）
+
+蒸馏/评测可跑在公司自建集群（SG=`agent.miro` / JB=`agent.miro.jb`，VPC-only）。
+客户端必须用 pinned venv（平台私有 CA 与 key 格式的限制）：
+
+```bash
+uv venv --python 3.12 .venv-aliyun
+uv pip install --python .venv-aliyun/bin/python "harbor==0.20.0" "e2b==2.23.0" tenacity httpx pyyaml
+# e2b 2.23 缺 harbor eager-import 的 SandboxNetworkUpdate（2.24+ 才有），补 stub：
+cat >> .venv-aliyun/lib/python3.12/site-packages/e2b/sandbox/sandbox_api.py <<'PATCH'
+
+
+class SandboxNetworkUpdate(dict):
+    """harbor-compat stub; aliyun mode no-ops the update_network path."""
+PATCH
+```
+
+运行：`ALIYUN_E2B_API_KEY=... .venv-aliyun/bin/harbor run -c configs/smoke-dpsk-distill-aliyun.yaml`。
+环境 kwargs 见 `tools/e2b_env.py` aliyun 模式（sandboxset + ACR 镜像 claim 时替换，
+无模板构建）；域名/CA 在 `tools/aliyun_clusters.py`。SSL_CERT_FILE 用系统 CA + 私有
+CA 合并 bundle（只放私有 CA 会把进程里 DPSK 网关等所有 TLS 打挂）。

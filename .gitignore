@@ -14,3 +14,4 @@ rl/_prover_config.generated.yaml
 /data/
 .env
 solved_problems/
+.venv-aliyun/

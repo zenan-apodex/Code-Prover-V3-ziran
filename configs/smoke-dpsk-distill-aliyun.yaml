@@ -1,0 +1,38 @@
+# Internal-platform distillation smoke: one trivial task on the company
+# self-hosted Aliyun sandbox cluster (SG) — sandboxset zenan-allow-internet
+# claimed with our code-prover-lean image swapped in from ACR at claim time.
+# MUST run with the pinned venv (py3.12 + e2b==2.23.0):
+#
+#   PYTHONPATH=$PWD DPSK_API_KEY=... ALIYUN_E2B_API_KEY=... \
+#     .venv-aliyun/bin/harbor run -c configs/smoke-dpsk-distill-aliyun.yaml
+
+job_name: smoke-dpsk-distill-aliyun
+jobs_dir: jobs
+n_attempts: 1
+n_concurrent_trials: 1
+
+environment:
+  import_path: tools.e2b_env:ACRE2BEnvironment
+  kwargs:
+    generic_template: zenan-allow-internet
+    aliyun_cluster: sg
+    aliyun_image: miromind-sg-registry-vpc.ap-southeast-1.cr.aliyuncs.com/verifiable-ai-lab/code-prover-lean:latest
+    sandbox_timeout_sec: 7200
+    claim_timeout_sec: 600
+    wait_ready_timeout_sec: 600
+
+agents:
+  - import_path: agents.thirdparty_agent:ThirdPartyAgent
+    model_name: deepseek-v4-pro
+    kwargs:
+      api_base: https://llm-hub.apodex.app/v1
+      api_key: $DPSK_API_KEY
+      extra_headers: {"X-Llmhub-Channel": "7"}
+      max_api_calls: 64
+      max_tokens: 16384
+      enable_compaction: false
+      save_transcript: true
+      extra_request_fields: {"thinking": {"type": "enabled"}}
+
+datasets:
+  - path: tasks/_smoke

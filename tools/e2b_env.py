@@ -104,6 +104,10 @@ class ACRE2BEnvironment(E2BEnvironment):
         *args,
         generic_template: str | None = None,
         sandbox_timeout_sec: int | None = None,
+        aliyun_cluster: str | None = None,
+        aliyun_image: str | None = None,
+        claim_timeout_sec: int = 600,
+        wait_ready_timeout_sec: int = 600,
         **kwargs,
     ):
         super().__init__(*args, **kwargs)
@@ -111,6 +115,21 @@ class ACRE2BEnvironment(E2BEnvironment):
         # Stock harbor hardcodes a 24h sandbox timeout; sandboxes bill while
         # they exist, so cap to just above agent+verifier budget instead.
         self._sandbox_timeout_sec = sandbox_timeout_sec
+        # Self-hosted Aliyun cluster mode (e2b-proxy): no template builds —
+        # generic_template names a pre-provisioned sandboxset and aliyun_image
+        # is swapped in at claim time via kruise metadata. Requires the
+        # py3.12 + e2b==2.23.0 venv (.venv-aliyun); see tools/aliyun_clusters.
+        self._aliyun_cluster = aliyun_cluster
+        self._aliyun_image = aliyun_image
+        self._claim_timeout_sec = int(claim_timeout_sec)
+        self._wait_ready_timeout_sec = int(wait_ready_timeout_sec)
+        if aliyun_cluster:
+            if not (generic_template and aliyun_image):
+                raise ValueError(
+                    "aliyun_cluster needs generic_template (sandboxset name) "
+                    "and aliyun_image (ACR ref to swap in)")
+            from tools.aliyun_clusters import configure_env
+            configure_env(aliyun_cluster)
         if generic_template:
             self._template_name = generic_template
 
@@ -118,10 +137,11 @@ class ACRE2BEnvironment(E2BEnvironment):
         if not self._generic_template:
             return await super().start(force_build)
 
-        async with _GENERIC_BUILD_LOCK:
-            if force_build or not await self._does_template_exist():
-                self.logger.info("Building generic template %s", self._template_name)
-                await self._create_generic_template()
+        if not self._aliyun_cluster:  # sandboxsets are pre-provisioned
+            async with _GENERIC_BUILD_LOCK:
+                if force_build or not await self._does_template_exist():
+                    self.logger.info("Building generic template %s", self._template_name)
+                    await self._create_generic_template()
 
         await self._create_sandbox()
         if not self._sandbox:
@@ -129,6 +149,14 @@ class ACRE2BEnvironment(E2BEnvironment):
         await self.ensure_dirs(self._mount_targets(writable_only=True))
         await self._upload_environment_dir_after_start()
         await self._replay_dockerfile_copies()
+
+    async def _apply_network_policy(self, network_policy) -> None:
+        if self._aliyun_cluster:
+            # The e2b-proxy does not implement update_network; egress policy
+            # is fixed by the sandboxset (e.g. zenan-allow-internet).
+            self.logger.debug("aliyun mode: skipping network policy update")
+            return
+        await super()._apply_network_policy(network_policy)
 
     async def _create_generic_template(self):
         """Build the shared template from the task's base (FROM) image only —
@@ -143,7 +171,10 @@ class ACRE2BEnvironment(E2BEnvironment):
         template = Template().from_image(image=base_ref)
         creds = _registry_credentials(base_ref)
         if creds:
-            template._registry_config = {
+            # from_image() returns a TemplateBuilder; the serializer that
+            # emits fromImageRegistry lives on the wrapped Template.
+            inner = getattr(template, "_template", template)
+            inner._registry_config = {
                 "type": "registry", "username": creds[0], "password": creds[1],
             }
         build_kwargs = {}
@@ -174,7 +205,25 @@ class ACRE2BEnvironment(E2BEnvironment):
         reraise=True,
     )
     async def _create_sandbox(self):
-        if self._sandbox_timeout_sec is None:
+        if self._aliyun_cluster:
+            from e2b import AsyncSandbox
+
+            self._sandbox = await AsyncSandbox.create(
+                template=self._template_name,
+                timeout=self._sandbox_timeout_sec or 7200,
+                request_timeout=self._claim_timeout_sec + self._wait_ready_timeout_sec + 100,
+                metadata={
+                    "environment_name": self.environment_name,
+                    "session_id": self.session_id,
+                    "e2b.agents.kruise.io/create-on-no-stock": "true",
+                    "e2b.agents.kruise.io/claim-timeout-seconds": str(self._claim_timeout_sec),
+                    "e2b.agents.kruise.io/wait-ready-timeout-seconds": str(self._wait_ready_timeout_sec),
+                    "e2b.agents.kruise.io/image": self._aliyun_image,
+                    "e2b.agents.kruise.io/reserve-failed-sandbox": "false",
+                },
+                envs=self._startup_env(),
+            )
+        elif self._sandbox_timeout_sec is None:
             await super()._create_sandbox()
         else:
             # Mirror of stock _create_sandbox with the timeout made
