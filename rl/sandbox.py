@@ -23,7 +23,10 @@ import shlex
 import uuid
 from pathlib import Path
 
-DEFAULT_DOCKER_IMAGE = "lizenan1995/code-prover-lean:latest"
+try:
+    from tools.prover_common import DOCKER_IMAGE_PUBLIC as DEFAULT_DOCKER_IMAGE
+except ImportError:  # rollout container without the repo root on sys.path
+    DEFAULT_DOCKER_IMAGE = "lizenan1995/code-prover-lean:latest"
 DEFAULT_EXEC_TIMEOUT = 300
 
 
@@ -123,8 +126,12 @@ class E2BSandbox:
 
     async def exec(self, command: str, timeout_sec: float | None = None) -> ExecResult:
         try:
+            # user="root": the lean toolchain lives in /root/.elan and E2B's
+            # default user is `user` (no PATH, no /root access) — harbor's
+            # eval E2BEnvironment also defaults to root. Without this every
+            # lake/lean call fails instantly and episodes spin to max_turns.
             r = await self._sbx.commands.run(
-                command, timeout=int(timeout_sec or DEFAULT_EXEC_TIMEOUT)
+                command, timeout=int(timeout_sec or DEFAULT_EXEC_TIMEOUT), user="root"
             )
             return ExecResult(r.stdout or "", r.stderr or "", r.exit_code or 0)
         except Exception as exc:  # noqa: BLE001 — command errors carry exit info
@@ -135,7 +142,7 @@ class E2BSandbox:
 
     async def upload_file(self, source_path: Path | str, target_path: str) -> None:
         data = Path(source_path).read_bytes()
-        await self._sbx.files.write(target_path, data)
+        await self._sbx.files.write(target_path, data, user="root")
 
     async def close(self) -> None:
         try:

@@ -102,3 +102,35 @@ verifier 的 `tests/` 在 agent 阶段结束后才被上传进容器，agent 无
 
 # 断点续跑：同一 job_name + jobs_dir 重新执行即可（Harbor 自动恢复已完成 trial）
 ```
+
+## 数据入库政策（2026-07-21 定）
+
+- **基准评测集进 git**（`tasks/verina_canonical_189`、`tasks/minif2f-*`、
+  `tasks/trainset_problems_300` 等）：它们的 Lean spec 源就是 canonical 版本，
+  仓库即唯一事实来源，删了就没了。
+- **批量生成的数据一律放 `/data/`（gitignored）**：蒸馏轮次、rescue 集、SFT 导出
+  等由 `tools/distill_ops.py` 从 `data/<dataset>/tasks/` + `rounds_assignment.json`
+  重新物化，不进 git。每个数据集目录带 `manifest.json`（per-task spec sha256 +
+  聚合 content hash，`tools/dataset.py manifest` 生成）用于对账。
+- 生成 task 目录的唯一原语是 `tools/dataset.py write_task`；衍生文件
+  （grader、instruction、Dockerfile）用 `dataset.py refresh` 批量重写，
+  不要手改单个任务。
+
+## 蒸馏campaign操作（tools/distill_ops.py）
+
+```bash
+# 物化第 N 轮 / 生成该轮 harbor 配置
+.venv/bin/python tools/distill_ops.py rounds --round 2
+.venv/bin/python tools/distill_ops.py config --round 2
+
+# 进度、质量与成本外推
+.venv/bin/python tools/distill_ops.py status --job jobs/distill-dpsk-round1 --total 5000
+
+# 一轮跑完后：把没干净完成的任务做成 rescue 集
+.venv/bin/python tools/distill_ops.py rescue --job jobs/distill-dpsk-round1 --round round1
+
+# 合并 job（含 rescue）导出 SFT 轨迹（默认丢弃 compaction 轨迹）
+.venv/bin/python tools/distill_ops.py collect \
+    --jobs jobs/distill-dpsk-round1 jobs/distill-dpsk-round1-rescue \
+    --out data/coding-v2.1-full-20260721/sft/round1.jsonl --solved-only
+```
