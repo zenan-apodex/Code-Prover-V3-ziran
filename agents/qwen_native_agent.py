@@ -371,6 +371,19 @@ class QwenNativeAgent(BaseAgent):
                                        "error": f"HTTP {r.status_code}"})
                 await asyncio.sleep(10 * (attempt + 1))
                 continue
+            if r.status_code < 300:
+                # The gateway occasionally returns 2xx with an empty/garbage
+                # body; that's as transient as a 5xx, but it used to escape
+                # this loop and kill the trial at resp.json() — 102 tasks
+                # burned on 2026-07-22.
+                try:
+                    r.json()
+                except ValueError:
+                    emit("request_retry", {"attempt": attempt + 1,
+                                           "error": f"HTTP {r.status_code} non-JSON body",
+                                           "body_head": r.text[:120]})
+                    await asyncio.sleep(10 * (attempt + 1))
+                    continue
             return r
         return None
 
