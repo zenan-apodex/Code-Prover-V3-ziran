@@ -16,7 +16,7 @@ environment:
   override_memory_mb: 8192
 
 agents:
-  - import_path: agents.qwen_native_agent:QwenNativeAgent
+  - import_path: agents.thirdparty_agent:ThirdPartyAgent
     model_name: deepseek-v4-pro
     kwargs:
       api_base: https://llm-hub.apodex.app/v1
