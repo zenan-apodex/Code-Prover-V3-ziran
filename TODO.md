@@ -23,13 +23,14 @@
       `create-on-no-stock`。
 - [ ] **resourcequota**:128 并发起步(512 核/1TB),目标 512 并发
       (2048 核/4TB,可后扩)。
-- [x] **镜像路线已解决,不再阻塞**:JB 直接从 Docker Hub 公开镜像
-      `docker.io/lizenan1995/code-prover-lean:latest` 做 image swap
-      验证通过(07-22:首拉靠重试累积层缓存,节点缓存热后 claim ~130s;
-      镜像内容/root exec/lake 工具链均确认完好)。JB 节点拉不到
-      miromind-sg VPC ACR(ALB 600s 504),johor ACR 也无公网 endpoint
-      ——都不需要了。可选优化:让平台把镜像复制进 apodex-sandbox-johor
-      ACR 换更快冷启动。
+- [x] **镜像路线已解决**:主用 johor ACR
+      `apodex-sandbox-johor-registry-vpc.ap-southeast-8.cr.aliyuncs.com/math-rl/code-prover-lean:latest`
+      (07-22 从 Johor 机器 crane 直拷入库,digest sha256:b4850e…,
+      swap 验证通过,claim ~123s)。兜底:Docker Hub 公开镜像
+      `docker.io/lizenan1995/code-prover-lean:latest` 也验证可 swap
+      (首拉慢,靠层缓存累积)。坑:ACR 临时密码登录用户是
+      `cr_temp_user` 不是 RAM 邮箱;johor 实例是 cri-t5999…(别的
+      token 对不上会 access:[])。
 - [ ] Grafana 面板权限(顺带)。
 - key 已齐:SG + JB 各一把(`.env`:`ALIYUN_E2B_API_KEY` / `_JB`;
   per-cluster 逻辑在 `tools/aliyun_clusters.py`)。
