@@ -50,6 +50,25 @@ from tenacity import retry, stop_after_attempt, wait_exponential
 
 from harbor.environments.e2b import E2BEnvironment
 
+# --- HTTP/2 stream-exhaustion guard ----------------------------------------
+# The e2b SDK routes every sandbox's API/envd traffic through ONE cached
+# transport per event loop with http2=True hardcoded. At ~1024 concurrent
+# sandboxes the shared h2 connections hit MAX_CONCURRENT_STREAMS (100) and
+# httpcore dies mid-trial: "Max outbound streams is 100, 100 open" plus h2
+# state-machine errors — 129 trials in round2's first hour (2026-07-22).
+# Force HTTP/1.1 (pool limit is 2000 connections, tunable via
+# E2B_MAX_CONNECTIONS); opt out with E2B_ENV_KEEP_HTTP2=1.
+if os.getenv("E2B_ENV_KEEP_HTTP2") != "1":
+    import e2b.api.client_async as _e2b_client_async
+
+    _transport_init = _e2b_client_async.AsyncTransportWithLogger.__init__
+
+    def _h1_transport_init(self, *args, **kwargs):
+        kwargs["http2"] = False
+        _transport_init(self, *args, **kwargs)
+
+    _e2b_client_async.AsyncTransportWithLogger.__init__ = _h1_transport_init
+
 _COPY_RE = re.compile(r"^\s*COPY\s+(?!--)(\S+)\s+(\S+)\s*$", re.MULTILINE)
 
 # One build per process even when many trials race the missing alias.
