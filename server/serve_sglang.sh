@@ -49,6 +49,8 @@ REASONING_PARSER="${REASONING_PARSER:-qwen3}"         # <think> → reasoning_co
 # Radix cache is therefore DISABLED by default. The prefill-reuse speedup it
 # offered is NOT worth silently-corrupt generations; if you re-enable it on a
 # future sglang, sanity-check actual generated text first (same rule as SPEC).
+# Upstream is reworking the hybrid MambaRadixCache — watch
+# https://github.com/sgl-project/sglang/issues/27418 before re-testing.
 EXTRA_ARGS="${EXTRA_ARGS:---disable-radix-cache}"
 SGLANG_PY="${SGLANG_PY:-$HERE/.sglang-venv/bin/python}"
 

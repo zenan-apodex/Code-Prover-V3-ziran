@@ -37,6 +37,11 @@ class ExecResult:
     return_code: int
 
 
+class SandboxLostError(RuntimeError):
+    """The sandbox died under us (external kill / TTL). The episode cannot
+    produce a valid reward — callers must ABORT the sample, never grade it."""
+
+
 class DockerSandbox:
     """One throwaway local docker container, `docker exec` per tool call."""
 
@@ -135,6 +140,12 @@ class E2BSandbox:
             )
             return ExecResult(r.stdout or "", r.stderr or "", r.exit_code or 0)
         except Exception as exc:  # noqa: BLE001 — command errors carry exit info
+            # A dead sandbox must end the episode NOW (ABORTED), not feed the
+            # model error tool-responses for the remaining turns and then get
+            # graded to a bogus reward-0 (observed during the 07-22 team-wide
+            # sandbox sweep).
+            if "sandbox was not found" in str(exc).lower():
+                raise SandboxLostError(str(exc)[:300]) from exc
             exit_code = getattr(exc, "exit_code", 1)
             stderr = getattr(exc, "stderr", "") or str(exc)
             stdout = getattr(exc, "stdout", "") or ""

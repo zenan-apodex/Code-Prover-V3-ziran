@@ -35,10 +35,13 @@ SANDBOX_BACKEND=${SANDBOX_BACKEND:-docker}
 PROVER_CFG="$REPO/rl/_prover_config.generated.yaml"
 cat > "$PROVER_CFG" <<EOF
 prover_model_path: $MODEL_HF
-prover_task_root: $REPO/tasks/trainset_problems_300
+prover_task_root: ${TASK_ROOT:-$REPO/training-data}
 prover_sandbox_backend: $SANDBOX_BACKEND
 prover_docker_image: lizenan1995/code-prover-lean:latest
-prover_e2b_template: ${E2B_TEMPLATE:-code-prover-lean-rl}
+# 4c/8GB: the original code-prover-lean-rl template (E2B default 2c/1GB)
+# cannot finish a full Mathlib `lake env lean` — known-good solutions graded
+# compiled=0 via 1200s timeouts (07-22 control experiment).
+prover_e2b_template: ${E2B_TEMPLATE:-code-prover-lean-eval-4c8g}
 prover_max_turns: 64
 prover_max_total_tokens: 65536
 prover_sandbox_concurrency: 32
@@ -50,15 +53,16 @@ CUSTOM_ARGS=(
 )
 
 ROLLOUT_ARGS=(
-   --prompt-data "$REPO/rl/data/trainset_problems_300.jsonl"
+   --prompt-data "${PROMPT_DATA:-$REPO/rl/data/training_data_1000.jsonl}"
    --input-key prompt
    --metadata-key metadata
    --rollout-batch-size 32
    --n-samples-per-prompt 8
    --rollout-max-response-len 65536
    --rollout-temperature 0.8
-   # binary 0/1 reward: keep groups with signal only
-   --dynamic-sampling-filter-path miles.rollout.filter_hub.dynamic_sampling_filters.check_reward_nonzero_std
+   # binary 0/1 reward: drop groups with ABORTED samples (reward=None) first,
+   # then groups without signal — see rl/filters.py
+   --dynamic-sampling-filter-path rl.filters.check_clean_and_nonzero_std
    --over-sampling-batch-size 64
 )
 
@@ -113,6 +117,9 @@ SGLANG_ARGS=(
    # GDN linear-attention state goes NaN under radix-cache prefix reuse
    # (probability-tensor device assert, 07-21 smoke); the eval server always
    # ran with --disable-radix-cache too. Costs per-turn re-prefill.
+   # Upstream MambaRadixCache is being reworked — track
+   # https://github.com/sgl-project/sglang/issues/27418 before re-enabling,
+   # and verify actual generated text first (same rule as SPEC).
    --sglang-disable-radix-cache
    --sglang-cuda-graph-bs 1 2 4 8 16 24 32 40 48 56 64 72 80 88 96 104 112 120 128
    --sglang-max-running-requests 256
@@ -131,8 +138,10 @@ MISC_ARGS=(
 )
 
 # SMOKE=1: rollout-only, tiny batch — validates sglang bring-up + episode
-# loop + reward wiring without touching the trainer. First real GRPO step
-# still needs a separate small run afterwards.
+# loop + reward wiring without touching the trainer (passed 07-22).
+# SMOKE=train: 3 real GRPO steps at small batch — validates the optimizer
+# step, weight sync back to sglang, actor-vs-rollout logprob agreement, and
+# checkpoint save.
 SMOKE_ARGS=()
 if [[ "${SMOKE:-0}" == "1" ]]; then
    SMOKE_ARGS=(
@@ -141,6 +150,15 @@ if [[ "${SMOKE:-0}" == "1" ]]; then
       --n-samples-per-prompt 2
       --over-sampling-batch-size 8
       --num-rollout 1
+   )
+elif [[ "${SMOKE:-0}" == "train" ]]; then
+   SMOKE_ARGS=(
+      --rollout-batch-size 8
+      --n-samples-per-prompt 4
+      --over-sampling-batch-size 16
+      --num-rollout 3
+      --save /mnt/VerifiableAILab/zenan.li/models/codeprover-rl-smoke-ckpt
+      --save-interval 3
    )
 fi
 

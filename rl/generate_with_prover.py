@@ -22,9 +22,13 @@ from __future__ import annotations
 import asyncio
 import dataclasses
 import json
+import logging
 import sys
 import tempfile
+import time
 from pathlib import Path
+
+logger = logging.getLogger(__name__)
 
 # Ray rollout workers import this module by dotted path; make the repo root
 # importable regardless of the worker's CWD.
@@ -43,7 +47,10 @@ from agents.qwen_native_agent import (  # noqa: E402
 from rl.sandbox import create_sandbox  # noqa: E402
 from rl.token_stream import TokenStream  # noqa: E402
 
-GRADE_TIMEOUT_SEC = 1500  # test.sh's lake compile allows 1200s
+# test.sh's lake compile alone allows 1200s; axioms/integrity checks ride on
+# top. 1500 was observed too tight (graders killed mid-run -> ABORTED, 07-22);
+# match the eval-side verifier timeout.
+GRADE_TIMEOUT_SEC = 1800
 _sandbox_semaphore: asyncio.Semaphore | None = None
 
 
@@ -57,6 +64,10 @@ class EpisodeConfig:
     e2b_template: str = ""
     sandbox_cpus: float | None = None
     sandbox_memory_gb: float | None = None
+    # E2B kills the sandbox at this TTL no matter what the episode is doing;
+    # must cover the slowest episode (gen + lake builds + grading), not the
+    # E2B default of 3600.
+    sandbox_timeout_sec: int = 14400
 
 
 @dataclasses.dataclass
@@ -205,7 +216,9 @@ async def _grade(sandbox, tests_dir: Path) -> tuple[float, dict]:
         rewards = json.loads(r.stdout)
         return float(rewards.get("reward", 0.0)), rewards
     except (ValueError, TypeError):
-        return 0.0, {"error": f"reward.json unreadable: {r.stderr[:200]}"}
+        # Grader infrastructure failure, not a model failure: reward-0 here
+        # would poison training — raise so the sample is ABORTED instead.
+        raise RuntimeError(f"reward.json unreadable: {r.stderr[:200]}") from None
 
 
 # --------------------------------------------------------------- miles glue --
@@ -234,6 +247,7 @@ def _episode_config(args) -> EpisodeConfig:
         sandbox_backend=args.prover_sandbox_backend,
         docker_image=args.prover_docker_image,
         e2b_template=args.prover_e2b_template,
+        sandbox_timeout_sec=getattr(args, "prover_sandbox_timeout", 14400),
     )
 
 
@@ -273,22 +287,40 @@ async def generate(args, sample, sampling_params: dict):
     task_dir = Path(args.prover_task_root) / meta["task_name"]
     instruction = sample.prompt if isinstance(sample.prompt, str) else meta["instruction"]
 
-    async with _sandbox_semaphore:
-        sandbox = await create_sandbox(
-            cfg.sandbox_backend,
-            image=cfg.docker_image,
-            template=cfg.e2b_template,
-            cpus=cfg.sandbox_cpus,
-            memory_gb=cfg.sandbox_memory_gb,
-        )
-        try:
-            ep = await run_episode(
-                _router_generate_fn(args, sampling_params),
-                sandbox, instruction, task_dir, cfg,
+    t0 = time.monotonic()
+    try:
+        async with _sandbox_semaphore:
+            sandbox = await create_sandbox(
+                cfg.sandbox_backend,
+                image=cfg.docker_image,
+                template=cfg.e2b_template,
+                cpus=cfg.sandbox_cpus,
+                memory_gb=cfg.sandbox_memory_gb,
+                timeout=cfg.sandbox_timeout_sec,
             )
-        finally:
-            await sandbox.close()
+            try:
+                ep = await run_episode(
+                    _router_generate_fn(args, sampling_params),
+                    sandbox, instruction, task_dir, cfg,
+                )
+            finally:
+                await sandbox.close()
+    except Exception:
+        # Infra fault (sandbox died, transport error, ...): ABORTED — miles
+        # discards the group via dynamic sampling instead of training on a
+        # bogus reward-0, and the rollout as a whole survives.
+        logger.exception(
+            "episode ABORTED task=%s elapsed=%.0fs", meta.get("task_name"), time.monotonic() - t0
+        )
+        sample.status = Sample.Status.ABORTED
+        return sample
 
+    logger.info(
+        "episode done task=%s status=%s reward=%s turns=%d stop=%s elapsed=%.0fs "
+        "rewards=%s guard_events=%d",
+        meta.get("task_name"), ep.status, ep.reward, ep.n_turns, ep.stop_detail,
+        time.monotonic() - t0, json.dumps(ep.rewards), len(ep.guard_events),
+    )
     sample.tokens = ep.tokens
     sample.response_length = ep.response_length
     sample.response = TokenStream(cfg.model_path).tokenizer.decode(

@@ -15,3 +15,5 @@ rl/_prover_config.generated.yaml
 .env
 solved_problems/
 .venv-aliyun/
+/training-data/
+rl/data/training_data_1000.jsonl

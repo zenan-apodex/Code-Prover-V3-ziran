@@ -61,6 +61,8 @@ async def main() -> int:
     ap.add_argument("--max-turns", type=int, default=40)
     ap.add_argument("--max-new-tokens", type=int, default=8192)
     ap.add_argument("--temperature", type=float, default=0.6)
+    ap.add_argument("--dump-transcript", default=None,
+                    help="write the decoded token stream (full conversation) here")
     args = ap.parse_args()
 
     task_dir = Path(args.task)
@@ -92,6 +94,12 @@ async def main() -> int:
         "rewards": ep.rewards,
         "guard_events": ep.guard_events,
     }, indent=2, ensure_ascii=False))
+
+    if args.dump_transcript:
+        from rl.token_stream import TokenStream
+        text = TokenStream(args.model_path).tokenizer.decode(ep.tokens)
+        Path(args.dump_transcript).write_text(text, encoding="utf-8")
+        print(f"[test] transcript ({len(ep.tokens)} tokens) -> {args.dump_transcript}")
 
     # invariants
     assert len(ep.loss_mask) == ep.response_length
