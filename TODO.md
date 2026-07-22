@@ -23,12 +23,13 @@
       `create-on-no-stock`。
 - [ ] **resourcequota**:128 并发起步(512 核/1TB),目标 512 并发
       (2048 核/4TB,可后扩)。
-- [ ] **apodex-sandbox-johor ACR repo + 推送凭据**:JB 节点拉不到
-      miromind-sg VPC ACR(inplace update 永不完成,ALB 600s 504);
-      johor ACR 无公网 endpoint,只能 JB VPC 内推(两跳:本机导 tar →
-      上传 JB 沙箱 → crane push)。Docker Hub 公开镜像
-      `lizenan1995/code-prover-lean:latest` 直接做 image swap 的替代路
-      在验证中(节点层缓存可累积)。
+- [x] **镜像路线已解决,不再阻塞**:JB 直接从 Docker Hub 公开镜像
+      `docker.io/lizenan1995/code-prover-lean:latest` 做 image swap
+      验证通过(07-22:首拉靠重试累积层缓存,节点缓存热后 claim ~130s;
+      镜像内容/root exec/lake 工具链均确认完好)。JB 节点拉不到
+      miromind-sg VPC ACR(ALB 600s 504),johor ACR 也无公网 endpoint
+      ——都不需要了。可选优化:让平台把镜像复制进 apodex-sandbox-johor
+      ACR 换更快冷启动。
 - [ ] Grafana 面板权限(顺带)。
 - key 已齐:SG + JB 各一把(`.env`:`ALIYUN_E2B_API_KEY` / `_JB`;
   per-cluster 逻辑在 `tools/aliyun_clusters.py`)。
@@ -37,8 +38,9 @@
 
 - [ ] **532 题 round1 补漏**(待定:等 JB 就绪一起跑 vs 先用 e2b.dev
       现有模板清掉,约半小时+)。
-- [ ] JB 资源就绪后:推镜像 → `configs/smoke-dpsk-distill-aliyun.yaml`
-      改 `aliyun_cluster: jb` + 新镜像地址 → 重跑冒烟,期望 reward 1.0。
+- [ ] JB sandboxset 扩到 4c/8GB 后:直接重跑
+      `configs/smoke-dpsk-distill-aliyun.yaml`(已切 jb + Docker Hub 镜像),
+      期望 reward 1.0。
 - [ ] `tools/distill_ops.py` 的 CONFIG_TEMPLATE 切 aliyun 模式
       (现在渲染的还是 e2b.dev 配置)。
 - [ ] rounds 2-6:`distill_ops rounds` + `config` 生成,逐轮启动

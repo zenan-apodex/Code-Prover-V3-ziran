@@ -1,9 +1,12 @@
 # Internal-platform distillation smoke: one trivial task on the company
-# self-hosted Aliyun sandbox cluster (SG) — sandboxset zenan-allow-internet
-# claimed with our code-prover-lean image swapped in from ACR at claim time.
+# self-hosted Aliyun sandbox cluster (JB/Johor) — sandboxset claimed with
+# our code-prover-lean image swapped in at claim time. The image comes from
+# the PUBLIC Docker Hub copy: JB nodes cannot reach the miromind-sg VPC ACR
+# (verified 2026-07-22), but they can pull Docker Hub — slow first pull per
+# node, cached afterwards (~130s claim once warm).
 # MUST run with the pinned venv (py3.12 + e2b==2.23.0):
 #
-#   PYTHONPATH=$PWD DPSK_API_KEY=... ALIYUN_E2B_API_KEY=... \
+#   PYTHONPATH=$PWD DPSK_API_KEY=... ALIYUN_E2B_API_KEY_JB=... \
 #     .venv-aliyun/bin/harbor run -c configs/smoke-dpsk-distill-aliyun.yaml
 
 job_name: smoke-dpsk-distill-aliyun
@@ -15,11 +18,11 @@ environment:
   import_path: tools.e2b_env:ACRE2BEnvironment
   kwargs:
     generic_template: zenan-allow-internet
-    aliyun_cluster: sg
-    aliyun_image: miromind-sg-registry-vpc.ap-southeast-1.cr.aliyuncs.com/verifiable-ai-lab/code-prover-lean:latest
+    aliyun_cluster: jb
+    aliyun_image: docker.io/lizenan1995/code-prover-lean:latest
     sandbox_timeout_sec: 7200
-    claim_timeout_sec: 600
-    wait_ready_timeout_sec: 600
+    claim_timeout_sec: 540   # platform ALB hard-timeouts creates at ~600s
+    wait_ready_timeout_sec: 540
 
 agents:
   - import_path: agents.thirdparty_agent:ThirdPartyAgent
