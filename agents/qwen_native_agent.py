@@ -26,7 +26,11 @@ Usage:
 
 from __future__ import annotations
 
+import asyncio
 import json
+import os
+import random
+import re
 import shlex
 from pathlib import Path
 
@@ -132,7 +136,7 @@ class QwenNativeAgent(BaseAgent):
         super().__init__(logs_dir, model_name, *args, **kwargs)
         self._api_base = api_base.rstrip("/")
         if api_key.startswith("$"):  # credentials via env, never in configs
-            api_key = __import__("os").environ.get(api_key[1:], "dummy")
+            api_key = os.environ.get(api_key[1:], "dummy")
         self._api_key = api_key
         self._tool_primer = bool(tool_primer)
         self._headers = {"Authorization": f"Bearer {self._api_key}",
@@ -173,7 +177,7 @@ class QwenNativeAgent(BaseAgent):
 
     # ------------------------------------------------------ spec guard --
 
-    _TASK_PATH_RE = __import__("re").compile(r"/task/\S+?\.lean\b")
+    _TASK_PATH_RE = re.compile(r"/task/\S+?\.lean\b")
 
     async def _read_task_file(self, env: BaseEnvironment, path: str) -> str | None:
         try:
@@ -328,6 +332,66 @@ class QwenNativeAgent(BaseAgent):
         except Exception as exc:  # noqa: BLE001
             return f"(handoff summary failed: {exc})"
 
+    # ----------------------------------------------------------- request --
+
+    async def _post_with_retry(self, client, wire, emit):
+        """POST /chat/completions, retrying transport errors, 5xx, and 429.
+
+        429 (shared-gateway busy-hour storms, minutes long) backs off
+        exponentially with jitter and honours Retry-After — treating it as
+        fatal burned 1.4k tasks on 2026-07-21. Returns the response, or None
+        when every attempt failed (caller ends the rollout gracefully)."""
+        for attempt in range(10):
+            try:
+                r = await client.post(
+                    f"{self._api_base}/chat/completions",
+                    json=wire,
+                    headers=self._headers,
+                )
+            except httpx.HTTPError as exc:
+                emit("request_retry", {"attempt": attempt + 1,
+                                       "error": repr(exc)})
+                await asyncio.sleep(10 * (attempt + 1))
+                continue
+            if r.status_code == 429:
+                retry_after = 0.0
+                try:
+                    retry_after = float(r.headers.get("retry-after") or 0)
+                except ValueError:
+                    pass
+                delay = max(retry_after, min(120.0, 15.0 * 2 ** attempt))
+                delay *= 0.5 + random.random()
+                emit("request_retry", {"attempt": attempt + 1,
+                                       "error": "HTTP 429",
+                                       "sleep_sec": round(delay, 1)})
+                await asyncio.sleep(delay)
+                continue
+            if r.status_code >= 500:
+                emit("request_retry", {"attempt": attempt + 1,
+                                       "error": f"HTTP {r.status_code}"})
+                await asyncio.sleep(10 * (attempt + 1))
+                continue
+            return r
+        return None
+
+    async def _compact_context(self, client, messages, instruction,
+                               last_prompt_tokens, n_compactions, emit):
+        """Summarize-and-restart when the context soft limit is reached.
+        Returns the fresh messages list (single continuation user turn)."""
+        summary = await self._handoff_summary(client, messages)
+        emit("context_compaction", {
+            "n": n_compactions,
+            "n_messages_replaced": len(messages),
+            "prompt_tokens_before": last_prompt_tokens,
+            "summary": summary,
+        })
+        return [{
+            "role": "user",
+            "content": CONTINUATION_TEMPLATE.format(
+                instruction=instruction,
+                summary=summary or "(summary unavailable)"),
+        }]
+
     # --------------------------------------------------------------- run --
 
     async def run(
@@ -367,20 +431,10 @@ class QwenNativeAgent(BaseAgent):
                         emit("stop", {"reason": stop_reason,
                                       "prompt_tokens": last_prompt_tokens})
                         break
-                    summary = await self._handoff_summary(client, messages)
                     n_compactions += 1
-                    emit("context_compaction", {
-                        "n": n_compactions,
-                        "n_messages_replaced": len(messages),
-                        "prompt_tokens_before": last_prompt_tokens,
-                        "summary": summary,
-                    })
-                    messages = [{
-                        "role": "user",
-                        "content": CONTINUATION_TEMPLATE.format(
-                            instruction=instruction,
-                            summary=summary or "(summary unavailable)"),
-                    }]
+                    messages = await self._compact_context(
+                        client, messages, instruction,
+                        last_prompt_tokens, n_compactions, emit)
                     last_prompt_tokens = 0
                 wire = codec.encode_request({
                     "model": self.model_name or "code-prover-sft",
@@ -389,43 +443,7 @@ class QwenNativeAgent(BaseAgent):
                     "temperature": self._temperature,
                     **self._extra_request_fields,
                 })
-                resp = None
-                for attempt in range(10):
-                    try:
-                        r = await client.post(
-                            f"{self._api_base}/chat/completions",
-                            json=wire,
-                            headers=self._headers,
-                        )
-                    except httpx.HTTPError as exc:
-                        emit("request_retry", {"attempt": attempt + 1,
-                                               "error": repr(exc)})
-                        await __import__("asyncio").sleep(10 * (attempt + 1))
-                        continue
-                    if r.status_code == 429:
-                        # Shared-gateway rate limit (busy-hour storms last
-                        # minutes): long jittered backoff, honour Retry-After.
-                        # 2026-07-21: treating 429 as fatal burned 1.4k tasks.
-                        import random
-                        retry_after = 0.0
-                        try:
-                            retry_after = float(r.headers.get("retry-after") or 0)
-                        except ValueError:
-                            pass
-                        delay = max(retry_after, min(120.0, 15.0 * 2 ** attempt))
-                        delay *= 0.5 + random.random()
-                        emit("request_retry", {"attempt": attempt + 1,
-                                               "error": "HTTP 429",
-                                               "sleep_sec": round(delay, 1)})
-                        await __import__("asyncio").sleep(delay)
-                        continue
-                    if r.status_code >= 500:
-                        emit("request_retry", {"attempt": attempt + 1,
-                                               "error": f"HTTP {r.status_code}"})
-                        await __import__("asyncio").sleep(10 * (attempt + 1))
-                        continue
-                    resp = r
-                    break
+                resp = await self._post_with_retry(client, wire, emit)
                 if resp is None:
                     # Model endpoint unreachable/overloaded: end gracefully so
                     # the verifier still grades the current file state.
