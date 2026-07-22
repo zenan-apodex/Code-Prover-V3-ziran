@@ -96,7 +96,8 @@ def _system_ca_bundle() -> bytes:
 
 def configure_env(cluster: str) -> None:
     """Point the e2b SDK at a self-hosted cluster. MUST run before the SDK
-    builds an HTTP client. Key: uses $ALIYUN_E2B_API_KEY when set.
+    builds an HTTP client. Key: $ALIYUN_E2B_API_KEY_<CLUSTER> wins over
+    $ALIYUN_E2B_API_KEY (keys are provisioned per cluster).
 
     SSL_CERT_FILE is process-wide, so it gets a COMBINED bundle (system CAs
     + the cluster's private CA). A private-CA-only file would break every
@@ -105,12 +106,15 @@ def configure_env(cluster: str) -> None:
     """
     profile = CLUSTERS[cluster]
     pem = base64.b64decode("".join(profile["ca_b64"].split()))
+    key = (
+        os.environ.get(f"ALIYUN_E2B_API_KEY_{cluster.upper()}")
+        or os.environ.get("ALIYUN_E2B_API_KEY")
+    )
     fd, path = tempfile.mkstemp(prefix=f"e2b-ca-{cluster}-", suffix=".pem")
     with os.fdopen(fd, "wb") as f:
         f.write(_system_ca_bundle().rstrip() + b"\n" + pem)
     atexit.register(lambda: os.path.exists(path) and os.unlink(path))
     os.environ["SSL_CERT_FILE"] = path
     os.environ["E2B_DOMAIN"] = profile["domain"]
-    key = os.environ.get("ALIYUN_E2B_API_KEY")
     if key:
         os.environ["E2B_API_KEY"] = key
