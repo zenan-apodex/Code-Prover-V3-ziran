@@ -82,7 +82,9 @@ def cmd_rescue(args) -> int:
     if not rescue:
         print("nothing to rescue")
         return 0
-    _materialize(rescue, DATASET / "rounds" / f"{args.round}_rescue")
+    # NB: _materialize merges into an existing dir (it never deletes), so a
+    # second rescue pass must use a fresh --out or it inherits stale tasks.
+    _materialize(rescue, DATASET / "rounds" / (args.out or f"{args.round}_rescue"))
     return 0
 
 
@@ -279,6 +281,9 @@ def main() -> int:
     rs.add_argument("--job", nargs="+", required=True,
                     help="job dir(s) whose clean finishes count as done")
     rs.add_argument("--round", required=True, help="e.g. round1")
+    rs.add_argument("--out", default=None,
+                    help="output dir name under rounds/ (default <round>_rescue; "
+                         "use a fresh name for a second rescue pass)")
     rs.set_defaults(func=cmd_rescue)
 
     st = sub.add_parser("status", help="progress / quality / cost report")
