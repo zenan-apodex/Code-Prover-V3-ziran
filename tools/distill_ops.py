@@ -174,6 +174,14 @@ def cmd_collect(args) -> int:
             tr = json.loads(tp.read_text())
             if tr.get("n_compactions", 0) and not args.keep_compacted:
                 continue
+            # SFT sequences must end on an assistant turn: rollouts that hit
+            # the call/context cap right after a tool call leave a trailing
+            # tool message with no training target (66/2030 in round1).
+            msgs = tr["messages"]
+            while msgs and msgs[-1]["role"] != "assistant":
+                msgs.pop()
+            if not msgs:
+                continue
             reward = None
             rw = trial / "verifier" / "reward.json"
             if rw.is_file():
@@ -188,7 +196,7 @@ def cmd_collect(args) -> int:
                 "stop_reason": tr.get("stop_reason"),
                 "api_calls": tr.get("api_calls"),
                 "usage": tr.get("usage"),
-                "messages": tr["messages"],
+                "messages": msgs,
             }
             cur = best.get(task)
             if (cur is None
