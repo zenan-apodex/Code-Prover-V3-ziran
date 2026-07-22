@@ -231,9 +231,9 @@ CONFIG_TEMPLATE = """\
 job_name: distill-dpsk-{label}
 jobs_dir: jobs
 n_attempts: 1
-# 512 per Zenan 2026-07-22 (validated on round1 rescues: gateway share is
-# the real throughput cap; sandboxes bill while waiting on 429 backoff).
-n_concurrent_trials: 512
+# 1024 per Zenan 2026-07-22 (512 validated on round1 rescues; gateway share
+# is the real throughput cap; sandboxes bill while waiting on 429 backoff).
+n_concurrent_trials: 1024
 
 environment:
   import_path: tools.e2b_env:ACRE2BEnvironment
