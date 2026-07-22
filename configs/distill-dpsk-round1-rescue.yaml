@@ -1,0 +1,33 @@
+# Rescue for distillation round 1: the 3,368 round1 tasks that did not finish
+# cleanly in the first pass (1,444 killed by unretried gateway 429s during
+# busy hours, ~5 misc exceptions, ~1,919 never started before the job was
+# stopped). The agent now retries 429 with jittered exponential backoff, so
+# rate-limit storms degrade throughput instead of burning tasks.
+#
+#   PYTHONPATH=$PWD DPSK_API_KEY=... .venv/bin/harbor run -c configs/distill-dpsk-round1-rescue.yaml
+
+job_name: distill-dpsk-round1-rescue
+jobs_dir: jobs
+n_attempts: 1
+n_concurrent_trials: 24
+
+environment:
+  override_cpus: 4
+  override_memory_mb: 8192
+
+agents:
+  - import_path: agents.qwen_native_agent:QwenNativeAgent
+    model_name: deepseek-v4-pro
+    kwargs:
+      api_base: https://llm-hub.apodex.app/v1
+      api_key: $DPSK_API_KEY
+      tool_primer: true
+      extra_headers: {"X-Llmhub-Channel": "7"}
+      max_api_calls: 384
+      max_tokens: 16384
+      enable_compaction: false
+      save_transcript: true
+      extra_request_fields: {"thinking": {"type": "enabled"}}
+
+datasets:
+  - path: data/coding-v2.1-full-20260721/rounds/round1_rescue

@@ -17,6 +17,7 @@ environment:
   override_memory_mb: 8192
   kwargs:
     generic_template: code-prover-lean-eval-4c8g
+    sandbox_timeout_sec: 7200
 
 agents:
   - import_path: agents.qwen_native_agent:QwenNativeAgent

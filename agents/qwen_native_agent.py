@@ -390,7 +390,7 @@ class QwenNativeAgent(BaseAgent):
                     **self._extra_request_fields,
                 })
                 resp = None
-                for attempt in range(5):
+                for attempt in range(10):
                     try:
                         r = await client.post(
                             f"{self._api_base}/chat/completions",
@@ -400,13 +400,32 @@ class QwenNativeAgent(BaseAgent):
                     except httpx.HTTPError as exc:
                         emit("request_retry", {"attempt": attempt + 1,
                                                "error": repr(exc)})
-                    else:
-                        if r.status_code < 500:
-                            resp = r
-                            break
+                        await __import__("asyncio").sleep(10 * (attempt + 1))
+                        continue
+                    if r.status_code == 429:
+                        # Shared-gateway rate limit (busy-hour storms last
+                        # minutes): long jittered backoff, honour Retry-After.
+                        # 2026-07-21: treating 429 as fatal burned 1.4k tasks.
+                        import random
+                        retry_after = 0.0
+                        try:
+                            retry_after = float(r.headers.get("retry-after") or 0)
+                        except ValueError:
+                            pass
+                        delay = max(retry_after, min(120.0, 15.0 * 2 ** attempt))
+                        delay *= 0.5 + random.random()
+                        emit("request_retry", {"attempt": attempt + 1,
+                                               "error": "HTTP 429",
+                                               "sleep_sec": round(delay, 1)})
+                        await __import__("asyncio").sleep(delay)
+                        continue
+                    if r.status_code >= 500:
                         emit("request_retry", {"attempt": attempt + 1,
                                                "error": f"HTTP {r.status_code}"})
-                    await __import__("asyncio").sleep(10 * (attempt + 1))
+                        await __import__("asyncio").sleep(10 * (attempt + 1))
+                        continue
+                    resp = r
+                    break
                 if resp is None:
                     # Model endpoint unreachable/overloaded: end gracefully so
                     # the verifier still grades the current file state.

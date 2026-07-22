@@ -99,9 +99,18 @@ def _registry_credentials(image_ref: str | None) -> tuple[str, str] | None:
 
 
 class ACRE2BEnvironment(E2BEnvironment):
-    def __init__(self, *args, generic_template: str | None = None, **kwargs):
+    def __init__(
+        self,
+        *args,
+        generic_template: str | None = None,
+        sandbox_timeout_sec: int | None = None,
+        **kwargs,
+    ):
         super().__init__(*args, **kwargs)
         self._generic_template = generic_template
+        # Stock harbor hardcodes a 24h sandbox timeout; sandboxes bill while
+        # they exist, so cap to just above agent+verifier budget instead.
+        self._sandbox_timeout_sec = sandbox_timeout_sec
         if generic_template:
             self._template_name = generic_template
 
@@ -157,9 +166,29 @@ class ACRE2BEnvironment(E2BEnvironment):
             self.logger.debug("Replayed COPY %s -> %s", src, target)
 
     async def _create_sandbox(self):
+        if self._sandbox_timeout_sec is None:
+            await super()._create_sandbox()
+        else:
+            # Mirror of stock _create_sandbox with the timeout made
+            # configurable (stock hardcodes 86_400).
+            from e2b import AsyncSandbox
+            from harbor.models.task.config import NetworkMode
+
+            self._sandbox = await AsyncSandbox.create(
+                template=self._template_name,
+                metadata={
+                    "environment_name": self.environment_name,
+                    "session_id": self.session_id,
+                },
+                envs=self._startup_env(),
+                timeout=self._sandbox_timeout_sec,
+                allow_internet_access=(
+                    self.network_policy.network_mode != NetworkMode.NO_NETWORK
+                ),
+                network=self._sandbox_create_network_options(),
+            )
         # Log the sandbox ID so external terminations (e.g. by another system
         # sharing the E2B team) can be matched against provider audit logs.
-        await super()._create_sandbox()
         self.logger.info(
             "E2B sandbox created: %s (template %s)",
             self._sandbox.sandbox_id,
