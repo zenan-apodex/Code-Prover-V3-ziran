@@ -165,6 +165,14 @@ class ACRE2BEnvironment(E2BEnvironment):
             await self.upload_file(self.environment_dir / src, target)
             self.logger.debug("Replayed COPY %s -> %s", src, target)
 
+    @retry(
+        # Company-shared team: creation can fail transiently under
+        # contention (concurrency cap, API blips). Backoff and retry
+        # instead of burning the trial.
+        stop=stop_after_attempt(6),
+        wait=wait_exponential(multiplier=2, min=5, max=120),
+        reraise=True,
+    )
     async def _create_sandbox(self):
         if self._sandbox_timeout_sec is None:
             await super()._create_sandbox()
