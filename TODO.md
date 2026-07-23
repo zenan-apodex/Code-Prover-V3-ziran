@@ -99,6 +99,13 @@
   agent 跑在本机,蒸馏不受影响。
 - 平台 ALB 对 create 请求 ~600s 硬超时(504);claim-timeout 设 ≤540 拿
   干净错误。镜像替换失败时 `reserve-failed-sandbox: "false"` 丢弃残骸。
+- **冷镜像 + 大并发 create = 踩踏死锁**(07-23 JB 实锤):500 路首拉打满
+  ACR/节点盘,每路超时→丢 pod→换冷节点重拉,1,500 次失败零成功,且需
+  ~25min 全静默才恢复(风暴后连单发都挂,pod state=dead)。修复:aliyun
+  模式 create 加信号量(`create_concurrency`,默认 24,tools/e2b_env.py)
+  ——只限"同时在建",跑的并发不受限;节点缓存热后 create ~2min,不再触发。
+  新集群/新镜像首跑务必带此限流。另:harbor 同 job 改 config 不能 resume
+  (FileExistsError),零产出时直接删 job 目录重开。
 
 ### harbor / e2b 通用
 - harbor 自定义 env 构造参数必须嵌在 `environment.kwargs` 下,顶层同名
