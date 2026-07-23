@@ -21,8 +21,14 @@ refresh every dataset. The spec source is never touched by refresh.
 
 Commands:
     make --from-lean-dir DIR   OUT     one task per *.lean file in DIR
+    make-math --from-jsonl F.. OUT     math prover records (theorem + sorry)
     refresh DATASET [DATASET...]       regenerate all derived files in place
     validate DATASET [DATASET...]      structural + marker sanity checks
+
+Task flavors: `coding` (verina-style code+proof specs, the default) and
+`math` (single theorem, NL problem as a read-only comment, editable regions
+`proof`/`proof_aux` only). The flavor is recorded as [metadata] task_flavor
+so `refresh` regenerates the right instruction.
 """
 
 from __future__ import annotations
@@ -124,6 +130,76 @@ stray edit outside the editable regions scores ZERO.
 {suffix}
 """
 
+INSTRUCTION_TEMPLATE_MATH = """\
+Prove the Lean 4 theorem at `{task_path}`.
+
+The file states a single theorem whose proof is `sorry`. The comment block
+above it gives the original natural-language problem (and, where the problem
+asked for a value, the intended answer — already baked into the statement).
+Your job is to replace the `sorry` with a complete proof so that the file
+compiles cleanly.
+
+## THE ONE RULE
+
+**Never modify the theorem statement. Never.** The imports, the theorem
+statement, the comment block, and every `-- !benchmark` marker line are
+read-only and verified byte-for-byte after you finish. In particular:
+
+- NEVER rewrite the whole file — make surgical edits inside the editable
+  regions only (use `Edit` or `lean_replace_sorry`, never `Write`);
+- put ALL helper definitions and lemmas INSIDE the `proof_aux` region — a
+  helper placed outside the markers fails the task even if the proof is
+  correct;
+- do not reformat, re-indent, or "clean up" any read-only line — even a
+  single added or removed space fails the byte-for-byte check;
+- do not insert `set_option`, `instance`, `open`, or attributes outside
+  the editable regions (put them inside `proof_aux`/`proof` if needed).
+
+## Self-check protocol (mandatory)
+
+As your VERY FIRST action run `cp {task_path} /tmp/task-orig.lean`. Before
+you consider the task done, run `diff /tmp/task-orig.lean {task_path}` and
+verify that EVERY changed hunk lies strictly between a
+`-- !benchmark @start` and `-- !benchmark @end` line of an editable region
+(`proof`, `proof_aux`). If any hunk touches a line outside those regions,
+restore that line byte-for-byte from `/tmp/task-orig.lean` and redo the
+change legally. A perfect proof with one stray edit outside the editable
+regions scores ZERO.
+
+## Success criteria (graded automatically after you finish)
+
+1. `lake env lean {task_path}` (run from `/task`) reports zero errors;
+2. no `sorry` remains anywhere in the file;
+3. the theorem depends only on the standard axioms
+   (`propext`, `Classical.choice`, `Quot.sound`) — check with
+   `#print axioms <theoremName>`;
+4. the specification is untouched: you may ONLY edit the contents of the
+   `-- !benchmark @start/@end` regions named `proof` and `proof_aux`.
+   Everything else — imports, marker lines, the comment block, the theorem
+   statement — is compared byte-for-byte against the original and any
+   change fails the task;
+5. no forbidden construct anywhere in the file: `axiom`, `constant`,
+   `opaque`, `unsafe` declarations and the negation workflow
+   (`negation` / `negate_goal` / `Tacs.Negate`) all fail the task.
+
+## Rules and hints
+
+- If the statement seems false, try harder to prove it — disproving is not
+  an option (see criterion 5).
+- Mathlib (~100K theorems) is preloaded; search it before hand-rolling
+  proofs. Decompose hard goals into `private lemma`s inside `proof_aux`.
+- The `lean-lsp` MCP tools (e.g. `lean_diagnostic_messages`, `lean_goal`,
+  `lean_multi_attempt`) give fast feedback without full recompiles; use them
+  after every edit. `lake env lean {task_path}` is the ground truth.
+
+{suffix}
+"""
+
+INSTRUCTION_TEMPLATES = {
+    "coding": INSTRUCTION_TEMPLATE,
+    "math": INSTRUCTION_TEMPLATE_MATH,
+}
+
 TASK_TOML_TEMPLATE = """\
 schema_version = "1.3"
 
@@ -135,6 +211,8 @@ keywords = ["lean4", "theorem-proving", "code-prover"]
 [metadata]
 source_id = {source_id}
 source_dataset = {source_dataset}
+task_flavor = {task_flavor}
+{extra_metadata}
 
 [agent]
 timeout_sec = {agent_timeout}
@@ -177,6 +255,8 @@ def write_task(
     image: str = DEFAULT_IMAGE,
     agent_timeout: float = DEFAULT_AGENT_TIMEOUT,
     verifier_timeout: float = DEFAULT_VERIFIER_TIMEOUT,
+    flavor: str = "coding",
+    extra_metadata: dict[str, str] | None = None,
 ) -> None:
     """Write one complete task dir. The single generation primitive — used by
     `make`, `refresh`, and (via import) any pipeline export."""
@@ -187,7 +267,9 @@ def write_task(
     (task_dir / "tests").mkdir(parents=True, exist_ok=True)
 
     (task_dir / "instruction.md").write_text(
-        INSTRUCTION_TEMPLATE.format(task_path=container_path, suffix=AUTONOMOUS_SUFFIX),
+        INSTRUCTION_TEMPLATES[flavor].format(
+            task_path=container_path, suffix=AUTONOMOUS_SUFFIX
+        ),
         encoding="utf-8",
     )
     (task_dir / "task.toml").write_text(
@@ -197,6 +279,10 @@ def write_task(
             description=toml_str(f"Lean 4 verification task {source_id}"),
             source_id=toml_str(source_id),
             source_dataset=toml_str(dataset_name),
+            task_flavor=toml_str(flavor),
+            extra_metadata="".join(
+                f"{k} = {toml_str(str(v))}\n" for k, v in (extra_metadata or {}).items()
+            ),
             agent_timeout=float(agent_timeout),
             verifier_timeout=float(verifier_timeout),
         ),
@@ -258,6 +344,113 @@ def cmd_make(args) -> int:
     return 0
 
 
+# ---------------------------------------------------------- make-math ------
+
+_BY_SORRY_RE = re.compile(r":=\s*by\s+sorry")
+
+
+def math_lean_source(rec: dict) -> str:
+    """Marked task.lean for a math prover record: read-only import + NL
+    problem comment + theorem statement; editable `proof_aux` and `proof`."""
+    src = rec["lean_spec"]["raw_source"].strip() + "\n"
+    if src.count("sorry") != 1:
+        raise ValueError(f"{rec['id']}: expected exactly one sorry")
+
+    lines = src.splitlines(keepends=True)
+    if not lines[0].startswith("import "):
+        raise ValueError(f"{rec['id']}: source does not start with an import")
+    n_imports = 0
+    while lines[n_imports].startswith("import "):
+        n_imports += 1
+    imports = "".join(lines[:n_imports]).rstrip("\n")
+    body = "".join(lines[n_imports:]).lstrip("\n").rstrip() + "\n"
+
+    # `<stmt> := by sorry[ trailing comment]`  ->  by-block with a proof region
+    idx = body.rindex("sorry")
+    head, tail = body[:idx].rstrip(), body[idx + len("sorry"):].strip()
+    if not head.endswith("by"):
+        raise ValueError(f"{rec['id']}: sorry is not the whole `by` body")
+    if tail:  # rare trailing comment after the sorry — keep it on the by-line
+        head += "  " + tail
+    theorem = (
+        head
+        + "\n  -- !benchmark @start proof\n  sorry\n  -- !benchmark @end proof\n"
+    )
+
+    comment_lines = []
+    # normalize CRLF/CR — refresh reads specs with universal newlines, so any
+    # \r written here would silently change the spec bytes on first refresh
+    problem = (rec.get("problem") or "").replace("\r\n", "\n").replace("\r", "\n")
+    problem = problem.strip().replace("-/", "- /")
+    if problem:
+        comment_lines.append("Problem:\n" + problem)
+    answer = rec.get("answer")
+    if rec.get("kind") == "answer" and answer not in (None, "None", ""):
+        comment_lines.append(f"Answer: {answer}")
+    comment = ""
+    if comment_lines:
+        comment = "/- " + "\n\n".join(comment_lines) + " -/\n\n"
+
+    return (
+        "-- !benchmark @start import type=solution\n"
+        f"{imports}\n"
+        "-- !benchmark @end import\n\n"
+        "-- !benchmark @start proof_aux\n"
+        "-- !benchmark @end proof_aux\n\n"
+        f"{comment}{theorem}"
+    )
+
+
+def cmd_make_math(args) -> int:
+    out: Path = args.out
+    if out.exists():
+        if not args.force:
+            print(f"FATAL: {out} exists — pass --force to rebuild.", file=sys.stderr)
+            return 1
+        shutil.rmtree(out)
+    out.mkdir(parents=True)
+
+    n = bad = 0
+    for jsonl in args.from_jsonl:
+        pool = jsonl.stem
+        with open(jsonl, encoding="utf-8") as f:
+            for line in f:
+                rec = json.loads(line)
+                try:
+                    lean_source = math_lean_source(rec)
+                except ValueError as exc:
+                    bad += 1
+                    print(f"SKIP {exc}", file=sys.stderr)
+                    continue
+                task_id = sanitize_id(rec["id"])
+                write_task(
+                    out / task_id,
+                    task_id=task_id,
+                    source_id=rec["id"],
+                    lean_source=lean_source,
+                    dataset_name=out.name,
+                    org=args.org,
+                    image=args.image,
+                    agent_timeout=args.agent_timeout,
+                    verifier_timeout=args.verifier_timeout,
+                    flavor="math",
+                    extra_metadata={
+                        "kind": rec.get("kind", ""),
+                        "domain": rec.get("domain", ""),
+                        "pool": pool,
+                    },
+                )
+                n += 1
+                if args.limit and n >= args.limit:
+                    break
+        if args.limit and n >= args.limit:
+            break
+    m = write_manifest(out)
+    print(f"Wrote {n} task(s) to {out} ({bad} skipped, "
+          f"content_sha256={m['content_sha256'][:16]}…)")
+    return 0 if not bad else 1
+
+
 # ------------------------------------------------------------- refresh ------
 
 
@@ -272,6 +465,11 @@ def cmd_refresh(args) -> int:
                 continue
             old = tomllib.loads(toml_path.read_text(encoding="utf-8"))
             meta = old.get("metadata", {})
+            extra = {
+                k: v
+                for k, v in meta.items()
+                if k not in ("source_id", "source_dataset", "task_flavor")
+            }
             write_task(
                 task_dir,
                 task_id=task_dir.name,
@@ -284,6 +482,8 @@ def cmd_refresh(args) -> int:
                 or old.get("agent", {}).get("timeout_sec", DEFAULT_AGENT_TIMEOUT),
                 verifier_timeout=args.verifier_timeout
                 or old.get("verifier", {}).get("timeout_sec", DEFAULT_VERIFIER_TIMEOUT),
+                flavor=meta.get("task_flavor", "coding"),
+                extra_metadata=extra,
             )
             total += 1
     print(f"Refreshed {total} task(s)")
@@ -437,6 +637,21 @@ def main() -> int:
     mk.add_argument("--limit", type=int, default=0)
     mk.add_argument("--force", action="store_true")
     mk.set_defaults(func=cmd_make)
+
+    mm = sub.add_parser(
+        "make-math",
+        help="generate math-flavor tasks from prover-record jsonl files "
+        "(id, problem, kind, lean_spec.raw_source with a single `by sorry`)",
+    )
+    mm.add_argument("--from-jsonl", type=Path, nargs="+", required=True)
+    mm.add_argument("out", type=Path, help="output dataset dir")
+    mm.add_argument("--org", default="codeprover")
+    mm.add_argument("--image", default=DEFAULT_IMAGE)
+    mm.add_argument("--agent-timeout", type=float, default=DEFAULT_AGENT_TIMEOUT)
+    mm.add_argument("--verifier-timeout", type=float, default=DEFAULT_VERIFIER_TIMEOUT)
+    mm.add_argument("--limit", type=int, default=0)
+    mm.add_argument("--force", action="store_true")
+    mm.set_defaults(func=cmd_make_math)
 
     rf = sub.add_parser(
         "refresh",

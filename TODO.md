@@ -12,6 +12,14 @@
   代码全部完成并验证(`f6c7d0fa0` + `60256c289`)——harbor aliyun 模式、
   双集群 per-cluster key、claim/上传/MCP/DPSK 全链路 E2E 通。
   **阻塞在平台侧资源**,见 §1。
+- **math 新题集(已洗完,07-23)**:`data/math-v0-unsolved-20260722/tasks/`
+  38,457 个 harbor 任务目录(manifest 45fe10b0…),源自 numina 未解题
+  (attempted-unsolved 10,966 + never-attempted 27,491,task.toml
+  metadata.pool 区分)。生成:`dataset.py make-math`(math flavor:单定理
+  + NL 题面只读注释 + proof/proof_aux 可编辑区,判分器零改动)。
+  验证:38,457/38,457 validate 通过;200 题抽样在 4.28 镜像编译
+  **200/200 全过**(题源 4.29,漂移为零,无需预编译过滤);spec_intact
+  接受合法编辑/拒绝改陈述;refresh 圆环字节稳定。**尚未安排蒸馏排期。**
 - **RL(miles)**:rollout 端到端已通,SMOKE 冒烟通过(07-22);
   下一步去掉 `--debug-rollout-only` 小步跑真 GRPO。
 

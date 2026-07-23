@@ -27,6 +27,7 @@ images/lean-mathlib/build.sh                 # -> code-prover-lean:latest
 # 2) 数据集就是 tasks/ 下的 Harbor task 目录（唯一格式，无 JSONL 中间层）。
 #    V2 的 10 个存量 benchmark 已一次性转换完毕，直接用；新数据这样生成：
 python3 tools/dataset.py make --from-lean-dir <目录> tasks/<名字>   # 每个 .lean 一个任务
+python3 tools/dataset.py make-math tasks/<名字> --from-jsonl <记录.jsonl>...  # math 题源（单定理+sorry）
 
 # 3) 跑评测（凭证放环境变量，不要写进配置文件）
 export ANTHROPIC_API_KEY=...   # 或 ANTHROPIC_BASE_URL + ANTHROPIC_AUTH_TOKEN 走网关
@@ -69,7 +70,7 @@ cat jobs/<job_name>/result.json
 |---|---|
 | `images/lean-mathlib/` | 共享基底镜像：elan/Lean(v4.28.0) + 烘焙 Mathlib oleans（`lean-packages/`，V3 自持）+ repl + lean-rs-mcp + claude CLI |
 | `verifier/` | 判分器（每个 task 的 `tests/` 由此拷贝）：五重校验，见下文判分语义 |
-| `tools/dataset.py` | 数据集工具：`make`（从 .lean 目录生成）、`refresh`（判分器升级后批量重刷派生文件，spec 不动）、`validate` |
+| `tools/dataset.py` | 数据集工具：`make`（从 .lean 目录生成）、`make-math`（math 题源 jsonl → 单定理任务，NL 题面进只读注释，flavor 记在 task.toml）、`refresh`（判分器升级后批量重刷派生文件，spec 不动，按 flavor 选 instruction 模板）、`validate` |
 | `tasks/` | **数据集本体**（canonical 格式，每个子目录一个数据集） |
 | `configs/` | `harbor run -c` 的 job 配置 |
 | `jobs/` | Harbor 运行输出（每 trial 的 reward、日志、trajectory） |
