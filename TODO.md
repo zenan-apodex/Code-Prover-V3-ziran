@@ -20,8 +20,12 @@
   验证:38,457/38,457 validate 通过;200 题抽样在 4.28 镜像编译
   **200/200 全过**(题源 4.29,漂移为零,无需预编译过滤);spec_intact
   接受合法编辑/拒绝改陈述;refresh 圆环字节稳定。
-  **round1(5K)已于 07-23 在 SG 500 并发开跑**(`distill-math-round1`,
-  seed 20260723 共 8 轮;500 并发预检 500/500 建成 141s)。
+  **round1(5K)07-23 在 SG 500 并发完赛**(`distill-math-round1`,4h16m):
+  solve 1,331/5,000(26.6%),spec_intact 100%,think 99.97%,异常仅 8
+  (7 RemoteProtocolError + 1 TypeError,rescue 集极小);均值 1.34M in /
+  50K out tokens/题,轮成本 $292(全缓存)-$1,977(全 miss)。吞吐
+  ~1,200 题/h @500 并发,SG 平台零沙箱事故。rounds 2-8 待启动
+  (seed 20260723 分配已就位,每轮启动前确认)。
 - **RL(miles)**:rollout 端到端已通,SMOKE 冒烟通过(07-22);
   下一步去掉 `--debug-rollout-only` 小步跑真 GRPO。
 
