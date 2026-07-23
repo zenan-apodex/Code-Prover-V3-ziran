@@ -3,24 +3,32 @@
 # as coding-v2.2-unsolved). round1 excludes the 1,096 tasks whose upstream
 # problem is already in the v2.1/v2.2 campaign (older v1 formalizations,
 # likely unprovable — they sit in round2, run only if wanted).
-# Backend/shape mirrors distill-dpsk-v2.2-round*.yaml (e2b.dev, 1024 conc).
+#
+# Backend: internal Aliyun JB cluster, sandboxset zenan-no-internet
+# (2c/8GiB, resized 2026-07-23; 500/500 concurrent creates probed OK in 1s).
+# no-internet is fine: the agent + DPSK calls run locally, the sandbox only
+# compiles Lean (Mathlib baked into the image, pulled from johor ACR).
+# MUST run with the pinned venv (py3.12 + e2b==2.23.0):
 #
 #   set -a && source .env && set +a && PYTHONPATH=$PWD \
-#     .venv/bin/harbor run -c configs/distill-dpsk-v1-round1.yaml
+#     .venv-aliyun/bin/harbor run -c configs/distill-dpsk-v1-round1.yaml
+#
+# Resume: same job_name + jobs_dir skips completed trials.
 
 job_name: distill-dpsk-v1-round1
 jobs_dir: jobs
 n_attempts: 1
-n_concurrent_trials: 1024
+n_concurrent_trials: 500
 
 environment:
   import_path: tools.e2b_env:ACRE2BEnvironment
-  override_cpus: 4
-  override_memory_mb: 8192
   kwargs:
-    generic_template: code-prover-lean-eval-4c8g
-    # agent 3600 + verifier 1800 + overhead; sandboxes bill while alive.
+    generic_template: zenan-no-internet
+    aliyun_cluster: jb
+    aliyun_image: apodex-sandbox-johor-registry-vpc.ap-southeast-8.cr.aliyuncs.com/math-rl/code-prover-lean:latest
     sandbox_timeout_sec: 7200
+    claim_timeout_sec: 540   # platform ALB hard-timeouts creates at ~600s
+    wait_ready_timeout_sec: 540
 
 agents:
   - import_path: agents.thirdparty_agent:ThirdPartyAgent
