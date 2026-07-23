@@ -74,6 +74,22 @@ _COPY_RE = re.compile(r"^\s*COPY\s+(?!--)(\S+)\s+(\S+)\s*$", re.MULTILINE)
 # One build per process even when many trials race the missing alias.
 _GENERIC_BUILD_LOCK = asyncio.Lock()
 
+# Aliyun mode: cap on concurrent sandbox CREATES (not on running sandboxes).
+# Claiming with an image swap makes the node pull the image on first use;
+# a full-fan-out create storm (2026-07-23 JB: 500 concurrent first-pulls)
+# saturates the ACR and node disks, every claim times out mid-pull, the pod
+# is discarded and the retry picks another cold node — zero claims ever
+# complete. Gating creates lets node caches warm progressively; once warm,
+# creates take ~2min and the gate stops binding.
+_ALIYUN_CREATE_SEM: asyncio.Semaphore | None = None
+
+
+def _aliyun_create_sem(limit: int) -> asyncio.Semaphore:
+    global _ALIYUN_CREATE_SEM
+    if _ALIYUN_CREATE_SEM is None:
+        _ALIYUN_CREATE_SEM = asyncio.Semaphore(limit)
+    return _ALIYUN_CREATE_SEM
+
 # docker config.json auth keys to try for a given image registry host.
 _DOCKER_HUB_KEYS = (
     "https://index.docker.io/v1/",
@@ -127,6 +143,7 @@ class ACRE2BEnvironment(E2BEnvironment):
         aliyun_image: str | None = None,
         claim_timeout_sec: int = 600,
         wait_ready_timeout_sec: int = 600,
+        create_concurrency: int = 24,
         **kwargs,
     ):
         super().__init__(*args, **kwargs)
@@ -142,6 +159,7 @@ class ACRE2BEnvironment(E2BEnvironment):
         self._aliyun_image = aliyun_image
         self._claim_timeout_sec = int(claim_timeout_sec)
         self._wait_ready_timeout_sec = int(wait_ready_timeout_sec)
+        self._create_concurrency = int(create_concurrency)
         if aliyun_cluster:
             if not (generic_template and aliyun_image):
                 raise ValueError(
@@ -227,21 +245,22 @@ class ACRE2BEnvironment(E2BEnvironment):
         if self._aliyun_cluster:
             from e2b import AsyncSandbox
 
-            self._sandbox = await AsyncSandbox.create(
-                template=self._template_name,
-                timeout=self._sandbox_timeout_sec or 7200,
-                request_timeout=self._claim_timeout_sec + self._wait_ready_timeout_sec + 100,
-                metadata={
-                    "environment_name": self.environment_name,
-                    "session_id": self.session_id,
-                    "e2b.agents.kruise.io/create-on-no-stock": "true",
-                    "e2b.agents.kruise.io/claim-timeout-seconds": str(self._claim_timeout_sec),
-                    "e2b.agents.kruise.io/wait-ready-timeout-seconds": str(self._wait_ready_timeout_sec),
-                    "e2b.agents.kruise.io/image": self._aliyun_image,
-                    "e2b.agents.kruise.io/reserve-failed-sandbox": "false",
-                },
-                envs=self._startup_env(),
-            )
+            async with _aliyun_create_sem(self._create_concurrency):
+                self._sandbox = await AsyncSandbox.create(
+                    template=self._template_name,
+                    timeout=self._sandbox_timeout_sec or 7200,
+                    request_timeout=self._claim_timeout_sec + self._wait_ready_timeout_sec + 100,
+                    metadata={
+                        "environment_name": self.environment_name,
+                        "session_id": self.session_id,
+                        "e2b.agents.kruise.io/create-on-no-stock": "true",
+                        "e2b.agents.kruise.io/claim-timeout-seconds": str(self._claim_timeout_sec),
+                        "e2b.agents.kruise.io/wait-ready-timeout-seconds": str(self._wait_ready_timeout_sec),
+                        "e2b.agents.kruise.io/image": self._aliyun_image,
+                        "e2b.agents.kruise.io/reserve-failed-sandbox": "false",
+                    },
+                    envs=self._startup_env(),
+                )
         elif self._sandbox_timeout_sec is None:
             await super()._create_sandbox()
         else:

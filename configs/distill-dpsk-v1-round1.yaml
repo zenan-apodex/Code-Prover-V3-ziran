@@ -29,6 +29,10 @@ environment:
     sandbox_timeout_sec: 7200
     claim_timeout_sec: 540   # platform ALB hard-timeouts creates at ~600s
     wait_ready_timeout_sec: 540
+    # gate concurrent CREATES so node image caches warm progressively —
+    # 500-way cold fan-out stampedes the ACR (2026-07-23 incident);
+    # running concurrency stays at n_concurrent_trials.
+    create_concurrency: 24
 
 agents:
   - import_path: agents.thirdparty_agent:ThirdPartyAgent
