@@ -17,10 +17,11 @@
 
 ## 1. 内部平台资源申请(硬阻塞,找平台团队)
 
-- [ ] **JB 集群 4c/8GB sandboxset**:现有 `zenan-allow-internet` 是
-      1c/2GB(SG/JB 皆然,cgroup 实测),Mathlib 判分需 ≥4c/8GB。
-      建议名 `zenan-prover-4c8g`,replicas ≥ 目标并发 2 倍或开
-      `create-on-no-stock`。
+- [x] **SG 已扩容 2c/8GiB 并冒烟通过**(07-23):reward 1.0 全绿、
+      think 40/40、transcript 完整(`smoke-dpsk-distill-aliyun-sg2c8g`,
+      8min E2E)。2 CPU 判分够用。
+- [ ] **JB 集群扩容未生效**:强制新 pod 仍 1c/2GB,跟平台确认 JB 的
+      变更是否已发(JB 其余全就绪:key/johor ACR 镜像/claim)。
 - [ ] **resourcequota**:128 并发起步(512 核/1TB),目标 512 并发
       (2048 核/4TB,可后扩)。
 - [x] **镜像路线已解决**:主用 johor ACR
