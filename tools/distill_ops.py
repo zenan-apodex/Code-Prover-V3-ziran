@@ -20,13 +20,19 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import shutil
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
-DATASET = REPO / "data" / "coding-v2.1-full-20260721"
+# Campaign selection: DISTILL_DATASET points at the dataset root (default v2.1),
+# DISTILL_CAMPAIGN prefixes job/config labels so campaigns never collide in
+# jobs/ or configs/ (e.g. "v2.2" -> distill-dpsk-v2.2-round1).
+DATASET = Path(os.environ.get("DISTILL_DATASET",
+                              str(REPO / "data" / "coding-v2.1-full-20260721")))
+CAMPAIGN = os.environ.get("DISTILL_CAMPAIGN", "")
 
 sys.path.insert(0, str(REPO))
 from tools.dataset import write_manifest  # noqa: E402
@@ -289,7 +295,8 @@ datasets:
 
 
 def cmd_config(args) -> int:
-    label = f"round{args.round}" + ("-rescue" if args.rescue else "") \
+    label = (f"{CAMPAIGN}-" if CAMPAIGN else "") + f"round{args.round}" \
+        + ("-rescue" if args.rescue else "") \
         + (f"-{args.suffix}" if args.suffix else "")
     ds = DATASET / "rounds" / (f"round{args.round}_rescue" if args.rescue
                                else f"round{args.round}")
