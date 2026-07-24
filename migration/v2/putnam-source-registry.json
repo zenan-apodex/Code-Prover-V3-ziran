@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "kind": "benchmark_campaign",
+  "name": "formal-benchmark-campaign-v1",
+  "created_at": "2026-07-18",
+  "benchmarks": {
+    "verisoftbench": {
+      "upstream_url": "https://github.com/utopia-group/VeriSoftBench.git",
+      "revision": "0c3d7931433bfa5dfa5c04259e6660cf62f178c8",
+      "source_dir": "benchmarks/VeriSoftBench",
+      "selection": "all 500 official tasks in data/verisoftbench.jsonl",
+      "record_count": 500,
+      "ordered_ids_sha256": "e198818c87e533b7ab0c72b1ccf0888c7a849d936e10ced3fa3be16544deaf2c",
+      "track": "filtered_context",
+      "grader": "VeriSoftBench evaluate.py native compile checker",
+      "toolchain": "per-repository; pinned by repos.json",
+      "smoke_ids": ["1"],
+      "license": "MIT harness; upstream repository licenses in THIRD_PARTY_NOTICES.txt"
+    },
+    "vero": {
+      "upstream_url": "https://github.com/sunblaze-ucb/vero.git",
+      "website": "https://vero.verina.io",
+      "revision": "64d5a8fb827a489b82119f667b6b54322a70e538",
+      "source_dir": "benchmarks/vero",
+      "selection": "44 real instances; excludes bankledger exemplar and tiny_unsat fixture",
+      "record_count": 44,
+      "ordered_ids_sha256": "9c33b9dfb611908854b6a0e5ab16f41de00ed38b306bceb40cc20630faa05317",
+      "track": "proof",
+      "grader": "vero native render/extract/fresh-build/axiom-audit grader",
+      "toolchain": "leanprover/lean4:v4.29.1",
+      "smoke_ids": ["tiny_unsat", "bankledger", "primepy"],
+      "license": "Apache-2.0 with per-instance notices"
+    },
+    "vericoding": {
+      "upstream_url": "https://github.com/Beneficial-AI-Foundation/vericoding-benchmark.git",
+      "revision": "387cd69996792d452ead7b0460f36ee4c5cdd148",
+      "source_dir": "benchmarks/vericoding-benchmark",
+      "selection": "language=lean and qa-issue=0 and source not in {verina,clever,fvapps}",
+      "record_count": 2012,
+      "ordered_ids_sha256": "0e38d8be5be248004e327d0fb9343518fb00715b6a9b28919c09ff05cb3fa7b0",
+      "track": "lean-compile-clean-unseen",
+      "grader": "fixed-section integrity, forbidden-token gate, pinned Lean compile",
+      "toolchain": "leanprover/lean4:v4.23.0-rc2",
+      "lean_tracks": {
+        "official-lean423": {
+          "toolchain": "leanprover/lean4:v4.23.0-rc2",
+          "question_source": "benchmarks/vericoding-benchmark/specs",
+          "leaderboard_comparable": true
+        },
+        "aligned-lean428": {
+          "toolchain": "leanprover/lean4:v4.28.0",
+          "question_source": "official specs plus sparse compatibility overlay",
+          "overlay_path": "benchmarks/compatibility/vericoding-benchmark/lean428/specs",
+          "overlay_count": 138,
+          "migration_manifest": "benchmarks/compatibility/vericoding-benchmark/lean428/migration-manifest.json",
+          "migration_manifest_sha256": "091cc6f3a8e26eb0a0e47ce31e4d4cf22ebb8f7558b1fc8d20b92d8301ad5950",
+          "baseline_audit": "1874/2012",
+          "final_audit": "2012/2012",
+          "final_audit_artifact": "results/benchmark-campaign/vericoding-lean428-compat-20260719/final-2012.json",
+          "final_audit_sha256": "dd242504f0e356c14a5b360806315cbf51072e6b2ac3cca583b8ac72710a01b3",
+          "needs_human_review": ["LA0041", "LA0273", "LA0289", "LT0340", "LT0346"],
+          "leaderboard_comparable": false
+        }
+      },
+      "smoke_ids": ["LA0000", "LT0000", "LD0000", "LJ0000", "LB0000", "LS0000"],
+      "license": "MIT; do not redistribute VerifiedCogen-derived data"
+    },
+    "putnambench": {
+      "upstream_url": "https://github.com/trishullab/PutnamBench.git",
+      "revision": "a23d8e6d4e9e3418fd78f76de7bfcb9414cbfd39",
+      "source_dir": "benchmarks/PutnamBench",
+      "selection": "all 672 Lean tasks after official numeric-answer rewrite",
+      "record_count": 672,
+      "ordered_ids_sha256": "2decb1f22757d868241e6f0f31a09c2c70beec9e9fe7353f0b529f6223a460e7",
+      "track": "proof-only",
+      "grader": "statement integrity, forbidden-token gate, pinned Lake compile and axiom audit",
+      "toolchain": "leanprover/lean4:v4.27.0; mathlib v4.27.0",
+      "lean_tracks": {
+        "official-lean427": {
+          "toolchain": "leanprover/lean4:v4.27.0",
+          "mathlib": "v4.27.0",
+          "project": "benchmarks/PutnamBench/lean4",
+          "leaderboard_comparable": true
+        },
+        "aligned-lean428": {
+          "toolchain": "leanprover/lean4:v4.28.0",
+          "mathlib": "v4.28.0",
+          "project": "benchmarks/compatibility/PutnamBench/lean428",
+          "overlay_count": 0,
+          "lake_manifest_sha256": "b9eeecc255e70766072eef4c3558d97afef7dc694026b3c12d2bca693e582b53",
+          "final_audit": "672/672",
+          "final_audit_artifact": "results/benchmark-campaign/putnam-lean428-compat-20260719/full-672.json",
+          "final_audit_sha256": "db3254b6bc5db03cc57059c0990eacf131ec39248770c760c53e84b3d7b2f9be",
+          "leaderboard_comparable": false
+        }
+      },
+      "smoke_ids": ["putnam_1962_a1", "putnam_1962_a2", "putnam_1962_a3", "putnam_1962_a4"],
+      "license": "Apache-2.0 for Lean formalizations"
+    }
+  }
+}

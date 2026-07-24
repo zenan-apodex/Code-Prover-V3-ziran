@@ -1,0 +1,4038 @@
+{
+  "schema_version": 1,
+  "kind": "v2_migrated_native_benchmark_campaign",
+  "name": "verisoftbench-filtered-context-500",
+  "campaign": "formal-benchmark-campaign-v1",
+  "upstream_url": "https://github.com/utopia-group/VeriSoftBench.git",
+  "upstream_revision": "0c3d7931433bfa5dfa5c04259e6660cf62f178c8",
+  "track": "filtered_context",
+  "native_fix_enabled": false,
+  "leaderboard_comparable": false,
+  "task_count": 500,
+  "ordered_ids_sha256": "e198818c87e533b7ab0c72b1ccf0888c7a849d936e10ced3fa3be16544deaf2c",
+  "dataset_sha256": "ea584250021fbfaddc060834be2e05b9b2fae4f720c770a9932c71d039a50961",
+  "repos_sha256": "c9cc7cb9650c482d81ee78d7f704c61d0d6073418064d11c55674938f35760de",
+  "repository_count": 23,
+  "registry_sha256": "19b313cca1207d8aa3223d8e84f158414aaa637ab66a864dc325927a8d21382d",
+  "native_files": {
+    "evaluate.py": "7e0710aa5b85476441faaf8602048967daa8db352af13cafb240bdcd8f25ea82",
+    "core/evaluator.py": "708181ee3efa160550b46b5dcec19064442f459d5a978cf12d6d7beb2c82a297",
+    "core/lean_interface.py": "0bf2c702853193dc07630742345f4d3c1b76b43445cc3a19618a38c020b9df97",
+    "prompts/prompt_builder.py": "05953b167eabcd62f2ca2a1a15bfdbd0ef87ab601ecffce9b9b06da139bf7f2c",
+    "prompts/templates/init.txt": "bc3740f835bec2eadb6b93b567f28e59e0a0f4767f643657346fb3ba1532057f",
+    "prompts/templates/user.txt": "a74ce7eab8b5b22806fb059f4178b426620b3eb8debb19381d75c3317267c96a",
+    "prompts/templates/examples/e1.txt": "81e155b909602295a2bb8e1444109844d55a2989ccf66e44490ec8ad84f8da64",
+    "utils/utils.py": "36d5dd02674b1a3427d76987b84be23fbbdb7ba54746ed104585a7248c3f6d68",
+    "analysis/identifier_extractor.py": "e65dc29c281834e352a88247a504d4e9ceafb259995e7720dbabaa2d9e2c1cea",
+    "analysis/scope_tracker.py": "afca95881420ab8ab356820a3767c620ee4bc1ab0d0362145eed9acbe0df4e49",
+    "analysis/lean_patterns.py": "7f516f14e661404054436296987879040ea5a27f10474d285517111ebbb2fd76"
+  },
+  "materialization": {
+    "default_path": "tasks/_campaign_views/verisoftbench-500",
+    "base_image": "verisoftbench/harbor-native:0c3d7931433b",
+    "source_payload_committed": false,
+    "requires_external_native_image": true
+  },
+  "tasks": {
+    "1": {
+      "id": 1,
+      "thm_name": "Binius.BinaryBasefold.fiberwise_dist_lt_imp_dist_lt_unique_decoding_radius",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/ProofSystem/Binius/BinaryBasefold/Prelude.lean",
+      "category": "Applied verif.",
+      "record_sha256": "81c9572012f2f175d47fbf5f1be5de571a2b71a45edc156c923d8c41cf0b24d4"
+    },
+    "2": {
+      "id": 2,
+      "thm_name": "ConcreteBinaryTower.minPoly_of_powerBasisSucc_generator",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/FieldTheory/BinaryField/Tower/Impl.lean",
+      "category": "Applied verif.",
+      "record_sha256": "6f83b2b166fb6fe3e8aaa9dd11abeb98fd74a040909ae9c1abeb3af3a67f5e4c"
+    },
+    "3": {
+      "id": 3,
+      "thm_name": "AdditiveNTT.evaluation_poly_split_identity",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/FieldTheory/AdditiveNTT/AdditiveNTT.lean",
+      "category": "Applied verif.",
+      "record_sha256": "8793ffe641efa528f2969d068ef0c46de34faf86b17c8d4dd725d98f0c7d2a35"
+    },
+    "4": {
+      "id": 4,
+      "thm_name": "Nat.getBit_repr",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/Nat/Bitwise.lean",
+      "category": "Applied verif.",
+      "record_sha256": "b345756cec3caa0522b196b27b3bf4f718fcf08fad747cd58091050982e2afae"
+    },
+    "5": {
+      "id": 5,
+      "thm_name": "Nat.getBit_of_binaryFinMapToNat",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/Nat/Bitwise.lean",
+      "category": "Applied verif.",
+      "record_sha256": "99f590996ff64a752c08c5c11ed471ad56493543db56f73c603ef5b02fe101d5"
+    },
+    "6": {
+      "id": 6,
+      "thm_name": "ConcreteBinaryTower.towerEquiv_commutes_left_diff",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/FieldTheory/BinaryField/Tower/Impl.lean",
+      "category": "Applied verif.",
+      "record_sha256": "a4a9cb9069f908451c2e4195ec71f2f8858aa6796337437851d2a6c3d32e4f36"
+    },
+    "7": {
+      "id": 7,
+      "thm_name": "AdditiveNTT.intermediateNormVpoly_comp",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/FieldTheory/AdditiveNTT/AdditiveNTT.lean",
+      "category": "Applied verif.",
+      "record_sha256": "8869cbbe5e49ab1d655c037ad58bdb9afe2529801eca230205e74fad16d80ef1"
+    },
+    "8": {
+      "id": 8,
+      "thm_name": "AdditiveNTT.inductive_rec_form_W_comp",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/FieldTheory/AdditiveNTT/NovelPolynomialBasis.lean",
+      "category": "Applied verif.",
+      "record_sha256": "bfb2a281aa021892009a80cd9bb3b4f2ad5bf161dac718609fdba26b4fa56b71"
+    },
+    "9": {
+      "id": 9,
+      "thm_name": "AdditiveNTT.odd_index_intermediate_novel_basis_decomposition",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/FieldTheory/AdditiveNTT/AdditiveNTT.lean",
+      "category": "Applied verif.",
+      "record_sha256": "3157d40240ccf92249af5a1fa56cde5591938ba2fa6a0443889865f18f526134"
+    },
+    "10": {
+      "id": 10,
+      "thm_name": "AdditiveNTT.finToBinaryCoeffs_sDomainToFin",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/FieldTheory/AdditiveNTT/AdditiveNTT.lean",
+      "category": "Applied verif.",
+      "record_sha256": "ee03f4b3f6f7f857c3dca871c687bf49f89f2cc3e09a5db94116c20bae7b6d7a"
+    },
+    "11": {
+      "id": 11,
+      "thm_name": "AdditiveNTT.sDomain_eq_image_of_upper_span",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/FieldTheory/AdditiveNTT/AdditiveNTT.lean",
+      "category": "Applied verif.",
+      "record_sha256": "b32c61ae98aaa3fde7382c40b9faa49e12c4e4187a355cd9c0608e74632c9cff"
+    },
+    "12": {
+      "id": 12,
+      "thm_name": "AdditiveNTT.initial_tiled_coeffs_correctness",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/FieldTheory/AdditiveNTT/AdditiveNTT.lean",
+      "category": "Applied verif.",
+      "record_sha256": "901c6ccaf82026a186aa3aff77d585a7e564dbdec4d8556c363e0612555915be"
+    },
+    "13": {
+      "id": 13,
+      "thm_name": "MlPoly.mobius_apply_zeta_apply_eq_id",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/MlPoly/Basic.lean",
+      "category": "Applied verif.",
+      "record_sha256": "8784fa90f0b9f4c6cb47182734a8d926ca79810b206fc7af9a70e3f8d64b098a"
+    },
+    "14": {
+      "id": 14,
+      "thm_name": "Nat.getLowBits_succ",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/Nat/Bitwise.lean",
+      "category": "Applied verif.",
+      "record_sha256": "af4b1208c846c15975d7119d8d29ccbfe88bf925c39566352371115ce803f40c"
+    },
+    "15": {
+      "id": 15,
+      "thm_name": "rsum_eq_t1_square_aux",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/FieldTheory/BinaryField/Tower/Prelude.lean",
+      "category": "Applied verif.",
+      "record_sha256": "86b721cc5e8545cbc3c57abcbe84ebc63ea1a7209a649fccda0aba9036b5aa8d"
+    },
+    "16": {
+      "id": 16,
+      "thm_name": "AdditiveNTT.rootMultiplicity_prod_W_comp_X_sub_C",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/FieldTheory/AdditiveNTT/NovelPolynomialBasis.lean",
+      "category": "Applied verif.",
+      "record_sha256": "440fdf1501f7438aef74ac7e6ff9c73c9a866190df77ca40d48bf3871da6d98d"
+    },
+    "17": {
+      "id": 17,
+      "thm_name": "Binius.BinaryBasefold.is_fiber_iff_generates_quotient_point",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/ProofSystem/Binius/BinaryBasefold/Prelude.lean",
+      "category": "Applied verif.",
+      "record_sha256": "d2771aceabc0d3aba56934cc6ace125c56036a37c136dd05ea9a3d9c39e1f803"
+    },
+    "18": {
+      "id": 18,
+      "thm_name": "ConcreteBinaryTower.Z_square_eq",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/FieldTheory/BinaryField/Tower/Impl.lean",
+      "category": "Applied verif.",
+      "record_sha256": "5b003a4372045d706d8a805a44f73f0fd8af0cd83a1c4785dd83c2bda9d228d1"
+    },
+    "19": {
+      "id": 19,
+      "thm_name": "Binius.BinaryBasefold.qMap_total_fiber_disjoint",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/ProofSystem/Binius/BinaryBasefold/Prelude.lean",
+      "category": "Applied verif.",
+      "record_sha256": "e1a377499fdca0067dbbd216e2437658e92985d8f50404d416a1ae3498b29691"
+    },
+    "20": {
+      "id": 20,
+      "thm_name": "AdditiveNTT.even_index_intermediate_novel_basis_decomposition",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/FieldTheory/AdditiveNTT/AdditiveNTT.lean",
+      "category": "Applied verif.",
+      "record_sha256": "092f2b5836718ca55494a117740ccba987b65007005c033438618f4516ee1679"
+    },
+    "21": {
+      "id": 21,
+      "thm_name": "ConcreteBinaryTower.split_algebraMap_eq_zero_x",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/FieldTheory/BinaryField/Tower/Impl.lean",
+      "category": "Applied verif.",
+      "record_sha256": "81d4d8cb2cde0776de08a4e40a9fbbc54fe16ea7b324bd3c67463872e6cfc462"
+    },
+    "22": {
+      "id": 22,
+      "thm_name": "ConcreteBinaryTower.split_bitvec_eq_iff_fromNat",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/FieldTheory/BinaryField/Tower/Impl.lean",
+      "category": "Applied verif.",
+      "record_sha256": "e62bde94f7265e1aefd325e5780b070e0cc1bd4915d01efd7f0ee44afd292ad7"
+    },
+    "23": {
+      "id": 23,
+      "thm_name": "AdditiveNTT.basisVectors_span",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/FieldTheory/AdditiveNTT/NovelPolynomialBasis.lean",
+      "category": "Applied verif.",
+      "record_sha256": "73373a67f8e94a0f41d8a99bd46c8ba73ae98418aa3ce372017363e9617559db"
+    },
+    "24": {
+      "id": 24,
+      "thm_name": "MlPoly.coeff_of_toMvPolynomial_eq_coeff_of_MlPoly",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/MlPoly/Equiv.lean",
+      "category": "Applied verif.",
+      "record_sha256": "89415820c4b46f1e32fa45ef28670d050eeaa9e04f9f3ec96e16f3594d08baa6"
+    },
+    "25": {
+      "id": 25,
+      "thm_name": "Polynomial.Bivariate.degreeX_mul",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/Polynomial/Bivariate.lean",
+      "category": "Applied verif.",
+      "record_sha256": "ae7e82971f9956a22f0828de4db02918a13abf149bac837c8c2edf7006aa09c5"
+    },
+    "26": {
+      "id": 26,
+      "thm_name": "Binius.BinaryBasefold.card_qMap_total_fiber",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/ProofSystem/Binius/BinaryBasefold/Prelude.lean",
+      "category": "Applied verif.",
+      "record_sha256": "de0e6272e5337852b0794c91e532cf896973a16df009ffc864e8d191c661a5d8"
+    },
+    "27": {
+      "id": 27,
+      "thm_name": "Binius.BinaryBasefold.qMap_total_fiber_one_level_eq",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/ProofSystem/Binius/BinaryBasefold/Prelude.lean",
+      "category": "Applied verif.",
+      "record_sha256": "8f88dc55ea7ee553d0a1ec62efa1efd556ca6a669b4ae70c98de9dc7a6afae16"
+    },
+    "28": {
+      "id": 28,
+      "thm_name": "ReedSolomonCode.minDist",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/CodingTheory/ReedSolomon.lean",
+      "category": "Applied verif.",
+      "record_sha256": "7ab29ace530202732f096a4410fc133ff648604559e89f7ba466178abd7e311a"
+    },
+    "29": {
+      "id": 29,
+      "thm_name": "Vector.foldl_succ",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/Vector/Basic.lean",
+      "category": "Applied verif.",
+      "record_sha256": "9fff255cf2cd3b2e00cabaff07654292beba29a885f598e5a32a0c6612bfc68b"
+    },
+    "30": {
+      "id": 30,
+      "thm_name": "ConcreteBinaryTower.join_eq_bitvec_iff_fromNat",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/FieldTheory/BinaryField/Tower/Impl.lean",
+      "category": "Applied verif.",
+      "record_sha256": "59532ae97ec3337bc4579a730bc0a802fd352a290a09baffa1e0956880a5993c"
+    },
+    "31": {
+      "id": 31,
+      "thm_name": "ConcreteBinaryTower.split_one",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/FieldTheory/BinaryField/Tower/Impl.lean",
+      "category": "Applied verif.",
+      "record_sha256": "422c2f21a0070d1a71f804b37b0eebadbcac1fb35b0e6c20af47882c9ae5778f"
+    },
+    "32": {
+      "id": 32,
+      "thm_name": "AdditiveNTT.W_prod_comp_decomposition",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/FieldTheory/AdditiveNTT/NovelPolynomialBasis.lean",
+      "category": "Applied verif.",
+      "record_sha256": "560a8ab1efa9451c2758ffdd0c7b5d28a27217ac476200fd3b750a1c441e7fff"
+    },
+    "33": {
+      "id": 33,
+      "thm_name": "ConcreteBinaryTower.towerRingHomBackwardMap_forwardMap_eq",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/FieldTheory/BinaryField/Tower/Impl.lean",
+      "category": "Applied verif.",
+      "record_sha256": "6052560f549af94674d8953c407e9408ffec06707159aaa56379814e3ab5b7e3"
+    },
+    "34": {
+      "id": 34,
+      "thm_name": "AdditiveNTT.additiveNTT_correctness",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/FieldTheory/AdditiveNTT/AdditiveNTT.lean",
+      "category": "Applied verif.",
+      "record_sha256": "521dfaf0b3242bc528603678bf3b24a35e32288e0e79ee2fe83d5806fc0dd6e9"
+    },
+    "35": {
+      "id": 35,
+      "thm_name": "InductiveMerkleTree.functional_completeness",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/CommitmentScheme/InductiveMerkleTree.lean",
+      "category": "Applied verif.",
+      "record_sha256": "312d1d9bd97ae3fd9ec6eb48dd32e8afe38a2af3add06d5a69b0e29bc86e14cf"
+    },
+    "36": {
+      "id": 36,
+      "thm_name": "ConcreteBinaryTower.aeval_definingPoly_at_Z_succ",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/FieldTheory/BinaryField/Tower/Impl.lean",
+      "category": "Applied verif.",
+      "record_sha256": "a5af6041dc7211ee9839ea264063dab13d5e34e1e8cb92b5be113f3df8295548"
+    },
+    "37": {
+      "id": 37,
+      "thm_name": "AdditiveNTT.inductive_linear_map_W",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/FieldTheory/AdditiveNTT/NovelPolynomialBasis.lean",
+      "category": "Applied verif.",
+      "record_sha256": "f8460e17e3f9b2fd276eb86de0b967410689fbda87932be8fc4ffc8c09ccfddf"
+    },
+    "38": {
+      "id": 38,
+      "thm_name": "ConcreteBinaryTower.join_eq_join_via_add_smul",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/FieldTheory/BinaryField/Tower/Impl.lean",
+      "category": "Applied verif.",
+      "record_sha256": "f31bfec5bb03e3978cacedf07cc5db5a7360bd29c2ce5129485986790d4c0e4e"
+    },
+    "39": {
+      "id": 39,
+      "thm_name": "AdditiveNTT.W_linearity",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/FieldTheory/AdditiveNTT/NovelPolynomialBasis.lean",
+      "category": "Applied verif.",
+      "record_sha256": "88ac3c19132367737f365f0ec9de5fb9ffe1382b7d97174f1cade4746cad22f0"
+    },
+    "40": {
+      "id": 40,
+      "thm_name": "MvPolynomial.finSuccEquivNth_coeff_coeff",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/ToMathlib/MvPolynomial/Equiv.lean",
+      "category": "Applied verif.",
+      "record_sha256": "2e311381f950c2c6588c9f201445c2310e7f910bb831670b310438ce04aafbfc"
+    },
+    "41": {
+      "id": 41,
+      "thm_name": "ReedSolomonCode.genMatIsVandermonde",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/CodingTheory/ReedSolomon.lean",
+      "category": "Applied verif.",
+      "record_sha256": "142e70d83c90359925151a09ed2010e1a1b09a4c857919c5f275d730ba035ac7"
+    },
+    "42": {
+      "id": 42,
+      "thm_name": "UniPoly.toImpl_toPoly_of_canonical",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/UniPoly/Basic.lean",
+      "category": "Applied verif.",
+      "record_sha256": "6de84b5d431285724f4824bbee37fb007d2d0131a2694a960cd7dc1c24dab89e"
+    },
+    "43": {
+      "id": 43,
+      "thm_name": "ConcreteBinaryTower.split_sum_eq_sum_split",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/FieldTheory/BinaryField/Tower/Impl.lean",
+      "category": "Applied verif.",
+      "record_sha256": "5d908e5cef1ffd9a49ed81d9634a31dbe30d394930079f34db5ab680587a6859"
+    },
+    "44": {
+      "id": 44,
+      "thm_name": "ConcreteBinaryTower.concrete_eq_zero_or_eq_one",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/FieldTheory/BinaryField/Tower/Impl.lean",
+      "category": "Applied verif.",
+      "record_sha256": "844b29cc1b322eeeb98487628cd35f2772ec9ba152fc16b1dd5d6e4014c61c0c"
+    },
+    "45": {
+      "id": 45,
+      "thm_name": "ConcreteBinaryTower.concrete_mul_left_distrib0",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/FieldTheory/BinaryField/Tower/Impl.lean",
+      "category": "Applied verif.",
+      "record_sha256": "25acbd5ded8c44cc6a53df6babe0ef2ad8036477baa67c35bc8b027cb9fb653f"
+    },
+    "46": {
+      "id": 46,
+      "thm_name": "coeffs_of_comp_minus_x",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/FieldTheory/NonBinaryField/Basic.lean",
+      "category": "Applied verif.",
+      "record_sha256": "8e6e2285a55a962d9f65c215dad0785f548679ef1b275fa6ae68f9f90194c618"
+    },
+    "47": {
+      "id": 47,
+      "thm_name": "UniPoly.Trim.eq_degree_of_equiv",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/UniPoly/Basic.lean",
+      "category": "Applied verif.",
+      "record_sha256": "dd8e4a8b3173e126e4a00fff577d4caa16197c9dd1803c0c0e05b049ee4480f4"
+    },
+    "48": {
+      "id": 48,
+      "thm_name": "ConcreteBinaryTower.towerRingHomForwardMap_Z",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/FieldTheory/BinaryField/Tower/Impl.lean",
+      "category": "Applied verif.",
+      "record_sha256": "65ed5d33b2374fe0b0abac17b5e37c396e3ef9b92efdd8f4baae59dc0f176ab2"
+    },
+    "49": {
+      "id": 49,
+      "thm_name": "Nat.num_eq_highBits_add_lowBits",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/Nat/Bitwise.lean",
+      "category": "Applied verif.",
+      "record_sha256": "f6e72087aebab94dbb4434d3734c5b2bb4d1f052232361387c1d54feb7962fcd"
+    },
+    "50": {
+      "id": 50,
+      "thm_name": "BerlekampWelch.elocPolyF_deg",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/CodingTheory/BerlekampWelch/ElocPoly.lean",
+      "category": "Applied verif.",
+      "record_sha256": "52d26d07da10a2c16212a85fb614f8d144c17479795b4b4ff3bccbf7a11ec9ce"
+    },
+    "51": {
+      "id": 51,
+      "thm_name": "Fin.zero_dappend",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/Fin/Tuple/Lemmas.lean",
+      "category": "Applied verif.",
+      "record_sha256": "90b259cba5f93c8fbf2f33f4b1b221fee4e72e3e9f2e0f15456065be281e4dbd"
+    },
+    "52": {
+      "id": 52,
+      "thm_name": "BerlekampWelch.solutionToQ_zero",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/CodingTheory/BerlekampWelch/Condition.lean",
+      "category": "Applied verif.",
+      "record_sha256": "cd5419b2a650303d3b3d35644f7f18985393b57f96520942df7d378a962543b8"
+    },
+    "53": {
+      "id": 53,
+      "thm_name": "BinaryTower.eq_join_via_add_smul_eq_iff_split",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/FieldTheory/BinaryField/Tower/Basic.lean",
+      "category": "Applied verif.",
+      "record_sha256": "4fff4783040125f94433d162e6d9d12031407e952cf2e63846bdfb4c85fde2a7"
+    },
+    "54": {
+      "id": 54,
+      "thm_name": "BinaryTower.algebraMap_eq_zero_x",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/FieldTheory/BinaryField/Tower/Basic.lean",
+      "category": "Applied verif.",
+      "record_sha256": "bce152bbc8faf7606838b371a30cb9e8c00b84d521f95a893d0317ce3a8910c9"
+    },
+    "55": {
+      "id": 55,
+      "thm_name": "Nat.getBit_of_sub_two_pow_of_bit_1",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/Nat/Bitwise.lean",
+      "category": "Applied verif.",
+      "record_sha256": "26b53bbde6bb3c6cc7e863e24a81c82563bea15a71fd2190beeacb42a2d2ff9c"
+    },
+    "56": {
+      "id": 56,
+      "thm_name": "Binius.BinaryBasefold.toOutCodewordsCount_succ_eq",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/ProofSystem/Binius/BinaryBasefold/Basic.lean",
+      "category": "Applied verif.",
+      "record_sha256": "bdbd9f9ec9192dd11722cc67a7917b55376c21cea83e399590b1a4abf6379255"
+    },
+    "57": {
+      "id": 57,
+      "thm_name": "AdditiveNTT.evalWAt_eq_W",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/FieldTheory/AdditiveNTT/Impl.lean",
+      "category": "Applied verif.",
+      "record_sha256": "ddf409799dda438dc61a22236c7b1927d0c6130e98a5b9eddfc95612b88beecc"
+    },
+    "58": {
+      "id": 58,
+      "thm_name": "AdditiveNTT.normalizedW_eq_qMap_composition",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/FieldTheory/AdditiveNTT/AdditiveNTT.lean",
+      "category": "Applied verif.",
+      "record_sha256": "f09750e2f92f6ec4b3a942f3683c8ef7abd4e75d80f757d17c14d2cb6f4ad2a0"
+    },
+    "59": {
+      "id": 59,
+      "thm_name": "Nat.getHighBits_no_shl_joinBits",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/Nat/Bitwise.lean",
+      "category": "Applied verif.",
+      "record_sha256": "b9c7d6a7027d30f4e3a9e246d6c0e30c6edbc15b2bede4d4dde9a0d383881d78"
+    },
+    "60": {
+      "id": 60,
+      "thm_name": "ConcreteBinaryTower.towerRingHomForwardMap_backwardMap_eq",
+      "lean_root": "ArkLib",
+      "rel_path": "ArkLib/Data/FieldTheory/BinaryField/Tower/Impl.lean",
+      "category": "Applied verif.",
+      "record_sha256": "aff85f02f7eeef345801a500b3746e7ad423e66142bf229bdfa6962453ca0384"
+    },
+    "61": {
+      "id": 61,
+      "thm_name": "Capless.preservation",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Soundness/Preservation.lean",
+      "category": "Type systems",
+      "record_sha256": "cc225420f07b1cecf29a1cc5705fd84cf631a35ba9000522cd24d1a88c908409"
+    },
+    "62": {
+      "id": 62,
+      "thm_name": "Capless.Typed.rename",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Renaming/Term/Typing.lean",
+      "category": "Type systems",
+      "record_sha256": "cabfaec23ee2919b8e92bbbe219076cb75d6eec6cd7012f6be807f02468e7803"
+    },
+    "63": {
+      "id": 63,
+      "thm_name": "Capless.Typed.subst",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Subst/Term/Typing.lean",
+      "category": "Type systems",
+      "record_sha256": "079d3cebf6e8b1cf0e2afe08e35095fb877831323bb8e23bcf2a53c7d5527f12"
+    },
+    "64": {
+      "id": 64,
+      "thm_name": "Capless.Typed.csubst",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Subst/Capture/Typing.lean",
+      "category": "Type systems",
+      "record_sha256": "56100e5b7892feda1521458af60dca574a0b13a89feea72129afa729779096c2"
+    },
+    "65": {
+      "id": 65,
+      "thm_name": "Capless.Typed.crename",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Renaming/Capture/Typing.lean",
+      "category": "Type systems",
+      "record_sha256": "8ce99d8a1c44b3784e32f374caa232f8ea0febbba173eaba22767d138dd787d8"
+    },
+    "66": {
+      "id": 66,
+      "thm_name": "Capless.Typed.trename",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Renaming/Type/Typing.lean",
+      "category": "Type systems",
+      "record_sha256": "6082522c178cbbd659928943c99dfd44d2a4ec803a48eed3f1237213d97fc255"
+    },
+    "67": {
+      "id": 67,
+      "thm_name": "Capless.Typed.tsubst",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Subst/Type/Typing.lean",
+      "category": "Type systems",
+      "record_sha256": "9f461ddf8524e1020a0258ea6634bd331f610b9ae9d5d870ab373eb0b70ad32c"
+    },
+    "68": {
+      "id": 68,
+      "thm_name": "Capless.SSubtyp.rename",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Renaming/Term/Subtyping.lean",
+      "category": "Type systems",
+      "record_sha256": "ded81ff210e7b1a144932cadbda7f050d30f043bc117d73e84e9df5314aa4059"
+    },
+    "69": {
+      "id": 69,
+      "thm_name": "Capless.SSubtyp.subst",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Subst/Term/Subtyping.lean",
+      "category": "Type systems",
+      "record_sha256": "39f8f83685f283d718522746eb232afa7f9c0de118918651f4f338fc27aef914"
+    },
+    "70": {
+      "id": 70,
+      "thm_name": "Capless.SSubtyp.csubst",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Subst/Capture/Subtyping.lean",
+      "category": "Type systems",
+      "record_sha256": "1ae9d89dfe72a2840c7e468e320548dc333eb1b70bd9e47fab6e9b04b678bce5"
+    },
+    "71": {
+      "id": 71,
+      "thm_name": "Capless.SSubtyp.crename",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Renaming/Capture/Subtyping.lean",
+      "category": "Type systems",
+      "record_sha256": "808956a1c38593ddd5a3a2a4acd11dce1527a92b4d0c043f87d3ec5f4af70cbd"
+    },
+    "72": {
+      "id": 72,
+      "thm_name": "Capless.SSubtyp.tsubst",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Subst/Type/Subtyping.lean",
+      "category": "Type systems",
+      "record_sha256": "08a00fc494786a770b40030fcc6f6e4cc5643457d85e5b3820de1a0b1dab5b78"
+    },
+    "73": {
+      "id": 73,
+      "thm_name": "Capless.SSubtyp.trename",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Renaming/Type/Subtyping.lean",
+      "category": "Type systems",
+      "record_sha256": "b3147df29998122fd784e39dd081fbf2590cc5217cf4036c32277b5b263fc5b1"
+    },
+    "74": {
+      "id": 74,
+      "thm_name": "Capless.SSubtyp.sub_dealias_cforall_inv",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Inversion/Subtyping.lean",
+      "category": "Type systems",
+      "record_sha256": "400e826f5c0b36483b11fa6c973b25a06c3f63c0291897186b5cf0de14d65a94"
+    },
+    "75": {
+      "id": 75,
+      "thm_name": "Capless.SSubtyp.sub_dealias_forall_inv",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Inversion/Subtyping.lean",
+      "category": "Type systems",
+      "record_sha256": "5db2db82746af45d1e8ce87b92c12ceb98ba057e8aebd0688e8d6170e6bd257f"
+    },
+    "76": {
+      "id": 76,
+      "thm_name": "Capless.SSubtyp.sub_dealias_tforall_inv",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Inversion/Subtyping.lean",
+      "category": "Type systems",
+      "record_sha256": "78de273812f7ba038abce1cc7209e7fcf0c908cc69564063f5cffca265c5e895"
+    },
+    "77": {
+      "id": 77,
+      "thm_name": "Capless.SSubtyp.sub_dealias_boxed_inv",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Inversion/Subtyping.lean",
+      "category": "Type systems",
+      "record_sha256": "9c6e2396222d3d34c878911cf21cf69816d6e7caaa41e52973a7ec0e0006184a"
+    },
+    "78": {
+      "id": 78,
+      "thm_name": "Capless.SSubtyp.sub_dealias_label_inv",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Inversion/Subtyping.lean",
+      "category": "Type systems",
+      "record_sha256": "f753961a30646aadb964e55c4cbd9841a88bc61eb12d1c34c671f93d9a80fb3a"
+    },
+    "79": {
+      "id": 79,
+      "thm_name": "Capless.progress",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Soundness/Progress.lean",
+      "category": "Type systems",
+      "record_sha256": "1dfd1c3fbdf85842dd27cb8782f1d75d108804d2ff9feb44e394bc41ade16a6b"
+    },
+    "80": {
+      "id": 80,
+      "thm_name": "Capless.TypedCont.lweaken",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Weakening/TypedCont/Term.lean",
+      "category": "Type systems",
+      "record_sha256": "7a176cb826cf1d2aad6f9a5d5786078ffe4c84487e450b6ef59a4a67ce2dd201"
+    },
+    "81": {
+      "id": 81,
+      "thm_name": "Capless.TypedCont.weaken",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Weakening/TypedCont/Term.lean",
+      "category": "Type systems",
+      "record_sha256": "33234edac3f0dabf6d7fb0c8303f46360e699028cb432a85ddd4c86da66187d3"
+    },
+    "82": {
+      "id": 82,
+      "thm_name": "Capless.TypedCont.cweaken",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Weakening/TypedCont/Capture.lean",
+      "category": "Type systems",
+      "record_sha256": "35ff55373001e233a55256d9e33ff6811bb61b69f8068292cba17777aae16021"
+    },
+    "83": {
+      "id": 83,
+      "thm_name": "Capless.Subcapt.rename",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Renaming/Term/Subcapturing.lean",
+      "category": "Type systems",
+      "record_sha256": "c51b79db7701fb78c33656d57e987776ee26f524896158e1eff0e4000a01a651"
+    },
+    "84": {
+      "id": 84,
+      "thm_name": "Capless.Store.val_lookup_exists",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Soundness/Progress.lean",
+      "category": "Type systems",
+      "record_sha256": "f48d5541df3e5a47357a24ce9f69690d07f5c4922c02a1d41eba5cfbe80b64e3"
+    },
+    "85": {
+      "id": 85,
+      "thm_name": "Capless.Typed.canonical_form_tlam'",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Inversion/Typing.lean",
+      "category": "Type systems",
+      "record_sha256": "48b2a2aa45fb8cf5dfece60dc6031a6b4202f0fce5094412ed9823d19aa2cd88"
+    },
+    "86": {
+      "id": 86,
+      "thm_name": "Capless.Subcapt.crename",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Renaming/Capture/Subcapturing.lean",
+      "category": "Type systems",
+      "record_sha256": "9f41af2780ff4346c226a187167098a404a6b462f4599dff7d2118f4024416ac"
+    },
+    "87": {
+      "id": 87,
+      "thm_name": "Capless.Typed.boundary_body_typing",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Typing/Boundary.lean",
+      "category": "Type systems",
+      "record_sha256": "f94ab70d314235aa98f515337d54e10b3784b38e8476332e4b1ebb79a38e97e2"
+    },
+    "88": {
+      "id": 88,
+      "thm_name": "Capless.Typed.canonical_form_lam'",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Inversion/Typing.lean",
+      "category": "Type systems",
+      "record_sha256": "4444c6832dd2595f93493fbfd2c4c6caac37a71b99fd0e0fbbfd22fa95bbe1d5"
+    },
+    "89": {
+      "id": 89,
+      "thm_name": "Capless.Typed.canonical_form_clam'",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Inversion/Typing.lean",
+      "category": "Type systems",
+      "record_sha256": "2f52f1d26dcd0b6b71f865d41b69755b2fff5e91c67710446bcb62df0d04dde9"
+    },
+    "90": {
+      "id": 90,
+      "thm_name": "Capless.TypedCont.tweaken",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Weakening/TypedCont/Type.lean",
+      "category": "Type systems",
+      "record_sha256": "e841ab82fc4a28bf777cdfbf23c35728f27abe1188742c95a33c4f33c957f65e"
+    },
+    "91": {
+      "id": 91,
+      "thm_name": "Capless.SType.crename_rename_comm",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Type/Basic.lean",
+      "category": "Type systems",
+      "record_sha256": "485b6a7d7998656f36b9fda8e8909bff1629f288ea0ccaf5f14726809410574d"
+    },
+    "92": {
+      "id": 92,
+      "thm_name": "Capless.SType.rename_rename",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Type/Basic.lean",
+      "category": "Type systems",
+      "record_sha256": "19488b4c4dda1d032530cce3eaa309eb7457a6fc095f6404215efba0c773ea5b"
+    },
+    "93": {
+      "id": 93,
+      "thm_name": "Capless.SType.trename_rename_comm",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Type/Basic.lean",
+      "category": "Type systems",
+      "record_sha256": "216e0197c20a00ef4edae961c6bfe1f8e968d7144faef6ff60f078f2eee72a78"
+    },
+    "94": {
+      "id": 94,
+      "thm_name": "Capless.SType.rename_id",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Type/Basic.lean",
+      "category": "Type systems",
+      "record_sha256": "64fd7024d3aaf40320faa7c40f7218277fb8cdcd47cd4c5cb3e8ebb9f62ef5d2"
+    },
+    "95": {
+      "id": 95,
+      "thm_name": "Capless.Context.cvar_bound_cvar_inst_inv'",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Context.lean",
+      "category": "Type systems",
+      "record_sha256": "096771281f35b2309c8978ea9fe606bf933490615585e9bfe04a2cc50a55fa36"
+    },
+    "96": {
+      "id": 96,
+      "thm_name": "Capless.SType.crename_crename",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Type/Basic.lean",
+      "category": "Type systems",
+      "record_sha256": "09a0155a45c9e2276f23b3bf464695438d2e889680f93da5494a91b2bae74a75"
+    },
+    "97": {
+      "id": 97,
+      "thm_name": "Capless.SType.crename_trename_comm",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Type/Basic.lean",
+      "category": "Type systems",
+      "record_sha256": "0b4bb82be98fa4c4a28ea6bdc8afbbfb1c4ebb4c3bdd046296d49fdf4224bda0"
+    },
+    "98": {
+      "id": 98,
+      "thm_name": "Capless.SType.crename_id",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Type/Basic.lean",
+      "category": "Type systems",
+      "record_sha256": "8be155f3b7cec2116845cae2a8e30f121f0d67772a2b8efe1cf085d1a5eaa831"
+    },
+    "99": {
+      "id": 99,
+      "thm_name": "Capless.SType.trename_trename",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Type/Basic.lean",
+      "category": "Type systems",
+      "record_sha256": "ff21e40711292c24472406617008e51f3da5a1198e9ec11d73da8a236206c017"
+    },
+    "100": {
+      "id": 100,
+      "thm_name": "Capless.Typed.letex_inv'",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Inversion/Typing.lean",
+      "category": "Type systems",
+      "record_sha256": "42da8d1620c6ba58b90f4ee6d5ea497dfcddd867c213704ab7e94b0e5700bed6"
+    },
+    "101": {
+      "id": 101,
+      "thm_name": "Capless.SType.trename_id",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Type/Basic.lean",
+      "category": "Type systems",
+      "record_sha256": "1ac8d8d7414499c9a4c6ddf02adbf42217ce59af58186f059b5cf1f1e1b31662"
+    },
+    "102": {
+      "id": 102,
+      "thm_name": "Capless.WellScoped.weaken",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Weakening/TypedCont/Term.lean",
+      "category": "Type systems",
+      "record_sha256": "1bd31543b12873671fded6258d026d65fdc52cdb7fe35d8c31073fd764c8336f"
+    },
+    "103": {
+      "id": 103,
+      "thm_name": "Capless.WellScoped.lweaken",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Weakening/TypedCont/Term.lean",
+      "category": "Type systems",
+      "record_sha256": "722dbd43591e6ebde3ef43a296a0373f9ba1979c361f2ab827216e8c0a82bb81"
+    },
+    "104": {
+      "id": 104,
+      "thm_name": "Capless.Typed.var_inv'",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Inversion/Typing.lean",
+      "category": "Type systems",
+      "record_sha256": "4e9fc80c3b8df84823e569158ebe64a5a02838b13ee9c1b8706e2e46f6732355"
+    },
+    "105": {
+      "id": 105,
+      "thm_name": "Capless.Context.bound_lbound_absurd",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Inversion/Context.lean",
+      "category": "Type systems",
+      "record_sha256": "2deb4d0d59f2b1b6f25e8bdad93bf7241ca4422fe793fb66d9f1224c1b662aae"
+    },
+    "106": {
+      "id": 106,
+      "thm_name": "Capless.Typing.inv_subcapt'",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Typing/Basic.lean",
+      "category": "Type systems",
+      "record_sha256": "469ea44183225c449cb84274b53e22a9f9564b430949bed7229dc91ccfda459e"
+    },
+    "107": {
+      "id": 107,
+      "thm_name": "Capless.Typed.tapp_inv'",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Inversion/Typing.lean",
+      "category": "Type systems",
+      "record_sha256": "faf8c4cbf444a6c7b08910254dcb7cf727313f72890e6256374823026aa479c6"
+    },
+    "108": {
+      "id": 108,
+      "thm_name": "Capless.Typed.capp_inv'",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Inversion/Typing.lean",
+      "category": "Type systems",
+      "record_sha256": "e1c611966eb9552fba113e008e54f5d0a9844db866fc5396f0e887f7383e1b44"
+    },
+    "109": {
+      "id": 109,
+      "thm_name": "Capless.Typed.boundary_inv'",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Inversion/Typing.lean",
+      "category": "Type systems",
+      "record_sha256": "4b053ba2e266d237230915ec48cc8d332a31d8986ab36c2f2b27b2e62c62d4f4"
+    },
+    "110": {
+      "id": 110,
+      "thm_name": "Capless.WellScoped.subcapt",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/WellScoped/Basic.lean",
+      "category": "Type systems",
+      "record_sha256": "5ae30740760839b19a85d4868e689855f84cfd3f45a3f6c17f6f87d0b9128556"
+    },
+    "111": {
+      "id": 111,
+      "thm_name": "Capless.Typed.letin_inv'",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Inversion/Typing.lean",
+      "category": "Type systems",
+      "record_sha256": "e67fb6f1f61f33e2bfd771818374a95d4a3ecd29d1af298b5b573451efb549ca"
+    },
+    "112": {
+      "id": 112,
+      "thm_name": "Capless.Typed.label_inv'",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Inversion/Typing.lean",
+      "category": "Type systems",
+      "record_sha256": "71b7e9f59fd3a6b7991ade5491b189392e3e0fe0adbdbcf69fb7074871838209"
+    },
+    "113": {
+      "id": 113,
+      "thm_name": "Capless.WellScoped.cweaken",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Weakening/TypedCont/Capture.lean",
+      "category": "Type systems",
+      "record_sha256": "0f243b7183507b13765a9046b360353ab92bdd239b9c57cad9227a5c3c14702f"
+    },
+    "114": {
+      "id": 114,
+      "thm_name": "Capless.WellScoped.tweaken",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Weakening/TypedCont/Type.lean",
+      "category": "Type systems",
+      "record_sha256": "afc19fb0fb74be97fc210474ede9cf150e67bfca6ef0fe184848bbc8dc92b7e4"
+    },
+    "115": {
+      "id": 115,
+      "thm_name": "Capless.Typed.forall_inv'",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Inversion/Typing.lean",
+      "category": "Type systems",
+      "record_sha256": "3f307f7821fbfdb69dc44de4b1083dd47e74457cf1d4302fe3fae8fb5c4eea2d"
+    },
+    "116": {
+      "id": 116,
+      "thm_name": "Capless.Typed.tforall_inv'",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Inversion/Typing.lean",
+      "category": "Type systems",
+      "record_sha256": "aa6150528b5028977b88acdf104a9c3f94c51fcad5177a0f5628c36ba4868042"
+    },
+    "117": {
+      "id": 117,
+      "thm_name": "Capless.Typed.cforall_inv'",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Inversion/Typing.lean",
+      "category": "Type systems",
+      "record_sha256": "8de147a762712ff1c6f9f2b2183abfebfa862dce1ad25f6915f414cb3fa3981a"
+    },
+    "118": {
+      "id": 118,
+      "thm_name": "Capless.Context.tight_bound_tvar_absurd",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Inversion/Context.lean",
+      "category": "Type systems",
+      "record_sha256": "91866e7433c6d9a0e5c5d7fd37df8e33b48e60f94fe6ba37a6c7259897566cc4"
+    },
+    "119": {
+      "id": 119,
+      "thm_name": "Capless.Typed.canonical_form_pack'",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Inversion/Typing.lean",
+      "category": "Type systems",
+      "record_sha256": "0d0ee9ac290980a108a697ec991ea32c79cc94ea590b44df582fd887fbdfe682"
+    },
+    "120": {
+      "id": 120,
+      "thm_name": "Capless.Typed.app_inv'",
+      "lean_root": "capless-lean",
+      "rel_path": "Capless/Inversion/Typing.lean",
+      "category": "Type systems",
+      "record_sha256": "93ec3075e3187ab4323b1f4cc4cad0cad2e5ab9e19925cb76576d79126d2be85"
+    },
+    "121": {
+      "id": 121,
+      "thm_name": "InductiveTable.table_soundness_aux",
+      "lean_root": "clean",
+      "rel_path": "Clean/Table/Inductive.lean",
+      "category": "Applied verif.",
+      "record_sha256": "ac4fab25848e34b7822ca24ca52ba098a9260d5741dbc0f86218842a87b6aa04"
+    },
+    "122": {
+      "id": 122,
+      "thm_name": "Circomlib.MultiAND.soundness",
+      "lean_root": "clean",
+      "rel_path": "Clean/Circomlib/Gates.lean",
+      "category": "Applied verif.",
+      "record_sha256": "4cf13ba5305153799e9d4e809e5eb7a1abbb0ccb0fa3ed30deb743b479ff8b5f"
+    },
+    "123": {
+      "id": 123,
+      "thm_name": "MemoryAccessList.isConsistent_iff_all_single_address",
+      "lean_root": "clean",
+      "rel_path": "Clean/Utils/OfflineMemory.lean",
+      "category": "Applied verif.",
+      "record_sha256": "2b20c41dfe491820b7c631f8ab0d49f13944be2c8c57b9eff9b51fd0b37235fa"
+    },
+    "124": {
+      "id": 124,
+      "thm_name": "Gadgets.Addition32.Theorems.add32_soundness",
+      "lean_root": "clean",
+      "rel_path": "Clean/Gadgets/Addition32/Theorems.lean",
+      "category": "Applied verif.",
+      "record_sha256": "270e92e78ea0c4180f72426fcded005459339824ca39732d528641078a595af0"
+    },
+    "125": {
+      "id": 125,
+      "thm_name": "Gadgets.ByteDecomposition.Theorems.soundness",
+      "lean_root": "clean",
+      "rel_path": "Clean/Gadgets/ByteDecomposition/Theorems.lean",
+      "category": "Applied verif.",
+      "record_sha256": "9d060d22b972686654d95babac7d27797dca637a293386c22e21e12ce8aad287"
+    },
+    "126": {
+      "id": 126,
+      "thm_name": "MemoryAccessList.isConsistentOffline_implies_single_address",
+      "lean_root": "clean",
+      "rel_path": "Clean/Utils/OfflineMemory.lean",
+      "category": "Applied verif.",
+      "record_sha256": "f5f1b8e2040869c1aa71630a59a57721c6d8a87dfae812957b5924532b7f3a83"
+    },
+    "127": {
+      "id": 127,
+      "thm_name": "Circomlib.MultiAND.soundness_two",
+      "lean_root": "clean",
+      "rel_path": "Clean/Circomlib/Gates.lean",
+      "category": "Applied verif.",
+      "record_sha256": "df50bcc6c04fd9ca6123ecccee4210d40d21a2d3934594a9cccb7a20d89b5958"
+    },
+    "128": {
+      "id": 128,
+      "thm_name": "Gadgets.ByteDecomposition.soundness",
+      "lean_root": "clean",
+      "rel_path": "Clean/Gadgets/ByteDecomposition/ByteDecomposition.lean",
+      "category": "Applied verif.",
+      "record_sha256": "598b031d1057df9b0c7268927b881642c174e4a4fcec497b81429ebf6cca182f"
+    },
+    "129": {
+      "id": 129,
+      "thm_name": "Gadgets.Or.Or8.completeness",
+      "lean_root": "clean",
+      "rel_path": "Clean/Gadgets/Or/Or8.lean",
+      "category": "Applied verif.",
+      "record_sha256": "58ae6384ee58fbf26e896463a52c51f1420f0b8ff93d299f097249196222e230"
+    },
+    "130": {
+      "id": 130,
+      "thm_name": "Gadgets.BLAKE3.ApplyRounds.soundness",
+      "lean_root": "clean",
+      "rel_path": "Clean/Gadgets/BLAKE3/ApplyRounds.lean",
+      "category": "Applied verif.",
+      "record_sha256": "b1a598c11a2bdd551489624fedd08d0c3be25947d0f5e6a70d0e253ad609ea4d"
+    },
+    "131": {
+      "id": 131,
+      "thm_name": "Utils.StateTransition.size_removeCycle_lt",
+      "lean_root": "clean",
+      "rel_path": "Clean/Utils/SourceSinkPath.lean",
+      "category": "Applied verif.",
+      "record_sha256": "6ac8afee7d400dbe748fabaf7863c1eb5f98fda0c0ed92e775f285aceeefa6c8"
+    },
+    "132": {
+      "id": 132,
+      "thm_name": "U32.ByteVector.bitwise_componentwise",
+      "lean_root": "clean",
+      "rel_path": "Clean/Types/U32.lean",
+      "category": "Applied verif.",
+      "record_sha256": "971a6db3157823639692a90801c8711dd641b9dea3ff981572394c907074fc71"
+    },
+    "133": {
+      "id": 133,
+      "thm_name": "MemoryAccessList.isConsistentOffline_iff_all_single_addresses",
+      "lean_root": "clean",
+      "rel_path": "Clean/Utils/OfflineMemory.lean",
+      "category": "Applied verif.",
+      "record_sha256": "07a9f3833d156a8206d71d4bcab2b6c6cfc03d67a78d4b4551eb9fd76ef49f8d"
+    },
+    "134": {
+      "id": 134,
+      "thm_name": "FlatOperation.proverEnvironment_usesLocalWitnesses",
+      "lean_root": "clean",
+      "rel_path": "Clean/Circuit/Theorems.lean",
+      "category": "Applied verif.",
+      "record_sha256": "02b5cbf652e6c2a7c3457095b7dd6b5d34b65f20f1b92e98e473672a66934c2d"
+    },
+    "135": {
+      "id": 135,
+      "thm_name": "Utils.StateTransition.acyclic_has_leaf_aux",
+      "lean_root": "clean",
+      "rel_path": "Clean/Utils/SourceSinkPath.lean",
+      "category": "Applied verif.",
+      "record_sha256": "f333885ce1788d6c988c8d33276af4d4ff8dd19b697988461288d707e089848a"
+    },
+    "136": {
+      "id": 136,
+      "thm_name": "MemoryAccessList.filterAddress_sorted_from_addressTimestampSorted",
+      "lean_root": "clean",
+      "rel_path": "Clean/Utils/OfflineMemory.lean",
+      "category": "Applied verif.",
+      "record_sha256": "9faa7a0ed10aa4337a20da091f965f3ae574109d9245de715f6321747430284a"
+    },
+    "137": {
+      "id": 137,
+      "thm_name": "MemoryAccessList.isConsistentOnline_iff_isConsistentOffline",
+      "lean_root": "clean",
+      "rel_path": "Clean/Utils/OfflineMemory.lean",
+      "category": "Applied verif.",
+      "record_sha256": "3919ba12e436e712e3e4aa00a8637f3713d14cb619e9f3835f57b6b6822a532b"
+    },
+    "138": {
+      "id": 138,
+      "thm_name": "Utils.StateTransition.path_with_back_edge_creates_cycle",
+      "lean_root": "clean",
+      "rel_path": "Clean/Utils/SourceSinkPath.lean",
+      "category": "Applied verif.",
+      "record_sha256": "2f19037dc649de5b08a9e5d9254564c291a254289913e4f3606a81b8f7cc820c"
+    },
+    "139": {
+      "id": 139,
+      "thm_name": "Vector.flatten_toChunks",
+      "lean_root": "clean",
+      "rel_path": "Clean/Utils/Vector.lean",
+      "category": "Applied verif.",
+      "record_sha256": "32b65b1839945520bc9dbdc953f1a365575fe7dbf4d963af8d7a207dbcb861b4"
+    },
+    "140": {
+      "id": 140,
+      "thm_name": "Tables.Fibonacci32.fib_constraints",
+      "lean_root": "clean",
+      "rel_path": "Clean/Tables/Fibonacci32.lean",
+      "category": "Applied verif.",
+      "record_sha256": "27f772ef5188e956aabcf0b414561df60e2563564b72909f87903a74ea32c152"
+    },
+    "141": {
+      "id": 141,
+      "thm_name": "MemoryAccessList.isConsistentOnline_iff_sorted_isConsistentOffline",
+      "lean_root": "clean",
+      "rel_path": "Clean/Utils/OfflineMemory.lean",
+      "category": "Applied verif.",
+      "record_sha256": "444b0fddcedb66894ae3ec2bb2dc1307c2d4e54aae52b37b36451d81a23c4b6d"
+    },
+    "142": {
+      "id": 142,
+      "thm_name": "U32.value_injective_on_normalized",
+      "lean_root": "clean",
+      "rel_path": "Clean/Types/U32.lean",
+      "category": "Applied verif.",
+      "record_sha256": "fe2a0eaba9d25940c15ef01c8310b42899899b9601434ac42fc64ac1e217c353"
+    },
+    "143": {
+      "id": 143,
+      "thm_name": "MemoryAccessList.isConsistentSingleAddress_cons_forall",
+      "lean_root": "clean",
+      "rel_path": "Clean/Utils/OfflineMemory.lean",
+      "category": "Applied verif.",
+      "record_sha256": "4cefedab2f97b2ecc80dc15a8fe239b865883c50534723b7b9790ca32947efe9"
+    },
+    "144": {
+      "id": 144,
+      "thm_name": "Utils.StateTransition.acyclic_containsPath_nodup",
+      "lean_root": "clean",
+      "rel_path": "Clean/Utils/SourceSinkPath.lean",
+      "category": "Applied verif.",
+      "record_sha256": "ae79c5c154b816a5296a94c166cac0d5ac8438c66b8daa85048886405d8d3bc4"
+    },
+    "145": {
+      "id": 145,
+      "thm_name": "Gadgets.And.And8.completeness",
+      "lean_root": "clean",
+      "rel_path": "Clean/Gadgets/And/And8.lean",
+      "category": "Applied verif.",
+      "record_sha256": "9747f292b9ca1d3188a0798c708375a487bb7dfd49e3d314a3a9a27fb2525da0"
+    },
+    "146": {
+      "id": 146,
+      "thm_name": "Utils.StateTransition.acyclic_run_has_path_from_source_to_sink",
+      "lean_root": "clean",
+      "rel_path": "Clean/Utils/SourceSinkPath.lean",
+      "category": "Applied verif.",
+      "record_sha256": "bf592026597a140b94502404c78424a7d4e1544e1728e30182da7b679d429d43"
+    },
+    "147": {
+      "id": 147,
+      "thm_name": "Circuit.FoldlM.operations_eq",
+      "lean_root": "clean",
+      "rel_path": "Clean/Circuit/Loops.lean",
+      "category": "Applied verif.",
+      "record_sha256": "0d5edb4f89e195d8eb7e20a3d8c8a9e3e1b0f46c9160392364c735a9f4b9521d"
+    },
+    "148": {
+      "id": 148,
+      "thm_name": "FlatOperation.localWitnesses_toFlat",
+      "lean_root": "clean",
+      "rel_path": "Clean/Circuit/Theorems.lean",
+      "category": "Applied verif.",
+      "record_sha256": "c40a3de364b2bb56689c7a427b50808f08dcb3c01d52b5009be3ba26c1c7ff7f"
+    },
+    "149": {
+      "id": 149,
+      "thm_name": "Tables.KeccakInductive.tableStatement",
+      "lean_root": "clean",
+      "rel_path": "Clean/Tables/KeccakInductive.lean",
+      "category": "Applied verif.",
+      "record_sha256": "91a97f3a210c8885d3b5e340b8df3f32031ef1ade77d162e373254f055314e0e"
+    },
+    "150": {
+      "id": 150,
+      "thm_name": "Environment.usesLocalWitnessesFlat_iff_extends",
+      "lean_root": "clean",
+      "rel_path": "Clean/Circuit/Theorems.lean",
+      "category": "Applied verif.",
+      "record_sha256": "98e6f289abf86080aa3099bb014d309d553294a7b313cb594f041f045056fded"
+    },
+    "151": {
+      "id": 151,
+      "thm_name": "Gadgets.Or.Or8.soundness",
+      "lean_root": "clean",
+      "rel_path": "Clean/Gadgets/Or/Or8.lean",
+      "category": "Applied verif.",
+      "record_sha256": "99c3969c739a11a04b858fa084f7dccba72cadff6e0bf708f3f44c331b922472"
+    },
+    "152": {
+      "id": 152,
+      "thm_name": "Gadgets.Not.not_bytewise_value_spec",
+      "lean_root": "clean",
+      "rel_path": "Clean/Gadgets/Not/Not64.lean",
+      "category": "Applied verif.",
+      "record_sha256": "9769458570ecef6d4b194892d946b44a820e136675c39ba46c73cdd54c0b2fa6"
+    },
+    "153": {
+      "id": 153,
+      "thm_name": "Gadgets.And.And8.soundness",
+      "lean_root": "clean",
+      "rel_path": "Clean/Gadgets/And/And8.lean",
+      "category": "Applied verif.",
+      "record_sha256": "0dc4b71fa724b699948dfc1eb55a51aa924d750b883a1132118bb4b2d8f2337f"
+    },
+    "154": {
+      "id": 154,
+      "thm_name": "MemoryAccessList.isConsistentOnline_filter_of_consistentOnline",
+      "lean_root": "clean",
+      "rel_path": "Clean/Utils/OfflineMemory.lean",
+      "category": "Applied verif.",
+      "record_sha256": "e8231a4c1efaf0cbd249ea0d0ac3394330d9325b2cff09c408f4997ea31865a0"
+    },
+    "155": {
+      "id": 155,
+      "thm_name": "Circomlib.MultiAND.localLength_eq",
+      "lean_root": "clean",
+      "rel_path": "Clean/Circomlib/Gates.lean",
+      "category": "Applied verif.",
+      "record_sha256": "3212f7796d214b2a3f544d80b67339b9e2a281659115b709ddb212a11ae820df"
+    },
+    "156": {
+      "id": 156,
+      "thm_name": "FlatOperation.localLength_toFlat",
+      "lean_root": "clean",
+      "rel_path": "Clean/Circuit/Theorems.lean",
+      "category": "Applied verif.",
+      "record_sha256": "a6099d79cb76257b929b9c2ed0fa246a97b93dba6aaf5808af144a90ff45444b"
+    },
+    "157": {
+      "id": 157,
+      "thm_name": "Gadgets.Xor64.completeness",
+      "lean_root": "clean",
+      "rel_path": "Clean/Gadgets/Xor/Xor64.lean",
+      "category": "Applied verif.",
+      "record_sha256": "4eeab38205456430aaa16e24c484a51eaf1e900b9c559980b8e675661674d969"
+    },
+    "158": {
+      "id": 158,
+      "thm_name": "Circuit.subcircuit_computableWitnesses",
+      "lean_root": "clean",
+      "rel_path": "Clean/Circuit/Subcircuit.lean",
+      "category": "Applied verif.",
+      "record_sha256": "f6425bec7d4749615962e87ee303114819e6070681ac01d5963a295aa26da9da"
+    },
+    "159": {
+      "id": 159,
+      "thm_name": "Gadgets.Xor64.soundness",
+      "lean_root": "clean",
+      "rel_path": "Clean/Gadgets/Xor/Xor64.lean",
+      "category": "Applied verif.",
+      "record_sha256": "427adf7f739d10f3543c9f53d39b66c5b3831c22b3b8168fb4104a383325796d"
+    },
+    "160": {
+      "id": 160,
+      "thm_name": "Circuit.ext",
+      "lean_root": "clean",
+      "rel_path": "Clean/Circuit/Theorems.lean",
+      "category": "Applied verif.",
+      "record_sha256": "46652166556f65abb7937928900e5b3c13a818fd099adb78b76f005b9dad2ef3"
+    },
+    "161": {
+      "id": 161,
+      "thm_name": "Circomlib.MultiAND.subcircuitsConsistent",
+      "lean_root": "clean",
+      "rel_path": "Clean/Circomlib/Gates.lean",
+      "category": "Applied verif.",
+      "record_sha256": "a14e6b0d3c9abe892c1735d2a747cc8b0148ecb4bb633a34d22d71e3342d0e1b"
+    },
+    "162": {
+      "id": 162,
+      "thm_name": "Operations.forAll_toFlat_iff",
+      "lean_root": "clean",
+      "rel_path": "Clean/Circuit/Theorems.lean",
+      "category": "Applied verif.",
+      "record_sha256": "b53a4027b97964dab7d918afabde63ec06998e6d2329d62cc0b98d527a4847d7"
+    },
+    "163": {
+      "id": 163,
+      "thm_name": "Circuit.FoldlM.forAll_iff_const",
+      "lean_root": "clean",
+      "rel_path": "Clean/Circuit/Loops.lean",
+      "category": "Applied verif.",
+      "record_sha256": "2d8f95b8322bf1201810639da731193448e908f6f94bedbfe4eef4ed1465aed7"
+    },
+    "164": {
+      "id": 164,
+      "thm_name": "Gadgets.Rotation32.Theorems.rotation32_bits_soundness",
+      "lean_root": "clean",
+      "rel_path": "Clean/Gadgets/Rotation32/Theorems.lean",
+      "category": "Applied verif.",
+      "record_sha256": "39e3fdc9cd6890e1202a66770c15422e0d8deea41a65db8b81ee3173b566753a"
+    },
+    "165": {
+      "id": 165,
+      "thm_name": "Circuit.FoldlM.operations_eq_const",
+      "lean_root": "clean",
+      "rel_path": "Clean/Circuit/Loops.lean",
+      "category": "Applied verif.",
+      "record_sha256": "073a837d8fa48fc1d972abb17615f1bea7728ca60e0c10457ec029312fab93e5"
+    },
+    "166": {
+      "id": 166,
+      "thm_name": "Gadgets.Rotation64.Theorems.rotation64_bits_soundness",
+      "lean_root": "clean",
+      "rel_path": "Clean/Gadgets/Rotation64/Theorems.lean",
+      "category": "Applied verif.",
+      "record_sha256": "3de791eaf1e21a067c8eb360256acd3464c6c21b96647bbd03121d4987f71ca1"
+    },
+    "167": {
+      "id": 167,
+      "thm_name": "Utils.StateTransition.exists_path_from_source_to_sink",
+      "lean_root": "clean",
+      "rel_path": "Clean/Utils/SourceSinkPath.lean",
+      "category": "Applied verif.",
+      "record_sha256": "49c6ca1c800926bbfc0faa7770ddca8dd21082c6304622d732c42eea2ef5fa34"
+    },
+    "168": {
+      "id": 168,
+      "thm_name": "FlatOperation.onlyAccessedBelow_all",
+      "lean_root": "clean",
+      "rel_path": "Clean/Circuit/Theorems.lean",
+      "category": "Applied verif.",
+      "record_sha256": "6a71ac407134e7cb20c389b14865fa7b9c980ad0165344af2818d0431d4bf5f8"
+    },
+    "169": {
+      "id": 169,
+      "thm_name": "Gadgets.Addition8.Theorems.soundness",
+      "lean_root": "clean",
+      "rel_path": "Clean/Gadgets/Addition8/Theorems.lean",
+      "category": "Applied verif.",
+      "record_sha256": "ae31c78f26a43ca542a027e677a3ba4090b78f743169f61f450a051b9ad1b288"
+    },
+    "170": {
+      "id": 170,
+      "thm_name": "MemoryAccessList.eq_of_perm_of_sorted",
+      "lean_root": "clean",
+      "rel_path": "Clean/Utils/OfflineMemory.lean",
+      "category": "Applied verif.",
+      "record_sha256": "c02cf99a1363a4d4ef4ab3489504acf606c2f681855f6a2025d9f10fa4a558d5"
+    },
+    "171": {
+      "id": 171,
+      "thm_name": "Circomlib.MultiAND.main_output_binary_from_completeness",
+      "lean_root": "clean",
+      "rel_path": "Clean/Circomlib/Gates.lean",
+      "category": "Applied verif.",
+      "record_sha256": "9b212395b59da4b3c04b932f9ef19a54ed0d73180878569c55c0bb8efc5b6553"
+    },
+    "172": {
+      "id": 172,
+      "thm_name": "Circuit.MapM.operations_eq",
+      "lean_root": "clean",
+      "rel_path": "Clean/Circuit/Loops.lean",
+      "category": "Applied verif.",
+      "record_sha256": "43940e82bb67b37139459e9de5cb83f323097951b320ec500662bdf2cc368f2c"
+    },
+    "173": {
+      "id": 173,
+      "thm_name": "Utils.StateTransition.exists_smaller_run_with_same_netFlow",
+      "lean_root": "clean",
+      "rel_path": "Clean/Utils/SourceSinkPath.lean",
+      "category": "Applied verif.",
+      "record_sha256": "5073ddea729292cd9de668bfc2aa0f45ed37e97b38cc6b5e6f9ce917dc56e1b5"
+    },
+    "174": {
+      "id": 174,
+      "thm_name": "Utils.StateTransition.acyclic_has_leaf",
+      "lean_root": "clean",
+      "rel_path": "Clean/Utils/SourceSinkPath.lean",
+      "category": "Applied verif.",
+      "record_sha256": "fd0c6686a1779a83f15c6ab2e4fa5439ada1bfa9f8e8ff71ec8daf6a85b328d9"
+    },
+    "175": {
+      "id": 175,
+      "thm_name": "Circuit.constraintsHold_toFlat_iff",
+      "lean_root": "clean",
+      "rel_path": "Clean/Circuit/Subcircuit.lean",
+      "category": "Applied verif.",
+      "record_sha256": "fa4d8ad0bcf2c40cb0ad5bcd51aefe9665ef5d12f2ce6a9d08818c96f400c51a"
+    },
+    "176": {
+      "id": 176,
+      "thm_name": "Circuit.FoldlM.output_eq",
+      "lean_root": "clean",
+      "rel_path": "Clean/Circuit/Loops.lean",
+      "category": "Applied verif.",
+      "record_sha256": "0507cb2e390f152425444838571a5549d8f77bed2a4a5c70639563dd647def59"
+    },
+    "177": {
+      "id": 177,
+      "thm_name": "Circuit.ForM.operations_eq",
+      "lean_root": "clean",
+      "rel_path": "Clean/Circuit/Loops.lean",
+      "category": "Applied verif.",
+      "record_sha256": "27529ad4ece16ee004b6eb1886632750ba8a43685be8e3cf41c1a6ea4b26942d"
+    },
+    "178": {
+      "id": 178,
+      "thm_name": "Gadgets.Xor32.completeness",
+      "lean_root": "clean",
+      "rel_path": "Clean/Gadgets/Xor/Xor32.lean",
+      "category": "Applied verif.",
+      "record_sha256": "6db0e72dd9afcfd8b652c5c1fdf9e12e21e7b9a8710cb708d0ac3da543e8bf08"
+    },
+    "179": {
+      "id": 179,
+      "thm_name": "Circomlib.MultiAND.completeness_two",
+      "lean_root": "clean",
+      "rel_path": "Clean/Circomlib/Gates.lean",
+      "category": "Applied verif.",
+      "record_sha256": "706b5d06ec4136ed5fe04f5bc05fb27e1bde1defc83d042c993781381be039cc"
+    },
+    "180": {
+      "id": 180,
+      "thm_name": "xfor_inv_lemma",
+      "lean_root": "splean",
+      "rel_path": "SPLean/Theories/WP1.lean",
+      "category": "Framework",
+      "record_sha256": "081989b36a4a55fe4e91a6f46ae4f721a9d3cedf33da4027dd75c83d7d5be333"
+    },
+    "181": {
+      "id": 181,
+      "thm_name": "Matrix.PosSemidef.PosDef_iff_det_ne_zero",
+      "lean_root": "CvxLean",
+      "rel_path": "CvxLean/Lib/Math/Subadditivity.lean",
+      "category": "Applied verif.",
+      "record_sha256": "28624efa3391935057506871bfeca67844c6ec3e39d295c7eefd4563ecdbe92a"
+    },
+    "182": {
+      "id": 182,
+      "thm_name": "Theories.wp_ref",
+      "lean_root": "splean",
+      "rel_path": "SPLean/Theories/WP1.lean",
+      "category": "Framework",
+      "record_sha256": "e187b5d5a98821e6c07431a83735f1e2287d3e86bbde70350107262e5b0e8b6f"
+    },
+    "183": {
+      "id": 183,
+      "thm_name": "exact_imp_eval",
+      "lean_root": "splean",
+      "rel_path": "SPLean/Theories/Lang.lean",
+      "category": "Framework",
+      "record_sha256": "b6a98458fbc3f00c2aeea38296103f95626bd8620fd090c3cc4d05bcfa04fb7f"
+    },
+    "184": {
+      "id": 184,
+      "thm_name": "Matrix.LogDetAtom.cond_elim",
+      "lean_root": "CvxLean",
+      "rel_path": "CvxLean/Lib/Math/LogDet.lean",
+      "category": "Applied verif.",
+      "record_sha256": "768a05e6fac168f3c8ecd6f9107a1f55f73820d5d5c0155a99a697c8a8350671"
+    },
+    "185": {
+      "id": 185,
+      "thm_name": "Tm.ren_den_eq",
+      "lean_root": "pcf-lean",
+      "rel_path": "PCF/Denotation.lean",
+      "category": "Semantics",
+      "record_sha256": "da01fdd6e9c552e9b17b959276aba4e8bb4ea14acc2baa1badea5011a5abb837"
+    },
+    "186": {
+      "id": 186,
+      "thm_name": "wtRename",
+      "lean_root": "TTBFL",
+      "rel_path": "src/safety.lean",
+      "category": "Type systems",
+      "record_sha256": "7afdc6ea6a90e3278dc50b32ee53b9236366806a1ee3b17fc5edd22a32eb0df6"
+    },
+    "187": {
+      "id": 187,
+      "thm_name": "Matrix.PosDef.nonsingular_inv",
+      "lean_root": "CvxLean",
+      "rel_path": "CvxLean/Lib/Math/LinearAlgebra/Matrix/PosDef.lean",
+      "category": "Applied verif.",
+      "record_sha256": "a327d6e9659ee8dc1d62570c01193ee09d7b5df06345f16316821f80b8742b08"
+    },
+    "188": {
+      "id": 188,
+      "thm_name": "Matrix.PosSemidef.sqrt_mul_sqrt",
+      "lean_root": "CvxLean",
+      "rel_path": "CvxLean/Lib/Math/Subadditivity.lean",
+      "category": "Applied verif.",
+      "record_sha256": "b971b298460be317a69e1dcd5489d1e3a8aa83e55ee72db1f4b5bff8f119bfff"
+    },
+    "189": {
+      "id": 189,
+      "thm_name": "log_prod_gaussianPdf",
+      "lean_root": "CvxLean",
+      "rel_path": "CvxLean/Lib/Math/CovarianceEstimation.lean",
+      "category": "Applied verif.",
+      "record_sha256": "81305084822fe2d39aed14fef9f49ce220fc4f482463ac378879d44baf57ff47"
+    },
+    "190": {
+      "id": 190,
+      "thm_name": "wp_mono_part",
+      "lean_root": "loom",
+      "rel_path": "CaseStudies/Velvet/VelvetTheory.lean",
+      "category": "Framework",
+      "record_sha256": "403de3233494fa62af4034ac34d59e6cc72fd31ee962c562d995aa2a21fbffc9"
+    },
+    "191": {
+      "id": 191,
+      "thm_name": "Matrix.det_add_det_le_det_add",
+      "lean_root": "CvxLean",
+      "rel_path": "CvxLean/Lib/Math/Subadditivity.lean",
+      "category": "Applied verif.",
+      "record_sha256": "70723eda46d196204347801a1e1dec3b2cb34e58553bd142549be35c834b0f7d"
+    },
+    "192": {
+      "id": 192,
+      "thm_name": "Vec.le_div_iff",
+      "lean_root": "CvxLean",
+      "rel_path": "CvxLean/Lib/Math/Data/Vec.lean",
+      "category": "Applied verif.",
+      "record_sha256": "8e222bcbc52b7ea0028f1e43b035dfcc869cfde24b0ff2b545834bcd08498390"
+    },
+    "193": {
+      "id": 193,
+      "thm_name": "Vec.div_le_iff",
+      "lean_root": "CvxLean",
+      "rel_path": "CvxLean/Lib/Math/Data/Vec.lean",
+      "category": "Applied verif.",
+      "record_sha256": "284d5d4a0f33ca2c9852d3b0b782953a023fd00c77524ca4f4f7abc5273cf782"
+    },
+    "194": {
+      "id": 194,
+      "thm_name": "DemonicChoice.ExtractNonDet.extract_refines_wp",
+      "lean_root": "loom",
+      "rel_path": "Loom/MonadAlgebras/NonDetT'/Extract.lean",
+      "category": "Framework",
+      "record_sha256": "493a51bfca6db5774c140dba53d41f5aa458999646c65f3997d4bcab23ddbde3"
+    },
+    "195": {
+      "id": 195,
+      "thm_name": "Matrix.isUnit_det_of_PosDef_inv",
+      "lean_root": "CvxLean",
+      "rel_path": "CvxLean/Lib/Math/LinearAlgebra/Matrix/PosDef.lean",
+      "category": "Applied verif.",
+      "record_sha256": "40cf8c1ad435f6d410a5b01e1b972dd7c2d0f4c52cf99526aae8a9248e2de050"
+    },
+    "196": {
+      "id": 196,
+      "thm_name": "Lipmaa.soundness",
+      "lean_root": "formal-snarks-project",
+      "rel_path": "FormalSnarksProject/SNARKs/Lipmaa/Soundness.lean",
+      "category": "Applied verif.",
+      "record_sha256": "3a61cb4975b93dc0261d27f60279290db6cb62a0a661c15760c28fae376a72da"
+    },
+    "197": {
+      "id": 197,
+      "thm_name": "ToySnark.soundness",
+      "lean_root": "formal-snarks-project",
+      "rel_path": "FormalSnarksProject/SNARKs/ToySnark.lean",
+      "category": "Applied verif.",
+      "record_sha256": "7f85da00b575f8ce064f64d2e9c8112384cfb980ee750ea925b4391ac034f25e"
+    },
+    "198": {
+      "id": 198,
+      "thm_name": "Intmax.theorem1",
+      "lean_root": "FVIntmax",
+      "rel_path": "FVIntmax/Theorem1.lean",
+      "category": "Applied verif.",
+      "record_sha256": "2dfc43764dd9063f6da2d866e4c0a44b633d679b37f1ac56997afd4ecdafdddb"
+    },
+    "199": {
+      "id": 199,
+      "thm_name": "Intmax.prop6_general",
+      "lean_root": "FVIntmax",
+      "rel_path": "FVIntmax/Theorem1.lean",
+      "category": "Applied verif.",
+      "record_sha256": "f142589aa227664a04191443ebdd2bf10a3f333184cc5ec07b28e2e51e1a7a72"
+    },
+    "200": {
+      "id": 200,
+      "thm_name": "Intmax.senderReceiver_transactionsInBlocks",
+      "lean_root": "FVIntmax",
+      "rel_path": "FVIntmax/Lemma4.lean",
+      "category": "Applied verif.",
+      "record_sha256": "182c76556baa8ed66e2c41bfc475db9df95ba8309122c84fda7247901a1f1d93"
+    },
+    "201": {
+      "id": 201,
+      "thm_name": "Intmax.isLUB_union_Merge_of_isLUB_isLUB_compat",
+      "lean_root": "FVIntmax",
+      "rel_path": "FVIntmax/Theorem1.lean",
+      "category": "Applied verif.",
+      "record_sha256": "b6723c1aee73c0c47a8c9e0fb8c4120912888a9c7aaa198f0b0acddf3f2b07fa"
+    },
+    "202": {
+      "id": 202,
+      "thm_name": "Intmax.Vec.le_trans",
+      "lean_root": "FVIntmax",
+      "rel_path": "FVIntmax/Wheels.lean",
+      "category": "Applied verif.",
+      "record_sha256": "90e69a32c62090d4095286f6f3bb649832cbdd4071932e3efc8e71dd662ed3ae"
+    },
+    "203": {
+      "id": 203,
+      "thm_name": "Intmax.monotone_TransactionsInBlocksFixed",
+      "lean_root": "FVIntmax",
+      "rel_path": "FVIntmax/Lemma4.lean",
+      "category": "Applied verif.",
+      "record_sha256": "3e341fb1ec872a44aec3f08ffa9de1525171b5e171dd2500acc2b846c4cf495e"
+    },
+    "204": {
+      "id": 204,
+      "thm_name": "Intmax.compat_merge_of_compat",
+      "lean_root": "FVIntmax",
+      "rel_path": "FVIntmax/Theorem1.lean",
+      "category": "Applied verif.",
+      "record_sha256": "de717e096a5a7e15093d63370e333a4ea205fada277bdd7ca833fc165d7b0b11"
+    },
+    "205": {
+      "id": 205,
+      "thm_name": "Intmax.aggregateDeposits_cons",
+      "lean_root": "FVIntmax",
+      "rel_path": "FVIntmax/AttackGame.lean",
+      "category": "Applied verif.",
+      "record_sha256": "4a8598be29ee800834b77227796837b0a7615026c01d7c07c3b494c6dec941a1"
+    },
+    "206": {
+      "id": 206,
+      "thm_name": "Intmax.f_transfer_source''",
+      "lean_root": "FVIntmax",
+      "rel_path": "FVIntmax/Balance.lean",
+      "category": "Applied verif.",
+      "record_sha256": "1e25d5b4700e9ddd3dc322fb10a20d266ee2ab6a781f46ab991a1510f880775c"
+    },
+    "207": {
+      "id": 207,
+      "thm_name": "Intmax.sum_f_le_sum",
+      "lean_root": "FVIntmax",
+      "rel_path": "FVIntmax/Lemma3.lean",
+      "category": "Applied verif.",
+      "record_sha256": "04b915e7ed846128d632eabbea6436a60848a7275fd2cbd99485d073830f8439"
+    },
+    "208": {
+      "id": 208,
+      "thm_name": "Intmax.v_transactionsInBlocks",
+      "lean_root": "FVIntmax",
+      "rel_path": "FVIntmax/Lemma4.lean",
+      "category": "Applied verif.",
+      "record_sha256": "efd433248b54550d3aad6c478c11739a70432fb6fdf227eaa81ea13d43efdede"
+    },
+    "209": {
+      "id": 209,
+      "thm_name": "Intmax.lemma3",
+      "lean_root": "FVIntmax",
+      "rel_path": "FVIntmax/Lemma3.lean",
+      "category": "Applied verif.",
+      "record_sha256": "7c57beb99bbd678e7350d0e834fd020ad8b972e242233b6e5661de122e1c0ef3"
+    },
+    "210": {
+      "id": 210,
+      "thm_name": "Intmax.proposition4",
+      "lean_root": "FVIntmax",
+      "rel_path": "FVIntmax/Propositions.lean",
+      "category": "Applied verif.",
+      "record_sha256": "2c7527455b73fe551c6d9da5ccc771453056488ea429207139339f6726e4acce"
+    },
+    "211": {
+      "id": 211,
+      "thm_name": "Intmax.sender_transactionsInBlock",
+      "lean_root": "FVIntmax",
+      "rel_path": "FVIntmax/Balance.lean",
+      "category": "Applied verif.",
+      "record_sha256": "bb63224137430aac9c07d371120f5b36f7dafc4f16c83af8b5cbce734f56ec60"
+    },
+    "212": {
+      "id": 212,
+      "thm_name": "Intmax.receiver_transactionsInBlock",
+      "lean_root": "FVIntmax",
+      "rel_path": "FVIntmax/Balance.lean",
+      "category": "Applied verif.",
+      "record_sha256": "a3ce60d5f50eb6bad2a41fb962b160e70bbd0f7bd2ade540f48d35b575592341"
+    },
+    "213": {
+      "id": 213,
+      "thm_name": "Intmax.f_withdrawal_block_source",
+      "lean_root": "FVIntmax",
+      "rel_path": "FVIntmax/Balance.lean",
+      "category": "Applied verif.",
+      "record_sha256": "1b99c4baaa7ba1aefb50f8e3fb24889dee1754d53129dabf072b69ffdde0811e"
+    },
+    "214": {
+      "id": 214,
+      "thm_name": "Intmax.monotone_f",
+      "lean_root": "FVIntmax",
+      "rel_path": "FVIntmax/Lemma4.lean",
+      "category": "Applied verif.",
+      "record_sha256": "5f73b9c71ba4ff772469d65cec1af95c84fcf25128b4ac7beb7bb5ab879ab42a"
+    },
+    "215": {
+      "id": 215,
+      "thm_name": "Intmax.proposition6",
+      "lean_root": "FVIntmax",
+      "rel_path": "FVIntmax/Propositions.lean",
+      "category": "Applied verif.",
+      "record_sha256": "33c3066958abaa98ba5b7702e479ac645c9b5e1552c436f6b466a65ea8c8ce71"
+    },
+    "216": {
+      "id": 216,
+      "thm_name": "Intmax.proposition6'",
+      "lean_root": "FVIntmax",
+      "rel_path": "FVIntmax/Propositions.lean",
+      "category": "Applied verif.",
+      "record_sha256": "c7f21fde42b6d10629d4c90507290ce6f807fe884c190981cb57cb822e76ee3b"
+    },
+    "217": {
+      "id": 217,
+      "thm_name": "Intmax.computeBalance'_eq_zero",
+      "lean_root": "FVIntmax",
+      "rel_path": "FVIntmax/AttackGame.lean",
+      "category": "Applied verif.",
+      "record_sha256": "083588cb84bab759094f8f4c72561be18d8d5173917090aa379af9f072ecbcd2"
+    },
+    "218": {
+      "id": 218,
+      "thm_name": "evalFuel_sound",
+      "lean_root": "IntroEffects",
+      "rel_path": "IntroEffects/Eval.lean",
+      "category": "Semantics",
+      "record_sha256": "7b99847cf0abd4e4b5223e247aae8a157928d6efea96d60f9ae2922ddbfdc09e"
+    },
+    "219": {
+      "id": 219,
+      "thm_name": "evalFuelRet_complete_aux",
+      "lean_root": "IntroEffects",
+      "rel_path": "IntroEffects/Eval.lean",
+      "category": "Semantics",
+      "record_sha256": "7b9c94a7b64708a8a132456bad9dcb6fcf18d1817945bff8d548daa91ae4bbe3"
+    },
+    "220": {
+      "id": 220,
+      "thm_name": "evalFuelOpCall_complete_aux",
+      "lean_root": "IntroEffects",
+      "rel_path": "IntroEffects/Eval.lean",
+      "category": "Semantics",
+      "record_sha256": "5bc348a0ffb35d886b4fd489ab3697f2fddc05d9cde21b7e828cdeb3c93fe722"
+    },
+    "221": {
+      "id": 221,
+      "thm_name": "Iris.Agree.op_inv",
+      "lean_root": "iris-lean",
+      "rel_path": "src/Iris/Algebra/Agree.lean",
+      "category": "Framework",
+      "record_sha256": "9668ebc6339d12e95d4e79011e360466c60521644c32ed0785a8ad9c66f882ec"
+    },
+    "222": {
+      "id": 222,
+      "thm_name": "Iris.OFE.ContractiveHom.fixpoint_ind",
+      "lean_root": "iris-lean",
+      "rel_path": "src/Iris/Algebra/OFE.lean",
+      "category": "Framework",
+      "record_sha256": "a1b81baae006a94c095e1b829aa3d8b233df6d8a43ff7542752288c1557d72a5"
+    },
+    "223": {
+      "id": 223,
+      "thm_name": "Iris.BI.wand_iff_exists_persistently",
+      "lean_root": "iris-lean",
+      "rel_path": "src/Iris/BI/DerivedLaws.lean",
+      "category": "Framework",
+      "record_sha256": "c558b48e655bbcbe6205c884fe2342cc739ac9b8949d41da6388e6ef3a4915ea"
+    },
+    "224": {
+      "id": 224,
+      "thm_name": "Iris.COFE.OFunctor.Fix.Impl.Tower.embed_up",
+      "lean_root": "iris-lean",
+      "rel_path": "src/Iris/Algebra/COFESolver.lean",
+      "category": "Framework",
+      "record_sha256": "849ece1a143d1e0f3adc30b6c2e33da7b0879dd1b36e856116ade1199f983a11"
+    },
+    "225": {
+      "id": 225,
+      "thm_name": "Iris.not_add_le_self",
+      "lean_root": "iris-lean",
+      "rel_path": "src/Iris/Algebra/Frac.lean",
+      "category": "Framework",
+      "record_sha256": "ddab8968fe97c9a85a6e3d80b2dfcbe9027f57a4eefc7c5e4251c9a8366c2fbc"
+    },
+    "226": {
+      "id": 226,
+      "thm_name": "Iris.BI.imp_iff_exists_persistently",
+      "lean_root": "iris-lean",
+      "rel_path": "src/Iris/BI/DerivedLaws.lean",
+      "category": "Framework",
+      "record_sha256": "72146f9e31bf7aae07e02c438eb930de5fa4cd40169f06a703c754b2def989f1"
+    },
+    "227": {
+      "id": 227,
+      "thm_name": "Iris.COFE.OFunctor.Fix.Impl.downN_upN",
+      "lean_root": "iris-lean",
+      "rel_path": "src/Iris/Algebra/COFESolver.lean",
+      "category": "Framework",
+      "record_sha256": "29a7a1208f35f8f9369abc338904a4f9fa2e80b70df671a01465a83f45148e8e"
+    },
+    "228": {
+      "id": 228,
+      "thm_name": "Iris.BI.persistently_sep",
+      "lean_root": "iris-lean",
+      "rel_path": "src/Iris/BI/DerivedLaws.lean",
+      "category": "Framework",
+      "record_sha256": "8260617da47d35bff9fbea985365062a32242f45c936c226943b3eca93b4dbe8"
+    },
+    "229": {
+      "id": 229,
+      "thm_name": "Iris.BI.loeb_wand_intuitionistically",
+      "lean_root": "iris-lean",
+      "rel_path": "src/Iris/BI/DerivedLaws.lean",
+      "category": "Framework",
+      "record_sha256": "3ea014819255a7157f7838277cfcded61e79bb0355cd8c0b0c77ac5faeef9a04"
+    },
+    "230": {
+      "id": 230,
+      "thm_name": "Iris.BI.plainly_persistently_elim",
+      "lean_root": "iris-lean",
+      "rel_path": "src/Iris/BI/Plainly.lean",
+      "category": "Framework",
+      "record_sha256": "37ecc8dd5549441c5dcc2e0894087b6f93a8d3ebfd9ab1cc9331d9e01009f34e"
+    },
+    "231": {
+      "id": 231,
+      "thm_name": "Iris.fixpoint_unique",
+      "lean_root": "iris-lean",
+      "rel_path": "src/Iris/Algebra/OFE.lean",
+      "category": "Framework",
+      "record_sha256": "b529bbb78e82476ee698a1e0ff1a11ab310084a8eeebdcf27d4bf43d3ef349c3"
+    },
+    "232": {
+      "id": 232,
+      "thm_name": "Iris.fixpoint_unfold",
+      "lean_root": "iris-lean",
+      "rel_path": "src/Iris/Algebra/OFE.lean",
+      "category": "Framework",
+      "record_sha256": "34bc8297052d03948672f36a25d941b676cf06794e9dd12471a353dc7f0d2399"
+    },
+    "233": {
+      "id": 233,
+      "thm_name": "Iris.BI.loeb",
+      "lean_root": "iris-lean",
+      "rel_path": "src/Iris/BI/DerivedLaws.lean",
+      "category": "Framework",
+      "record_sha256": "5f2a897b1e7b5d4dca8bf381c51ed58118d60bfe2950faa1acbd330d18258152"
+    },
+    "234": {
+      "id": 234,
+      "thm_name": "Iris.BI.plainly_and_sep",
+      "lean_root": "iris-lean",
+      "rel_path": "src/Iris/BI/Plainly.lean",
+      "category": "Framework",
+      "record_sha256": "225be196ab4e776e676c5add8b8d482725403f569149de0f44b220c9fa733e7c"
+    },
+    "235": {
+      "id": 235,
+      "thm_name": "Iris.BI.later_exists_false",
+      "lean_root": "iris-lean",
+      "rel_path": "src/Iris/BI/DerivedLaws.lean",
+      "category": "Framework",
+      "record_sha256": "1ff6e110fb3d231536456b00a231601cdf03c23b8f73b7518e8d9ed17f290249"
+    },
+    "236": {
+      "id": 236,
+      "thm_name": "Iris.DFrac.update_discard",
+      "lean_root": "iris-lean",
+      "rel_path": "src/Iris/Algebra/DFrac.lean",
+      "category": "Framework",
+      "record_sha256": "0bec4184ecb3d67951b8f1d7355ca490619d62206d1d868c3059d31cc99c533b"
+    },
+    "237": {
+      "id": 237,
+      "thm_name": "Iris.local_update_unital_discrete",
+      "lean_root": "iris-lean",
+      "rel_path": "src/Iris/Algebra/LocalUpdates.lean",
+      "category": "Framework",
+      "record_sha256": "d749e401c566be1b74c8aab745480ec01c796c5b26b1877565d2ffc781902070"
+    },
+    "238": {
+      "id": 238,
+      "thm_name": "Iris.BI.persistently_and_sep_assoc",
+      "lean_root": "iris-lean",
+      "rel_path": "src/Iris/BI/DerivedLaws.lean",
+      "category": "Framework",
+      "record_sha256": "7f4780f4fec040c2c41d7c1e02f44b6f3cd4bd98718e4f696d88945e61ef4222"
+    },
+    "239": {
+      "id": 239,
+      "thm_name": "Iris.UpdateP.iso",
+      "lean_root": "iris-lean",
+      "rel_path": "src/Iris/Algebra/Updates.lean",
+      "category": "Framework",
+      "record_sha256": "5cc8e6d50204ca00ed5bd085318c877c1d0dcfa54c11c9513938f65f0ab75473"
+    },
+    "240": {
+      "id": 240,
+      "thm_name": "Iris.OFE.equiv_eqv",
+      "lean_root": "iris-lean",
+      "rel_path": "src/Iris/Algebra/OFE.lean",
+      "category": "Framework",
+      "record_sha256": "78f0cc2156d19599bb3fdf312e7f6bc94354b9d39f8fc9d0e472b889cabebd4e"
+    },
+    "241": {
+      "id": 241,
+      "thm_name": "Iris.BI.plainly_sep",
+      "lean_root": "iris-lean",
+      "rel_path": "src/Iris/BI/Plainly.lean",
+      "category": "Framework",
+      "record_sha256": "6deb19be6bc5162dca3793d09750eb8126b886bcec4dc0cd0bb68ca5acd3e1f1"
+    },
+    "242": {
+      "id": 242,
+      "thm_name": "Iris.Agree.toAgree_uninj",
+      "lean_root": "iris-lean",
+      "rel_path": "src/Iris/Algebra/Agree.lean",
+      "category": "Framework",
+      "record_sha256": "8cde39c081608e830ec87251508a7e0c1afe0a5a7e0903ba5912730edc3d130f"
+    },
+    "243": {
+      "id": 243,
+      "thm_name": "Iris.BI.plainly_sep_dup",
+      "lean_root": "iris-lean",
+      "rel_path": "src/Iris/BI/Plainly.lean",
+      "category": "Framework",
+      "record_sha256": "1fd5215dfbf2aa89e5ab171358a764d685032234e76bbd6ac30bac169746503b"
+    },
+    "244": {
+      "id": 244,
+      "thm_name": "Iris.BI.later_and",
+      "lean_root": "iris-lean",
+      "rel_path": "src/Iris/BI/DerivedLaws.lean",
+      "category": "Framework",
+      "record_sha256": "5c46b50568cf71d6cd2a2cea46b37dbc50efbfc772f8131e50ce5b308c7c6771"
+    },
+    "245": {
+      "id": 245,
+      "thm_name": "Juvix.Core.Main.Value.Approx.Indexed.preserved_step",
+      "lean_root": "juvix-lean",
+      "rel_path": "Juvix/Core/Main/Semantics/Approx/Indexed.lean",
+      "category": "Semantics",
+      "record_sha256": "a4f56a653fc8044d596b7f2a77ffcd2b78c03eb6d5dd759299f18843b9127d2b"
+    },
+    "246": {
+      "id": 246,
+      "thm_name": "Juvix.Core.Main.Value.Approx.Indexed.refl",
+      "lean_root": "juvix-lean",
+      "rel_path": "Juvix/Core/Main/Semantics/Approx/Indexed.lean",
+      "category": "Semantics",
+      "record_sha256": "4a7ec4570cb2bc89c77530019869f3a9f77546e68bd924025cd99b21eb9cfd84"
+    },
+    "247": {
+      "id": 247,
+      "thm_name": "Juvix.Core.Main.Eval.toIndexed",
+      "lean_root": "juvix-lean",
+      "rel_path": "Juvix/Core/Main/Semantics/Eval/Indexed.lean",
+      "category": "Semantics",
+      "record_sha256": "a65e1469846257136997163a1d4f0741bfedcafa7509fc0ac0961d1bfe8c9fe2"
+    },
+    "248": {
+      "id": 248,
+      "thm_name": "Juvix.Core.Main.Termination.recur",
+      "lean_root": "juvix-lean",
+      "rel_path": "Juvix/Core/Main/Tactics/Termination.lean",
+      "category": "Semantics",
+      "record_sha256": "d38be5f20ff5cc61f8ea59cf246b561bc462d7ad5a977bbb6e04309cbdb9492d"
+    },
+    "249": {
+      "id": 249,
+      "thm_name": "Juvix.Core.Main.Value.Approx.Indexed.trans",
+      "lean_root": "juvix-lean",
+      "rel_path": "Juvix/Core/Main/Semantics/Approx.lean",
+      "category": "Semantics",
+      "record_sha256": "754312f30911e5ebb2d806a54f187c0c713f1846991dfa40eeefd7b09fed2010"
+    },
+    "250": {
+      "id": 250,
+      "thm_name": "Juvix.Core.Main.Value.Approx.Indexed.anti_monotone",
+      "lean_root": "juvix-lean",
+      "rel_path": "Juvix/Core/Main/Semantics/Approx/Indexed.lean",
+      "category": "Semantics",
+      "record_sha256": "353362e1c8447113a1c75ad25a1b07a187f0c6503c1381414dab5a74ffe9b6ba"
+    },
+    "251": {
+      "id": 251,
+      "thm_name": "Juvix.Core.Main.Expr.Approx.Context.preserved",
+      "lean_root": "juvix-lean",
+      "rel_path": "Juvix/Core/Main/Semantics/Approx/Soundness.lean",
+      "category": "Semantics",
+      "record_sha256": "8a32de274555f0982efd4852b48d1e8049e916b9be6524d59e11cca78a71010e"
+    },
+    "252": {
+      "id": 252,
+      "thm_name": "Juvix.Core.Main.Value.Approx.closure",
+      "lean_root": "juvix-lean",
+      "rel_path": "Juvix/Core/Main/Semantics/Approx.lean",
+      "category": "Semantics",
+      "record_sha256": "850b65ea36f67873cd38f54b8cd70306db5195fc9e942b8293483f44f55fd5a8"
+    },
+    "253": {
+      "id": 253,
+      "thm_name": "Juvix.Core.Main.Object.Approx.Indexed'.anti_monotone",
+      "lean_root": "juvix-lean",
+      "rel_path": "Juvix/Core/Main/Semantics/Approx/Indexed.lean",
+      "category": "Semantics",
+      "record_sha256": "70ae628e0490583120d569298dd909c72111119d4eb24667f0b96780ccdb8b22"
+    },
+    "254": {
+      "id": 254,
+      "thm_name": "Juvix.Core.Main.Value.Approx.closure_inv",
+      "lean_root": "juvix-lean",
+      "rel_path": "Juvix/Core/Main/Semantics/Approx.lean",
+      "category": "Semantics",
+      "record_sha256": "a2bbaed2a80030cd2407ad226d3cd81add21408e74e77c8cfe967c8211b1345a"
+    },
+    "255": {
+      "id": 255,
+      "thm_name": "Juvix.Core.Main.Value.Approx.preserved",
+      "lean_root": "juvix-lean",
+      "rel_path": "Juvix/Core/Main/Semantics/Approx.lean",
+      "category": "Semantics",
+      "record_sha256": "4fa0ef592be2864eae2beda20de577650f4c56659da8ec172f1323e726205088"
+    },
+    "256": {
+      "id": 256,
+      "thm_name": "Juvix.Core.Main.Env.Approx.Indexed'.delayed",
+      "lean_root": "juvix-lean",
+      "rel_path": "Juvix/Core/Main/Semantics/Approx/Indexed.lean",
+      "category": "Semantics",
+      "record_sha256": "e62e6dec9a9a27cb2ce5667323402c5f7b695f468b7816feb43db82decbb4ed8"
+    },
+    "257": {
+      "id": 257,
+      "thm_name": "Juvix.Core.Main.Value.Approx.Indexed.preserved'",
+      "lean_root": "juvix-lean",
+      "rel_path": "Juvix/Core/Main/Semantics/Approx/Indexed.lean",
+      "category": "Semantics",
+      "record_sha256": "2e97ef970d2cc10781b4d8d09e1b334098cacfd391b916e2cfacb9023c83e828"
+    },
+    "258": {
+      "id": 258,
+      "thm_name": "Juvix.Core.Main.Object.Approx.Indexed'.refl'",
+      "lean_root": "juvix-lean",
+      "rel_path": "Juvix/Core/Main/Semantics/Approx/Indexed.lean",
+      "category": "Semantics",
+      "record_sha256": "36d0cf0c022416fd96098ce17f3c426ff7d832cf05de0e9a56c31eb67d10feaa"
+    },
+    "259": {
+      "id": 259,
+      "thm_name": "Juvix.Core.Main.Expr.Equiv.eval_const",
+      "lean_root": "juvix-lean",
+      "rel_path": "Juvix/Core/Main/Semantics/Equiv.lean",
+      "category": "Semantics",
+      "record_sha256": "16d0adf300f8fe428df513428f502aca2c0fd18ad1bd7968ef6b43c02616ef84"
+    },
+    "260": {
+      "id": 260,
+      "thm_name": "Juvix.Core.Main.Env.Approx.Indexed'.from_delayed",
+      "lean_root": "juvix-lean",
+      "rel_path": "Juvix/Core/Main/Semantics/Approx/Indexed.lean",
+      "category": "Semantics",
+      "record_sha256": "3653fa21b931fca43c417e9420e614c2ed6e1f5e53eab93102c477d90edd282a"
+    },
+    "261": {
+      "id": 261,
+      "thm_name": "Juvix.Core.Main.Termination.binop",
+      "lean_root": "juvix-lean",
+      "rel_path": "Juvix/Core/Main/Tactics/Termination.lean",
+      "category": "Semantics",
+      "record_sha256": "60ab38241cfc01153ec1c9b0499e4456d9de2460eaaed8ccbf24b6d03787ae16"
+    },
+    "262": {
+      "id": 262,
+      "thm_name": "Juvix.Core.Main.Object.Approx.trans",
+      "lean_root": "juvix-lean",
+      "rel_path": "Juvix/Core/Main/Semantics/Approx.lean",
+      "category": "Semantics",
+      "record_sha256": "62a04462c024c7a4cd1ecfd412a077b4d880ec13d40cffc7ad5f1dc0c8a5d6b6"
+    },
+    "263": {
+      "id": 263,
+      "thm_name": "Juvix.Core.Main.Env.Approx.cons_value",
+      "lean_root": "juvix-lean",
+      "rel_path": "Juvix/Core/Main/Semantics/Approx.lean",
+      "category": "Semantics",
+      "record_sha256": "4d02ac4521398e2aa37a0ca1495d5577aa80cb6e50185e09a83c44f11ebd8cad"
+    },
+    "264": {
+      "id": 264,
+      "thm_name": "Juvix.Core.Main.Termination.branch_matches",
+      "lean_root": "juvix-lean",
+      "rel_path": "Juvix/Core/Main/Tactics/Termination.lean",
+      "category": "Semantics",
+      "record_sha256": "5f98ed156eb1620ec66726dd0f785c6389624af15a1d417c1bb428a66d51f86e"
+    },
+    "265": {
+      "id": 265,
+      "thm_name": "eval_bool_completeness",
+      "lean_root": "LeanExprEvaluator",
+      "rel_path": "ExprEval/Basic.lean",
+      "category": "Semantics",
+      "record_sha256": "f12c45a212c3ec65d4e0ac2b63f37890492a26e0204077e7bdb8177a3fdbb638"
+    },
+    "266": {
+      "id": 266,
+      "thm_name": "eval_completeness",
+      "lean_root": "LeanExprEvaluator",
+      "rel_path": "ExprEval/Basic.lean",
+      "category": "Semantics",
+      "record_sha256": "924d4685c08ecd597d8d176355ddb0c69a25e0a8c1ebfb1a5e58287dadc51ef5"
+    },
+    "267": {
+      "id": 267,
+      "thm_name": "boolstep_preserves_eval_bool",
+      "lean_root": "LeanExprEvaluator",
+      "rel_path": "ExprEval/Lemmas.lean",
+      "category": "Semantics",
+      "record_sha256": "c31fb2581e223ccf7adb22f85d965e57f91f2b0d6f30bd920f57a32ecc1d92e7"
+    },
+    "268": {
+      "id": 268,
+      "thm_name": "arstep_preserve_eval",
+      "lean_root": "LeanExprEvaluator",
+      "rel_path": "ExprEval/Lemmas.lean",
+      "category": "Semantics",
+      "record_sha256": "a0e3587c12fbd4c5883fc6df9313d6303b867f54312cdc66f06ba0af1242786e"
+    },
+    "269": {
+      "id": 269,
+      "thm_name": "boolstepstar_preserves_eval_bool",
+      "lean_root": "LeanExprEvaluator",
+      "rel_path": "ExprEval/Lemmas.lean",
+      "category": "Semantics",
+      "record_sha256": "b43c17a2c459e504649aede328a0d2acb2b281d72710717676d3ba158eb89e4b"
+    },
+    "270": {
+      "id": 270,
+      "thm_name": "arstepstar_preserves_eval",
+      "lean_root": "LeanExprEvaluator",
+      "rel_path": "ExprEval/Lemmas.lean",
+      "category": "Semantics",
+      "record_sha256": "b753532c638c9bd33202e2ca0d11a72144bb77a6ed542f0046fe937b4e7ba94c"
+    },
+    "271": {
+      "id": 271,
+      "thm_name": "TM.progress",
+      "lean_root": "lean-formal-reasoning-program",
+      "rel_path": "Frap/Types.lean",
+      "category": "Semantics",
+      "record_sha256": "c5a00d10e63be94ffc66c8145c09ee8cc486ccf5efefcb36bdb6d0c44c97c18b"
+    },
+    "272": {
+      "id": 272,
+      "thm_name": "Imp.fold_constants_com_sound",
+      "lean_root": "lean-formal-reasoning-program",
+      "rel_path": "Frap/Trans.lean",
+      "category": "Semantics",
+      "record_sha256": "881b5f9d675b09e22016d71328e80d855d1fd86d11ebd6b7ec52e9b0d464b2ae"
+    },
+    "273": {
+      "id": 273,
+      "thm_name": "CImp.par_loop_any_x",
+      "lean_root": "lean-formal-reasoning-program",
+      "rel_path": "Frap/SmallStepImp.lean",
+      "category": "Semantics",
+      "record_sha256": "ab1647d9fbd3c784bd6a88d59d69ab03411fc289849f9f861666b9217ed105c0"
+    },
+    "274": {
+      "id": 274,
+      "thm_name": "Imp.fold_constants_bexp_sound",
+      "lean_root": "lean-formal-reasoning-program",
+      "rel_path": "Frap/Trans.lean",
+      "category": "Semantics",
+      "record_sha256": "a87540d35d7d6dbbb105ee31985174d9cc39dde3b805ea3639cfaa84ccf3785b"
+    },
+    "275": {
+      "id": 275,
+      "thm_name": "step_normalizing",
+      "lean_root": "lean-formal-reasoning-program",
+      "rel_path": "Frap/SmallStep.lean",
+      "category": "Semantics",
+      "record_sha256": "7fd4f7664a93ed24f98197174f949c08faf9530f156011c88722d577cc58d645"
+    },
+    "276": {
+      "id": 276,
+      "thm_name": "Imp.optimize_0plus_com_sound",
+      "lean_root": "lean-formal-reasoning-program",
+      "rel_path": "Frap/Exercises/Trans.lean",
+      "category": "Semantics",
+      "record_sha256": "965a383d4c97bdebedac4eacac32888a297de11c171b6a2e88051f93e6fb9761"
+    },
+    "277": {
+      "id": 277,
+      "thm_name": "Tree.balance_BST",
+      "lean_root": "lean-formal-reasoning-program",
+      "rel_path": "Frap/RedBlack.lean",
+      "category": "Semantics",
+      "record_sha256": "c9b185d0ca383e7db1cbbfa4efab19aaee0a59ce0c5031ffcd608ebb78b26e3a"
+    },
+    "278": {
+      "id": 278,
+      "thm_name": "permutation_app_comm",
+      "lean_root": "lean-formal-reasoning-program",
+      "rel_path": "Frap/Sort.lean",
+      "category": "Semantics",
+      "record_sha256": "8aa151cbf3b3e57dcc10d9193d21e3f5493150013ca285094357beb6758b3b4c"
+    },
+    "279": {
+      "id": 279,
+      "thm_name": "Hidden.Nat.add_comm",
+      "lean_root": "lean-formal-reasoning-program",
+      "rel_path": "Frap/Inductive.lean",
+      "category": "Semantics",
+      "record_sha256": "18451bbb718675d7e1473036553dea524654ce9e1f8aa4122e1fe9e99b6ebb48"
+    },
+    "280": {
+      "id": 280,
+      "thm_name": "Hidden.List.Palindrome.Palindrome_rev",
+      "lean_root": "lean-formal-reasoning-program",
+      "rel_path": "Frap/Exercises/IndProp.lean",
+      "category": "Semantics",
+      "record_sha256": "e76f51f1f8ac6b0ae15c01d7692aa95bb6cab4bbe9ac813a5199beb8c03bd074"
+    },
+    "281": {
+      "id": 281,
+      "thm_name": "Imp.Hoare.hoare_while",
+      "lean_root": "lean-formal-reasoning-program",
+      "rel_path": "Frap/Hoare.lean",
+      "category": "Semantics",
+      "record_sha256": "eaac6daa186c5c292ff1d8a9059ebc242b97d8924cddf3c52cdcf06f0faa4344"
+    },
+    "282": {
+      "id": 282,
+      "thm_name": "Tree.bst_insert_of_bst",
+      "lean_root": "lean-formal-reasoning-program",
+      "rel_path": "Frap/ADT.lean",
+      "category": "Semantics",
+      "record_sha256": "ce4ed9ecc5246934a163a9ff2e10f11c7b4d81b5039a14f16f9f2e1219f05757"
+    },
+    "283": {
+      "id": 283,
+      "thm_name": "Hidden.List.Palindrome.Palindrome_app_rev",
+      "lean_root": "lean-formal-reasoning-program",
+      "rel_path": "Frap/Exercises/IndProp.lean",
+      "category": "Semantics",
+      "record_sha256": "ed00e3bffa4ae6c9fd31cc1f4c4a5a92e1d7ffd19f8d3097b892213ecf55d3e9"
+    },
+    "284": {
+      "id": 284,
+      "thm_name": "Hidden.Nat.mul_assoc",
+      "lean_root": "lean-formal-reasoning-program",
+      "rel_path": "Frap/Inductive.lean",
+      "category": "Semantics",
+      "record_sha256": "b8dca172e71273f7195d42faf0d51cd5b88e8b7355232ef341d1daa0dfdc393b"
+    },
+    "285": {
+      "id": 285,
+      "thm_name": "permutation_cons_app",
+      "lean_root": "lean-formal-reasoning-program",
+      "rel_path": "Frap/Sort.lean",
+      "category": "Semantics",
+      "record_sha256": "cd3dc40027afe4e6bb7c5d86fd39365df51fb6cbe99e105056bfab933454dbde"
+    },
+    "286": {
+      "id": 286,
+      "thm_name": "TM.soundness",
+      "lean_root": "lean-formal-reasoning-program",
+      "rel_path": "Frap/Types.lean",
+      "category": "Semantics",
+      "record_sha256": "253cc83938a28eb985eae5d67584dcf7545b7c47ff6c2094575fe4c52e425a13"
+    },
+    "287": {
+      "id": 287,
+      "thm_name": "CImp.par_body_n",
+      "lean_root": "lean-formal-reasoning-program",
+      "rel_path": "Frap/SmallStepImp.lean",
+      "category": "Semantics",
+      "record_sha256": "3cd50a00e6c8501c2e1cd710aec8048481fce5cd05a9d8d6243a918207e0901e"
+    },
+    "288": {
+      "id": 288,
+      "thm_name": "Imp.Hoare.hoare_if",
+      "lean_root": "lean-formal-reasoning-program",
+      "rel_path": "Frap/Hoare.lean",
+      "category": "Semantics",
+      "record_sha256": "bd8875bab8dec376dfccfd0ae88434ca70dc1a87c536f99271923113c42c94d2"
+    },
+    "289": {
+      "id": 289,
+      "thm_name": "Hidden.List.reverse_append",
+      "lean_root": "lean-formal-reasoning-program",
+      "rel_path": "Frap/Exercises/IndProp.lean",
+      "category": "Semantics",
+      "record_sha256": "06624720c807334357254fe84afaeefae4fb5dc8f1b5403175469bcb2243522b"
+    },
+    "290": {
+      "id": 290,
+      "thm_name": "and_associative",
+      "lean_root": "lean-formal-reasoning-program",
+      "rel_path": "Frap/Propositional.lean",
+      "category": "Semantics",
+      "record_sha256": "1b4b50e9421fdb58b4f272e18dadd78f486938dc63f9224ed72e8af00863b0a7"
+    },
+    "291": {
+      "id": 291,
+      "thm_name": "While.WellTyped.some_ty",
+      "lean_root": "lean-hoare",
+      "rel_path": "Hoare/While/Types.lean",
+      "category": "Semantics",
+      "record_sha256": "a4b9e8abe61844fbd2202533f4a5dbde799a8afd3d98e7f5a810ac9c79890fac"
+    },
+    "292": {
+      "id": 292,
+      "thm_name": "While.WellTyped.ty_some",
+      "lean_root": "lean-hoare",
+      "rel_path": "Hoare/While/Types.lean",
+      "category": "Semantics",
+      "record_sha256": "0a04995c380d8a4d02d1e936a0c1357581ead2c535da7ad4753795f3650321f0"
+    },
+    "293": {
+      "id": 293,
+      "thm_name": "While.WellTyped.not_eq_not_eq_ty",
+      "lean_root": "lean-hoare",
+      "rel_path": "Hoare/While/Types.lean",
+      "category": "Semantics",
+      "record_sha256": "20507d3d9d95a81d75161d88f60651e7808f665cdb0843c6b0d33cbfb73f82fc"
+    },
+    "294": {
+      "id": 294,
+      "thm_name": "While.WellTyped.not_welltyped_not_eq_ty",
+      "lean_root": "lean-hoare",
+      "rel_path": "Hoare/While/Types.lean",
+      "category": "Semantics",
+      "record_sha256": "2194b82b4635d8ff67a0136d93526684cad79e37cee679f826724d2fdf2e5b45"
+    },
+    "295": {
+      "id": 295,
+      "thm_name": "processOneElem_spec",
+      "lean_root": "lean-mlir",
+      "rel_path": "Blase/Blase/AutoStructs/Worklist.lean",
+      "category": "Compiler",
+      "record_sha256": "5c2f8d305cdb35f7783aea3c9e0887f9e0ff8df610dd003ff2bfd953be8075d9"
+    },
+    "296": {
+      "id": 296,
+      "thm_name": "formula_language_case_atom",
+      "lean_root": "lean-mlir",
+      "rel_path": "Blase/Blase/AutoStructs/Defs.lean",
+      "category": "Compiler",
+      "record_sha256": "94c82faf872c561e7939bade3a4a3b2de3d8eb0073fec763e80955e9d793999e"
+    },
+    "297": {
+      "id": 297,
+      "thm_name": "TermBinop.alt_lang",
+      "lean_root": "lean-mlir",
+      "rel_path": "Blase/Blase/AutoStructs/FormulaToAuto.lean",
+      "category": "Compiler",
+      "record_sha256": "5aff3f3ecee738ed5f8fd511e56b796e74bf3c66d227535f4810df2c77e29510"
+    },
+    "298": {
+      "id": 298,
+      "thm_name": "Predicate.eval_eq_denote",
+      "lean_root": "lean-mlir",
+      "rel_path": "Blase/Blase/Fast/Defs.lean",
+      "category": "Compiler",
+      "record_sha256": "881f6bab51bc0b6ae07646a7a69a6187aa556eaae1e1578ff526b96088936942"
+    },
+    "299": {
+      "id": 299,
+      "thm_name": "eq_true_iff_of_eq_false_iff",
+      "lean_root": "lean-mlir",
+      "rel_path": "Blase/Blase/Fast/Defs.lean",
+      "category": "Compiler",
+      "record_sha256": "ecdeaa49731233d22cdfe3aea4ca24c3ee2934d94e74371bfaf02273f3230f17"
+    },
+    "300": {
+      "id": 300,
+      "thm_name": "ReflectVerif.BvDecide.KInductionCircuits.FSM.carryWith_congrEnv_envBitstream_set_of_le",
+      "lean_root": "lean-mlir",
+      "rel_path": "Blase/Blase/KInduction/KInduction.lean",
+      "category": "Compiler",
+      "record_sha256": "76fbeaffcb8552f7e56375232d0ca2d276c30b7042aa887f170575f8fd968592"
+    },
+    "301": {
+      "id": 301,
+      "thm_name": "TermUnop.alt_lang",
+      "lean_root": "lean-mlir",
+      "rel_path": "Blase/Blase/AutoStructs/FormulaToAuto.lean",
+      "category": "Compiler",
+      "record_sha256": "24fc6bbbb3e11c2ec5bf999446f81809d6407ccf360e29855b376a8a8f4d26fd"
+    },
+    "302": {
+      "id": 302,
+      "thm_name": "formula_language",
+      "lean_root": "lean-mlir",
+      "rel_path": "Blase/Blase/AutoStructs/Defs.lean",
+      "category": "Compiler",
+      "record_sha256": "0943eda4f1ef54f21a8ff5ac8d6e31c0bd5577a00e12b871e4286b2545c52692"
+    },
+    "303": {
+      "id": 303,
+      "thm_name": "createSink_trans",
+      "lean_root": "lean-mlir",
+      "rel_path": "Blase/Blase/AutoStructs/Basic.lean",
+      "category": "Compiler",
+      "record_sha256": "98c3862bed9fa2faa889b6f5400583f1ef3639b1130c7f268ac9128a622cbb56"
+    },
+    "304": {
+      "id": 304,
+      "thm_name": "ReflectVerif.BvDecide.KInductionCircuits.IsLawful_mkSucc_of_IsLawful",
+      "lean_root": "lean-mlir",
+      "rel_path": "Blase/Blase/KInduction/KInduction.lean",
+      "category": "Compiler",
+      "record_sha256": "0b4cfce153bf8c00afd30af98f6764a48e42687182cf2377cf384e6d25a8fa17"
+    },
+    "305": {
+      "id": 305,
+      "thm_name": "NFA'.autSignedCmp_correct",
+      "lean_root": "lean-mlir",
+      "rel_path": "Blase/Blase/AutoStructs/FormulaToAuto.lean",
+      "category": "Compiler",
+      "record_sha256": "0a76daeadbed9fd7a155994978505e00ffe1ebfe9b0af53f2d03e624a2b5d6d8"
+    },
+    "306": {
+      "id": 306,
+      "thm_name": "product.f_spec",
+      "lean_root": "lean-mlir",
+      "rel_path": "Blase/Blase/AutoStructs/Constructions.lean",
+      "category": "Compiler",
+      "record_sha256": "5c003425328d6376ac3938f8cb96f0b0d373910a996f056e183f95c6aaf2be18"
+    },
+    "307": {
+      "id": 307,
+      "thm_name": "Zipper.denote_insertPureCom",
+      "lean_root": "lean-mlir",
+      "rel_path": "LeanMLIR/LeanMLIR/Framework/Zipper.lean",
+      "category": "Compiler",
+      "record_sha256": "372afe976db7f589560d5937112a645540ba55133e710b2c8bca7b57a388cfac"
+    },
+    "308": {
+      "id": 308,
+      "thm_name": "autMsbSet_accepts",
+      "lean_root": "lean-mlir",
+      "rel_path": "Blase/Blase/AutoStructs/FormulaToAuto.lean",
+      "category": "Compiler",
+      "record_sha256": "2725dbd6836a61d19b135b6432819e77f37c95b62c7be75513924d45cacb6da3"
+    },
+    "309": {
+      "id": 309,
+      "thm_name": "decideIfZerosAux_correct",
+      "lean_root": "lean-mlir",
+      "rel_path": "Blase/Blase/Fast/FiniteStateMachine.lean",
+      "category": "Compiler",
+      "record_sha256": "8a3c167a0330b1bef006e2b9240dad70f5c7ed41cc39f17efe22c7dbda388c25"
+    },
+    "310": {
+      "id": 310,
+      "thm_name": "MultiWidth.eval_fsmTermSlt_eq_decide_slt",
+      "lean_root": "lean-mlir",
+      "rel_path": "Blase/Blase/MultiWidth/GoodFSM.lean",
+      "category": "Compiler",
+      "record_sha256": "4981d9fae98d7514c5c5ab8ff829f0fb00d4f4f3d807e03ffe4444b6c2c2b561"
+    },
+    "311": {
+      "id": 311,
+      "thm_name": "MultiWidth.eval_fsmTermSle_eq_decide_sle",
+      "lean_root": "lean-mlir",
+      "rel_path": "Blase/Blase/MultiWidth/GoodFSM.lean",
+      "category": "Compiler",
+      "record_sha256": "87125088c324651cc67136f4784fc050ebec25d349e58cbfe4b9eecaa761cd0b"
+    },
+    "312": {
+      "id": 312,
+      "thm_name": "MultiWidth.fsmSext_eval_eq",
+      "lean_root": "lean-mlir",
+      "rel_path": "Blase/Blase/MultiWidth/GoodFSM.lean",
+      "category": "Compiler",
+      "record_sha256": "23d0714396fe74fef8d3d589a4e47f0de2cd5ffe6b5ad265356709cd82212fb5"
+    },
+    "313": {
+      "id": 313,
+      "thm_name": "R.repLength_lt_n_plus_1",
+      "lean_root": "lean-mlir",
+      "rel_path": "SSA/Projects/FullyHomomorphicEncryption/Basic.lean",
+      "category": "Compiler",
+      "record_sha256": "3d0318fed519750859b171cde59a9bb4761b499bda05017a529e9d137925587f"
+    },
+    "314": {
+      "id": 314,
+      "thm_name": "Circuit.varsFinset_assignVars",
+      "lean_root": "lean-mlir",
+      "rel_path": "Blase/Blase/Fast/Circuit.lean",
+      "category": "Compiler",
+      "record_sha256": "bde9da53861721fa024acd12ac7e83d731f3ce3ada4ff3a9a6b211368c070889"
+    },
+    "315": {
+      "id": 315,
+      "thm_name": "NFA'.autUnsignedCmp_correct",
+      "lean_root": "lean-mlir",
+      "rel_path": "Blase/Blase/AutoStructs/FormulaToAuto.lean",
+      "category": "Compiler",
+      "record_sha256": "4785eeec484fbb693f2d464af2c3fe02f5ad1d1757c7cfcca4fb21139d378af7"
+    },
+    "316": {
+      "id": 316,
+      "thm_name": "AngelicChoice.ExtractNonDet.extract_refines_wp_weak",
+      "lean_root": "loom",
+      "rel_path": "Loom/MonadAlgebras/NonDetT'/Extract.lean",
+      "category": "Framework",
+      "record_sha256": "412d816bfc8904e9d30326d76e95f5717356bd7c3823c7af6491288daf1cfb9a"
+    },
+    "317": {
+      "id": 317,
+      "thm_name": "denote_matchVar",
+      "lean_root": "lean-mlir",
+      "rel_path": "LeanMLIR/LeanMLIR/Transforms/Rewrite/Match.lean",
+      "category": "Compiler",
+      "record_sha256": "3ebc7508f9790266276496275cb1b87fd81d6cc7ab7116551e90af13fb99e8c3"
+    },
+    "318": {
+      "id": 318,
+      "thm_name": "NFA.proj_eval",
+      "lean_root": "lean-mlir",
+      "rel_path": "Blase/Blase/AutoStructs/ForMathlib.lean",
+      "category": "Compiler",
+      "record_sha256": "f985dbf50bc0dafac57dc07a7ac6193ae45361dd0a13999638f55dad5493c258"
+    },
+    "319": {
+      "id": 319,
+      "thm_name": "nfaOfFormula_bv_language",
+      "lean_root": "lean-mlir",
+      "rel_path": "Blase/Blase/AutoStructs/FormulaToAuto.lean",
+      "category": "Compiler",
+      "record_sha256": "1d1a7276b2d26e71dc7f3ba24efdcd9d488cdc2afd98bed6bf9deb1b744e75aa"
+    },
+    "320": {
+      "id": 320,
+      "thm_name": "CNFA.ofFSM.f_spec",
+      "lean_root": "lean-mlir",
+      "rel_path": "Blase/Blase/AutoStructs/FormulaToAuto.lean",
+      "category": "Compiler",
+      "record_sha256": "8f478858c5da24d6657cf1366cd6ddf6f17805d9d711bba968403336066feb0f"
+    },
+    "321": {
+      "id": 321,
+      "thm_name": "Predicate.evalFin_eq_eval",
+      "lean_root": "lean-mlir",
+      "rel_path": "Blase/Blase/Fast/Lemmas.lean",
+      "category": "Compiler",
+      "record_sha256": "2aa9f32420dc597f6e39f9484d1fb1c563ce73d9cd25b0b25926720e4c070835"
+    },
+    "322": {
+      "id": 322,
+      "thm_name": "BitStream.ofBitVecZext_add_EqualUpTo",
+      "lean_root": "lean-mlir",
+      "rel_path": "Blase/Blase/Fast/BitStream.lean",
+      "category": "Compiler",
+      "record_sha256": "1b020a6fbcf8c492140b1cf740f75f3d76902f9f3863d8a2f0f0dbad6b4383d4"
+    },
+    "323": {
+      "id": 323,
+      "thm_name": "product.sim",
+      "lean_root": "lean-mlir",
+      "rel_path": "Blase/Blase/AutoStructs/Constructions.lean",
+      "category": "Compiler",
+      "record_sha256": "dc79a3593e260ead9170a2c147b9d7d729c282341897817d6faff2328ca569d8"
+    },
+    "324": {
+      "id": 324,
+      "thm_name": "matchVar_appendInl",
+      "lean_root": "lean-mlir",
+      "rel_path": "LeanMLIR/LeanMLIR/Transforms/Rewrite/Match.lean",
+      "category": "Compiler",
+      "record_sha256": "093d0674e167ef2fbd051b88d1967a637721e17b5c22cd6776a3096981e2e91a"
+    },
+    "325": {
+      "id": 325,
+      "thm_name": "RawCNFA.reverse_spec",
+      "lean_root": "lean-mlir",
+      "rel_path": "Blase/Blase/AutoStructs/Constructions.lean",
+      "category": "Compiler",
+      "record_sha256": "7599011d38a5eb3decb4458610a726bf4ca8f74e96690a1442be6ce9bb02478c"
+    },
+    "326": {
+      "id": 326,
+      "thm_name": "denote_rewriteAt",
+      "lean_root": "lean-mlir",
+      "rel_path": "LeanMLIR/LeanMLIR/Transforms/Rewrite/Rewrite.lean",
+      "category": "Compiler",
+      "record_sha256": "8e9c5a157ee2cee5279999b1a8d71d6da6414d4d772af95b1aabf33e7f808ab6"
+    },
+    "327": {
+      "id": 327,
+      "thm_name": "nfaOfTerm_bv_language",
+      "lean_root": "lean-mlir",
+      "rel_path": "Blase/Blase/AutoStructs/FormulaToAuto.lean",
+      "category": "Compiler",
+      "record_sha256": "3851c4b2173b745b0493882d8467b0cbb186e4e4edcaadb7b197accdf6cbbd90"
+    },
+    "328": {
+      "id": 328,
+      "thm_name": "isMonotone_matchVarArg_aux",
+      "lean_root": "lean-mlir",
+      "rel_path": "LeanMLIR/LeanMLIR/Transforms/Rewrite/Match.lean",
+      "category": "Compiler",
+      "record_sha256": "4abdf68cec90ecab360a852d6c39576a08427d076c507266dacb8782f932e1f1"
+    },
+    "329": {
+      "id": 329,
+      "thm_name": "Deleted.toHom_append",
+      "lean_root": "lean-mlir",
+      "rel_path": "LeanMLIR/LeanMLIR/Transforms/DCE.lean",
+      "category": "Compiler",
+      "record_sha256": "560dbd88e38dcaf7394e681ff1d30f9969a1ffae46a5d14ee8d7d16bc80cffe4"
+    },
+    "330": {
+      "id": 330,
+      "thm_name": "Poly.fromTensor_toTensor",
+      "lean_root": "lean-mlir",
+      "rel_path": "SSA/Projects/FullyHomomorphicEncryption/Statements.lean",
+      "category": "Compiler",
+      "record_sha256": "78ec0f44d6c5951c04427e95d9e688f268a041ed716b806a701d54bad4103824"
+    },
+    "331": {
+      "id": 331,
+      "thm_name": "NFA'.correct_spec",
+      "lean_root": "lean-mlir",
+      "rel_path": "Blase/Blase/AutoStructs/FormulaToAuto.lean",
+      "category": "Compiler",
+      "record_sha256": "c9a6f3bed04522b3927c484b17b7c775863e10ccf3d28ab06d49d4498f2537c3"
+    },
+    "332": {
+      "id": 332,
+      "thm_name": "mem_matchVar",
+      "lean_root": "lean-mlir",
+      "rel_path": "LeanMLIR/LeanMLIR/Transforms/Rewrite/Match.lean",
+      "category": "Compiler",
+      "record_sha256": "ca9123a315a0036cd1fd6da870782cb5e8d070f99be3305212e830d93872d8a6"
+    },
+    "333": {
+      "id": 333,
+      "thm_name": "MultiWidth.eval_fsmMsb_eq_BitStream_ofBitVecSext",
+      "lean_root": "lean-mlir",
+      "rel_path": "Blase/Blase/MultiWidth/GoodFSM.lean",
+      "category": "Compiler",
+      "record_sha256": "a6a175fad337553f9e6fa107cea0601ac39058e709d40ff5e5781fc7261e850a"
+    },
+    "334": {
+      "id": 334,
+      "thm_name": "MultiWidth.eval_fsmUltUnary_eq_decide",
+      "lean_root": "lean-mlir",
+      "rel_path": "Blase/Blase/MultiWidth/GoodFSM.lean",
+      "category": "Compiler",
+      "record_sha256": "6f9e2bc9b63133a11a705a9932b0aacaf0a8df91fc659a971796c763985a866e"
+    },
+    "335": {
+      "id": 335,
+      "thm_name": "MultiWidth.eval_fsmUnaryNeqUpto_eq_decide",
+      "lean_root": "lean-mlir",
+      "rel_path": "Blase/Blase/MultiWidth/GoodFSM.lean",
+      "category": "Compiler",
+      "record_sha256": "ed55b1300aa2c8f2d71267804500a21c02f52b541d7e38f9a2e2e21617781d17"
+    },
+    "336": {
+      "id": 336,
+      "thm_name": "CNFA.autWidth_spec",
+      "lean_root": "lean-mlir",
+      "rel_path": "Blase/Blase/AutoStructs/FormulaToAuto.lean",
+      "category": "Compiler",
+      "record_sha256": "9e9cd7b9056feee566c497b67e01b72364fae9e614683ac3f76f2c3aa08bea37"
+    },
+    "337": {
+      "id": 337,
+      "thm_name": "Ctxt.delete_append_appendInl",
+      "lean_root": "lean-mlir",
+      "rel_path": "LeanMLIR/LeanMLIR/Transforms/DCE.lean",
+      "category": "Compiler",
+      "record_sha256": "92ba3a532ff056314c5872ec7f1ff3f54b9e2468cd6caa22828db2033de0529c"
+    },
+    "338": {
+      "id": 338,
+      "thm_name": "Lets.getPureExpr_var_appendInl",
+      "lean_root": "lean-mlir",
+      "rel_path": "LeanMLIR/LeanMLIR/Framework/Basic.lean",
+      "category": "Compiler",
+      "record_sha256": "d21d9974e061b4438f25d2241ab38d8900a5b852fcdae1eea23403e8ceabd096"
+    },
+    "339": {
+      "id": 339,
+      "thm_name": "Expr.denote_castPureToEff",
+      "lean_root": "lean-mlir",
+      "rel_path": "LeanMLIR/LeanMLIR/Framework/Basic.lean",
+      "category": "Compiler",
+      "record_sha256": "2dd5c20ddda32add39fc321028cbe41547fe214d90da71d2862a1a2c4947da96"
+    },
+    "340": {
+      "id": 340,
+      "thm_name": "CIRCTStream.Stream.removeNone_equiv",
+      "lean_root": "lean-mlir",
+      "rel_path": "SSA/Projects/CIRCT/Stream/WeakBisim.lean",
+      "category": "Compiler",
+      "record_sha256": "f667152e0207f4ebd3b51546f9157fea407a410d7d4246ea4d701d457109d1b7"
+    },
+    "341": {
+      "id": 341,
+      "thm_name": "autOfTermUnop_bv_language",
+      "lean_root": "lean-mlir",
+      "rel_path": "Blase/Blase/AutoStructs/FormulaToAuto.lean",
+      "category": "Compiler",
+      "record_sha256": "d3df31a6f0f854809c4a244ab8aa0eca45df8b495bbfd376582462ce548ca02b"
+    },
+    "342": {
+      "id": 342,
+      "thm_name": "Std.HashMap.fold_induction",
+      "lean_root": "lean-mlir",
+      "rel_path": "Blase/Blase/AutoStructs/ForMathlib.lean",
+      "category": "Compiler",
+      "record_sha256": "7c0547ae0b162a0d1af612cb45c3ea5ba9bd1b41ebaa6c67a5e17338498fa741"
+    },
+    "343": {
+      "id": 343,
+      "thm_name": "Lets.getPureExpr_var_appendInr",
+      "lean_root": "lean-mlir",
+      "rel_path": "LeanMLIR/LeanMLIR/Framework/Basic.lean",
+      "category": "Compiler",
+      "record_sha256": "f100a3d6785a229ce73833c16aa5c8dd2108d66c3269ce906491accd41515ec6"
+    },
+    "344": {
+      "id": 344,
+      "thm_name": "mem_matchArg",
+      "lean_root": "lean-mlir",
+      "rel_path": "LeanMLIR/LeanMLIR/Transforms/Rewrite/Match.lean",
+      "category": "Compiler",
+      "record_sha256": "2722d815eea2116947a498c5b7d591acccf63e4cfd08d054e513dec9f37476a1"
+    },
+    "345": {
+      "id": 345,
+      "thm_name": "transBV_spec",
+      "lean_root": "lean-mlir",
+      "rel_path": "Blase/Blase/AutoStructs/Constructions.lean",
+      "category": "Compiler",
+      "record_sha256": "dbdcda05ce3b6983578024e75a228eb3c9e9686ce0ff4587d8452d23780fd389"
+    },
+    "346": {
+      "id": 346,
+      "thm_name": "autOfRelation_accepts",
+      "lean_root": "lean-mlir",
+      "rel_path": "Blase/Blase/AutoStructs/FormulaToAuto.lean",
+      "category": "Compiler",
+      "record_sha256": "0b141150eca744a13c822201feb171a7985d9bda73fb84c9b71a2c3b3ff24306"
+    },
+    "347": {
+      "id": 347,
+      "thm_name": "ScfFunctor.ForAddToMul.correct",
+      "lean_root": "lean-mlir",
+      "rel_path": "SSA/Projects/Scf/ScfFunctor.lean",
+      "category": "Compiler",
+      "record_sha256": "84dc72091f526ca3297cad5f914ec23567db74048d4d351edb41d25762dd8301"
+    },
+    "348": {
+      "id": 348,
+      "thm_name": "Zipper.denote_insertPureCom_eq_of",
+      "lean_root": "lean-mlir",
+      "rel_path": "LeanMLIR/LeanMLIR/Framework/Zipper.lean",
+      "category": "Compiler",
+      "record_sha256": "53295bf8b7b36a749ebda125290b1ffcae56e60ea8c4e7df5d49e4b4f4beffc3"
+    },
+    "349": {
+      "id": 349,
+      "thm_name": "R.coeff_fromTensor",
+      "lean_root": "lean-mlir",
+      "rel_path": "SSA/Projects/FullyHomomorphicEncryption/Basic.lean",
+      "category": "Compiler",
+      "record_sha256": "4ff417e1facdb110e6b4cceb20e15b8b82e5652aee49c9a4976d126840dc037a"
+    },
+    "350": {
+      "id": 350,
+      "thm_name": "BitStream.ofBitVec_add",
+      "lean_root": "lean-mlir",
+      "rel_path": "Blase/Blase/Fast/BitStream.lean",
+      "category": "Compiler",
+      "record_sha256": "abfe063792ad13df71e23c17f9b3e691a1d173ca92ec2f406b68d49e046b88a3"
+    },
+    "351": {
+      "id": 351,
+      "thm_name": "Predicate.evalUlt_denote_true_iff",
+      "lean_root": "lean-mlir",
+      "rel_path": "Blase/Blase/Fast/Defs.lean",
+      "category": "Compiler",
+      "record_sha256": "784bbd5630c0b0ebdcd9224bd8231872f9a24fce2825ce17e5a2aaaa28e675f0"
+    },
+    "352": {
+      "id": 352,
+      "thm_name": "Ctxt.Valuation.reassignVars_eq",
+      "lean_root": "lean-mlir",
+      "rel_path": "LeanMLIR/LeanMLIR/ErasedContext.lean",
+      "category": "Compiler",
+      "record_sha256": "2d9ce63441cc223be6806e62f2ca150d78c95364d447b28ff6b3006d6f9c3f89"
+    },
+    "353": {
+      "id": 353,
+      "thm_name": "autOfTermBinop_bv_language",
+      "lean_root": "lean-mlir",
+      "rel_path": "Blase/Blase/AutoStructs/FormulaToAuto.lean",
+      "category": "Compiler",
+      "record_sha256": "78e214f472101d16c0f2e121f97682e89b08f20501c2284c105f498f637aca3c"
+    },
+    "354": {
+      "id": 354,
+      "thm_name": "Tensor1D.extractslice_insertslice",
+      "lean_root": "lean-mlir",
+      "rel_path": "SSA/Projects/Tensor1D/Tensor1D.lean",
+      "category": "Compiler",
+      "record_sha256": "c0c4307575e800140c84756de0760a09e087e9e48be54a9d7aa03d3e6912974b"
+    },
+    "355": {
+      "id": 355,
+      "thm_name": "TLA.wf1",
+      "lean_root": "Lentil",
+      "rel_path": "Lentil/Rules/WF.lean",
+      "category": "Framework",
+      "record_sha256": "760c6ea9181546c657603c8139816e1cd008f4f4a6a4d2a8d1af4981fd9def0f"
+    },
+    "356": {
+      "id": 356,
+      "thm_name": "simulation_step",
+      "lean_root": "LeroyCompilerVerificationCourse",
+      "rel_path": "LeroyCompilerVerificationCourse/Compil.lean",
+      "category": "Compiler",
+      "record_sha256": "294089a1280261a56b950cc40eeb4c504b616c2c2d22d6f538d00ad709673ad4"
+    },
+    "357": {
+      "id": 357,
+      "thm_name": "compile_com_correct_terminating",
+      "lean_root": "LeroyCompilerVerificationCourse",
+      "rel_path": "LeroyCompilerVerificationCourse/Compil.lean",
+      "category": "Compiler",
+      "record_sha256": "b9796a55f4631366ec9cc54371d2715910a9a8263880272d4e2fd6daf84c57c3"
+    },
+    "358": {
+      "id": 358,
+      "thm_name": "fixpoint_join_increasing",
+      "lean_root": "LeroyCompilerVerificationCourse",
+      "rel_path": "LeroyCompilerVerificationCourse/Fixpoints.lean",
+      "category": "Compiler",
+      "record_sha256": "03e1d901b266dea440245c48038bc0b7e9ed9c9d7677323f34af37cbd672683b"
+    },
+    "359": {
+      "id": 359,
+      "thm_name": "cp_com_correct_terminating",
+      "lean_root": "LeroyCompilerVerificationCourse",
+      "rel_path": "LeroyCompilerVerificationCourse/Constprop.lean",
+      "category": "Compiler",
+      "record_sha256": "118a04170510758297a94c360428632c3d28e63a6b782a2b80063a4db6bbfe52"
+    },
+    "360": {
+      "id": 360,
+      "thm_name": "Cexec_sound",
+      "lean_root": "LeroyCompilerVerificationCourse",
+      "rel_path": "LeroyCompilerVerificationCourse/Constprop.lean",
+      "category": "Compiler",
+      "record_sha256": "b76566120719edd6d196f56ded684deba2a29914f6d6b9beb1dbcf89a61cf755"
+    },
+    "361": {
+      "id": 361,
+      "thm_name": "compile_bexp_correct",
+      "lean_root": "LeroyCompilerVerificationCourse",
+      "rel_path": "LeroyCompilerVerificationCourse/Compil.lean",
+      "category": "Compiler",
+      "record_sha256": "0e2447c81ee93b6fe7f0da47707e9ba2d543350cd75d203a685d6c2e857b4634"
+    },
+    "362": {
+      "id": 362,
+      "thm_name": "dce_correct_terminating",
+      "lean_root": "LeroyCompilerVerificationCourse",
+      "rel_path": "LeroyCompilerVerificationCourse/Deadcode.lean",
+      "category": "Compiler",
+      "record_sha256": "6f05c50c43d96604210de5fc1c3e1d6ae293796f0cc277ffb3629e1b2995ed31"
+    },
+    "363": {
+      "id": 363,
+      "thm_name": "compile_aexp_correct",
+      "lean_root": "LeroyCompilerVerificationCourse",
+      "rel_path": "LeroyCompilerVerificationCourse/Compil.lean",
+      "category": "Compiler",
+      "record_sha256": "6f5292e9ae5e4821594383502a7a0443439e60a2c31e36b6f303df637c3afc29"
+    },
+    "364": {
+      "id": 364,
+      "thm_name": "cexec_to_reds",
+      "lean_root": "LeroyCompilerVerificationCourse",
+      "rel_path": "LeroyCompilerVerificationCourse/Imp.lean",
+      "category": "Compiler",
+      "record_sha256": "6c31b4829bf767c85ca419862add132f6fc3261dfd538f0df1267898627b7a8e"
+    },
+    "365": {
+      "id": 365,
+      "thm_name": "compile_program_correct_terminating_2",
+      "lean_root": "LeroyCompilerVerificationCourse",
+      "rel_path": "LeroyCompilerVerificationCourse/Compil.lean",
+      "category": "Compiler",
+      "record_sha256": "8b18c418fda2f0dedf0576c13f47719d5479b646b9468cc2c7a06e8a3993636e"
+    },
+    "366": {
+      "id": 366,
+      "thm_name": "simulation_steps",
+      "lean_root": "LeroyCompilerVerificationCourse",
+      "rel_path": "LeroyCompilerVerificationCourse/Compil.lean",
+      "category": "Compiler",
+      "record_sha256": "cc77da842a421ddf5aca55cbfc161325c06cb5aaa6f2e7bef25acf86205344a6"
+    },
+    "367": {
+      "id": 367,
+      "thm_name": "fixpoint_join_sound",
+      "lean_root": "LeroyCompilerVerificationCourse",
+      "rel_path": "LeroyCompilerVerificationCourse/Fixpoints.lean",
+      "category": "Compiler",
+      "record_sha256": "3e4e8a402f093ffe5547cd9fcdb155b7912fb03a74adbc3418d8080ce63d81ff"
+    },
+    "368": {
+      "id": 368,
+      "thm_name": "compile_program_correct_diverging",
+      "lean_root": "LeroyCompilerVerificationCourse",
+      "rel_path": "LeroyCompilerVerificationCourse/Compil.lean",
+      "category": "Compiler",
+      "record_sha256": "5394778b62ba11ff3990a50665b607995d7774b6b2f7ba9230b9506b3f3e1d20"
+    },
+    "369": {
+      "id": 369,
+      "thm_name": "simulation_infseq_inv",
+      "lean_root": "LeroyCompilerVerificationCourse",
+      "rel_path": "LeroyCompilerVerificationCourse/Compil.lean",
+      "category": "Compiler",
+      "record_sha256": "a42d723650deeeca727d657d15de77d49ccc12617cfd7f941d3d2c836e716573"
+    },
+    "370": {
+      "id": 370,
+      "thm_name": "fixpoint_sound",
+      "lean_root": "LeroyCompilerVerificationCourse",
+      "rel_path": "LeroyCompilerVerificationCourse/Constprop.lean",
+      "category": "Compiler",
+      "record_sha256": "2f73fc2ca7270620aae3c9dc1400f11c2599bc0e83c5cd270415079961e0c779"
+    },
+    "371": {
+      "id": 371,
+      "thm_name": "fixpoint_join_eq",
+      "lean_root": "LeroyCompilerVerificationCourse",
+      "rel_path": "LeroyCompilerVerificationCourse/Fixpoints.lean",
+      "category": "Compiler",
+      "record_sha256": "3e1ffb3291a94b49414fe46eaa11ad75728c9688853dd9e19ff8fcf64176b61c"
+    },
+    "372": {
+      "id": 372,
+      "thm_name": "Gt_wf",
+      "lean_root": "LeroyCompilerVerificationCourse",
+      "rel_path": "LeroyCompilerVerificationCourse/Fixpoints.lean",
+      "category": "Compiler",
+      "record_sha256": "fbfcaea0048e7637a967b942ec233aea7b8602b7d2737216878c32a4f2d8f821"
+    },
+    "373": {
+      "id": 373,
+      "thm_name": "fixpoint_correct",
+      "lean_root": "LeroyCompilerVerificationCourse",
+      "rel_path": "LeroyCompilerVerificationCourse/Fixpoints.lean",
+      "category": "Compiler",
+      "record_sha256": "bcaaa8e1d19f455d39e1442d5b17278b4db143c43b7068084a8b1281130dbaa6"
+    },
+    "374": {
+      "id": 374,
+      "thm_name": "fixpoint_join_smallest",
+      "lean_root": "LeroyCompilerVerificationCourse",
+      "rel_path": "LeroyCompilerVerificationCourse/Fixpoints.lean",
+      "category": "Compiler",
+      "record_sha256": "ca198071ab8b958976402ff1c6a43c8d237f29656b438c0d52d17619a836042f"
+    },
+    "375": {
+      "id": 375,
+      "thm_name": "spv_dot_pure_gen",
+      "lean_root": "loom",
+      "rel_path": "CaseStudies/Velvet/VelvetExamples/SpMSpV_Example.lean",
+      "category": "Framework",
+      "record_sha256": "778d9b1a2e2e465022d14efb9df4c427e64b086462644a492c5ec969f69148dc"
+    },
+    "376": {
+      "id": 376,
+      "thm_name": "VelvetM.total_decompose",
+      "lean_root": "loom",
+      "rel_path": "CaseStudies/Velvet/VelvetTheory.lean",
+      "category": "Framework",
+      "record_sha256": "8141d50078658a036e56472ae96be5f212f9c40d4a32d0414145cf81592a3f0f"
+    },
+    "377": {
+      "id": 377,
+      "thm_name": "VSpV_correct_pure",
+      "lean_root": "loom",
+      "rel_path": "CaseStudies/Velvet/VelvetExamples/SpMSpV_Example.lean",
+      "category": "Framework",
+      "record_sha256": "3fcb397ab2457de70c7598654b8adc37499e2a5b62717c0df6285801ccf229d4"
+    },
+    "378": {
+      "id": 378,
+      "thm_name": "DemonicChoice.ExtractNonDet.extract_refines_wp_weak",
+      "lean_root": "loom",
+      "rel_path": "Loom/MonadAlgebras/NonDetT'/Extract.lean",
+      "category": "Framework",
+      "record_sha256": "930187713eb14884c8aa5905236155aaa3f1b76c0b804e9a90e8ae1a1de8c16b"
+    },
+    "379": {
+      "id": 379,
+      "thm_name": "spv_dot_pure",
+      "lean_root": "loom",
+      "rel_path": "CaseStudies/Velvet/VelvetExamples/SpMSpV_Example.lean",
+      "category": "Framework",
+      "record_sha256": "29427799868ab75587c6eedb23022f53f4e239b1e9c5b46455346fb613f8bece"
+    },
+    "380": {
+      "id": 380,
+      "thm_name": "array_extract_split_i_j_k",
+      "lean_root": "loom",
+      "rel_path": "CaseStudies/Velvet/VelvetExamples/EncodeDecodeStr.lean",
+      "category": "Framework",
+      "record_sha256": "9dab02109d249f9fce8bdf4383f8c1eae8fd204326eb4770cd2e0e0e0f4f9e00"
+    },
+    "381": {
+      "id": 381,
+      "thm_name": "TotalCorrectness.repeat_inv",
+      "lean_root": "loom",
+      "rel_path": "Loom/MonadAlgebras/WP/Basic.lean",
+      "category": "Framework",
+      "record_sha256": "effbc68c25ac30ee7948cf1f2fbe79450c0bda3211756eaf85ca9637db3620b7"
+    },
+    "382": {
+      "id": 382,
+      "thm_name": "SpMSpV_correct_triple",
+      "lean_root": "loom",
+      "rel_path": "CaseStudies/Velvet/VelvetExamples/SpMSpV_Example.lean",
+      "category": "Framework",
+      "record_sha256": "479f0535bbad14b726ef7b7a220281472ce7466fad2ff337486ffb8486134201"
+    },
+    "383": {
+      "id": 383,
+      "thm_name": "PartialCorrectness.repeat_inv",
+      "lean_root": "loom",
+      "rel_path": "Loom/MonadAlgebras/WP/Basic.lean",
+      "category": "Framework",
+      "record_sha256": "e1847784fa7a36d750904a9586cb768290e5a1478885aa3c4dec276b83a78d55"
+    },
+    "384": {
+      "id": 384,
+      "thm_name": "SpVSpV_correct_triple",
+      "lean_root": "loom",
+      "rel_path": "CaseStudies/Velvet/VelvetExamples/SpMSpV_Example.lean",
+      "category": "Framework",
+      "record_sha256": "367421c0748479cea8e9eac3b2ca0c34bbd03d8912d9ab525e789243e3f9fc8e"
+    },
+    "385": {
+      "id": 385,
+      "thm_name": "spmv_correct_triple",
+      "lean_root": "loom",
+      "rel_path": "CaseStudies/Velvet/VelvetExamples/SpMSpV_Example.lean",
+      "category": "Framework",
+      "record_sha256": "a0c82844d3dc3a268412def115894fa10bf84817d9479805b99532b64450b569"
+    },
+    "386": {
+      "id": 386,
+      "thm_name": "VSpV_correct_triple",
+      "lean_root": "loom",
+      "rel_path": "CaseStudies/Velvet/VelvetExamples/SpMSpV_Example.lean",
+      "category": "Framework",
+      "record_sha256": "cd26a4b8cc8676cdeaa5f2bd9e984a5b2053a69e004790d618e4e8ce22641a69"
+    },
+    "387": {
+      "id": 387,
+      "thm_name": "DemonicChoice.ExtractNonDet.extract_refines",
+      "lean_root": "loom",
+      "rel_path": "Loom/MonadAlgebras/NonDetT'/Extract.lean",
+      "category": "Framework",
+      "record_sha256": "ed0eea9974c6f623d55a1fa611dd34011d36dff95a4f88f035b5e40bea8df795"
+    },
+    "388": {
+      "id": 388,
+      "thm_name": "StateT.wp_lift",
+      "lean_root": "loom",
+      "rel_path": "Loom/MonadAlgebras/WP/Basic.lean",
+      "category": "Framework",
+      "record_sha256": "c4947e8ea76a3a1e71274c3bf8198b97274b416cceeb7d5043dd0c4f67f56075"
+    },
+    "389": {
+      "id": 389,
+      "thm_name": "Gen.wp_rand",
+      "lean_root": "loom",
+      "rel_path": "Loom/MonadAlgebras/WP/Basic.lean",
+      "category": "Framework",
+      "record_sha256": "ae5eb1655e7e88a835acd10b594df85868c0b77b78add87e662cf6371d9fb0fe"
+    },
+    "390": {
+      "id": 390,
+      "thm_name": "MAlgLift.wp_throw",
+      "lean_root": "loom",
+      "rel_path": "Loom/MonadAlgebras/WP/Basic.lean",
+      "category": "Framework",
+      "record_sha256": "d92d8b208f806798eed14fef0b751bb33456ad589cca01b3cb8a8e46b2fb167a"
+    },
+    "391": {
+      "id": 391,
+      "thm_name": "p_findNat_some",
+      "lean_root": "loom",
+      "rel_path": "Loom/MonadAlgebras/NonDetT/Findable.lean",
+      "category": "Framework",
+      "record_sha256": "80bf57ab65b9f323945f2412b8b3283bd5a4f8e7cadf0933d52eccf75036558b"
+    },
+    "392": {
+      "id": 392,
+      "thm_name": "p_findNat_some",
+      "lean_root": "loom",
+      "rel_path": "Loom/MonadAlgebras/NonDetT'/Extract.lean",
+      "category": "Framework",
+      "record_sha256": "f0681058d19b0aeb615c31b83deba4a609cd3279ab8e5d7ccd06e05ee433f299"
+    },
+    "393": {
+      "id": 393,
+      "thm_name": "PartialCorrectness.DemonicChoice.NonDetT.wp_pickCont",
+      "lean_root": "loom",
+      "rel_path": "Loom/MonadAlgebras/NonDetT/Basic.lean",
+      "category": "Framework",
+      "record_sha256": "8d2e8c8dfec09f4ced2d6de4dc5f4029520facf629f3662fc9796617b84429ab"
+    },
+    "394": {
+      "id": 394,
+      "thm_name": "TotalCorrectness.DemonicChoice.NonDetT.wp_pickCont",
+      "lean_root": "loom",
+      "rel_path": "Loom/MonadAlgebras/NonDetT/Basic.lean",
+      "category": "Framework",
+      "record_sha256": "f485b50288a0cea77e7be138f290f2e88e158feb1e85a29fb514f67152175463"
+    },
+    "395": {
+      "id": 395,
+      "thm_name": "Tm.sub_den_eq",
+      "lean_root": "pcf-lean",
+      "rel_path": "PCF/Denotation.lean",
+      "category": "Semantics",
+      "record_sha256": "f204330102023ff6068217129fbad0f0715f8654428cc87689be5d6533f0eaf2"
+    },
+    "396": {
+      "id": 396,
+      "thm_name": "Flat.sup_some",
+      "lean_root": "pcf-lean",
+      "rel_path": "PCF/Flat.lean",
+      "category": "Semantics",
+      "record_sha256": "b4911ff3b8117c60d8a129468edda97a6fb4594fd6180a001a5ff4825a3ec9ab"
+    },
+    "397": {
+      "id": 397,
+      "thm_name": "Ren.ren_comp_eq",
+      "lean_root": "pcf-lean",
+      "rel_path": "PCF/Substitution.lean",
+      "category": "Semantics",
+      "record_sha256": "cde5047cbcae540672ac7ffb32256dc6ae252b7f064eb1d9370cca00da9c8cf0"
+    },
+    "398": {
+      "id": 398,
+      "thm_name": "Flat.under_eq",
+      "lean_root": "pcf-lean",
+      "rel_path": "PCF/Flat.lean",
+      "category": "Semantics",
+      "record_sha256": "7d54ea7d77c57efb435ce69dfb7ebe8bb2ccdee9f70a8dab0f7bb961aa83d42d"
+    },
+    "399": {
+      "id": 399,
+      "thm_name": "Cont.pair_after",
+      "lean_root": "pcf-lean",
+      "rel_path": "PCF/Domain.lean",
+      "category": "Semantics",
+      "record_sha256": "4f1b979176adb29df4248e1bee34e534daea641ae177844779c04081ff55a1e4"
+    },
+    "400": {
+      "id": 400,
+      "thm_name": "Flat.leq_none",
+      "lean_root": "pcf-lean",
+      "rel_path": "PCF/Flat.lean",
+      "category": "Semantics",
+      "record_sha256": "1e14c2749dae6bd8bd044bf2bcdaa20a7e6721f0bd07c05b7d3157f05d81bbff"
+    },
+    "401": {
+      "id": 401,
+      "thm_name": "evalExact_frame",
+      "lean_root": "splean",
+      "rel_path": "SPLean/Theories/SepLog.lean",
+      "category": "Framework",
+      "record_sha256": "25f0f886ff9858af8823956975d1acb1a51b30d76544c98e532b8cf1393308ff"
+    },
+    "402": {
+      "id": 402,
+      "thm_name": "Theories.eval_like_trm_apps_funs_pre",
+      "lean_root": "splean",
+      "rel_path": "SPLean/Theories/WP1.lean",
+      "category": "Framework",
+      "record_sha256": "38bf99b3182244fa0863da1706f2870b909c17f9477c44e849b309e53713c596"
+    },
+    "403": {
+      "id": 403,
+      "thm_name": "eval_frame",
+      "lean_root": "splean",
+      "rel_path": "SPLean/Theories/SepLog.lean",
+      "category": "Framework",
+      "record_sha256": "49f2982361570f12f50641909e7b3bc7b3cc710992ccce6f43127682618dc026"
+    },
+    "404": {
+      "id": 404,
+      "thm_name": "evalExact_WellAlloc",
+      "lean_root": "splean",
+      "rel_path": "SPLean/Theories/SepLog.lean",
+      "category": "Framework",
+      "record_sha256": "b727faec79304677fbe5bfcc740dcd1c9b11797afc2c2cd77e2c97cfc69826a4"
+    },
+    "405": {
+      "id": 405,
+      "thm_name": "evalExact_post",
+      "lean_root": "splean",
+      "rel_path": "SPLean/Theories/SepLog.lean",
+      "category": "Framework",
+      "record_sha256": "bcbe8c8191c226357608f9c192f7155884d086fd4eec08d3d87238b0e933cbf2"
+    },
+    "406": {
+      "id": 406,
+      "thm_name": "qwand_equiv",
+      "lean_root": "splean",
+      "rel_path": "SPLean/Theories/HProp.lean",
+      "category": "Framework",
+      "record_sha256": "6183784e34b9887755ef921fdc455b5bd8a08e21839e0e865c1bf794c766b04b"
+    },
+    "407": {
+      "id": 407,
+      "thm_name": "Theories.xwp_lemma_funs",
+      "lean_root": "splean",
+      "rel_path": "SPLean/Theories/WP1.lean",
+      "category": "Framework",
+      "record_sha256": "02b2ab2be1671b98e63975fd2163c2565045073676fc5419095c2eea90bfec7f"
+    },
+    "408": {
+      "id": 408,
+      "thm_name": "Theories.xapp_simpl_lemma",
+      "lean_root": "splean",
+      "rel_path": "SPLean/Theories/WP1.lean",
+      "category": "Framework",
+      "record_sha256": "d57ee661845d96d5ccf53159881cb0253cf59f714bb8ee689503c7b5dac6a653"
+    },
+    "409": {
+      "id": 409,
+      "thm_name": "hseg_focus_relative",
+      "lean_root": "splean",
+      "rel_path": "SPLean/Theories/Arrays.lean",
+      "category": "Framework",
+      "record_sha256": "f1e899dcff071fb551a691cd5a956ff14e0478620c6304fe507898429f41f54f"
+    },
+    "410": {
+      "id": 410,
+      "thm_name": "triple_ref",
+      "lean_root": "splean",
+      "rel_path": "SPLean/Theories/SepLog.lean",
+      "category": "Framework",
+      "record_sha256": "5a171ae2e1681203a8e01b95985d0a18c7bf7790f57c59aedfadd229991a4a32"
+    },
+    "411": {
+      "id": 411,
+      "thm_name": "triple_alloc",
+      "lean_root": "splean",
+      "rel_path": "SPLean/Theories/SepLog.lean",
+      "category": "Framework",
+      "record_sha256": "fa1f8276233e9297f2a39941bd77f4c057f22ca1d7631d5fda1bb8b8f6a0cc69"
+    },
+    "412": {
+      "id": 412,
+      "thm_name": "Theories.wp_alloc",
+      "lean_root": "splean",
+      "rel_path": "SPLean/Theories/WP1.lean",
+      "category": "Framework",
+      "record_sha256": "3e2a01b5706bc7539625633a25ff3475cffcfb993d3ddc3ee0cce66216261af4"
+    },
+    "413": {
+      "id": 413,
+      "thm_name": "xfor_lemma",
+      "lean_root": "splean",
+      "rel_path": "SPLean/Theories/WP1.lean",
+      "category": "Framework",
+      "record_sha256": "9b8da10683c09442884eeb9b8fa150d5cea363865abef979333918a18ba70388"
+    },
+    "414": {
+      "id": 414,
+      "thm_name": "Theories.isubst_insert",
+      "lean_root": "splean",
+      "rel_path": "SPLean/Theories/WP1.lean",
+      "category": "Framework",
+      "record_sha256": "f335626b931fb4c9b239cfb7746488098e8240ca211dd36d4df8dc0f97ccbcde"
+    },
+    "415": {
+      "id": 415,
+      "thm_name": "Perm.kmerge",
+      "lean_root": "splean",
+      "rel_path": "SPLean/Common/Heap.lean",
+      "category": "Framework",
+      "record_sha256": "a80d8796ce09794e33a9eba5e8ad892f6411f4bbf654bcb556f249f0627a4e6b"
+    },
+    "416": {
+      "id": 416,
+      "thm_name": "validInter_hop_distr_l",
+      "lean_root": "splean",
+      "rel_path": "SPLean/Common/Heap.lean",
+      "category": "Framework",
+      "record_sha256": "6ed240fa7cd53111885c3fa182e025fbe63e6949f6ef008ff7e8606669875c64"
+    },
+    "417": {
+      "id": 417,
+      "thm_name": "xwhile_inv_basic_lemma",
+      "lean_root": "splean",
+      "rel_path": "SPLean/Theories/WP1.lean",
+      "category": "Framework",
+      "record_sha256": "92e4559f37be33ae147297c74aaef0d84f1c7a5fabc3c454213135d8adf4be4c"
+    },
+    "418": {
+      "id": 418,
+      "thm_name": "kmerge_assoc_perm",
+      "lean_root": "splean",
+      "rel_path": "SPLean/Common/Heap.lean",
+      "category": "Framework",
+      "record_sha256": "6ab13e5b99ed1a2adc53784f11854bbdb1cfcb626686121a809becf660f18435"
+    },
+    "419": {
+      "id": 419,
+      "thm_name": "validInter_assoc_r",
+      "lean_root": "splean",
+      "rel_path": "SPLean/Common/Heap.lean",
+      "category": "Framework",
+      "record_sha256": "58ec17f89cd140f2312c8e7363422e61a41e5cda334cddffdc56ea7432e803ca"
+    },
+    "420": {
+      "id": 420,
+      "thm_name": "hrange_eq_conseq",
+      "lean_root": "splean",
+      "rel_path": "SPLean/Theories/SepLog.lean",
+      "category": "Framework",
+      "record_sha256": "db8d9c82b3a2c719afa5cee1501283cdd75984a43bafccb405dd772bc9ed8d97"
+    },
+    "421": {
+      "id": 421,
+      "thm_name": "validInter_assoc_l",
+      "lean_root": "splean",
+      "rel_path": "SPLean/Common/Heap.lean",
+      "category": "Framework",
+      "record_sha256": "b718837d1d5925bb1854519ff3f26ee9afb73446a8d341fd83ecdc86614da6bb"
+    },
+    "422": {
+      "id": 422,
+      "thm_name": "wtPar",
+      "lean_root": "TTBFL",
+      "rel_path": "src/safety.lean",
+      "category": "Type systems",
+      "record_sha256": "f358f29e776cf3e2145ea3e4b155ded30f4225800a5b8ca10a340597dac418f9"
+    },
+    "423": {
+      "id": 423,
+      "thm_name": "wtMorph",
+      "lean_root": "TTBFL",
+      "rel_path": "src/safety.lean",
+      "category": "Type systems",
+      "record_sha256": "fd2e41621ddee3418f9629b0da2f748524277276aa6cd1a24ab7235acbfd64c5"
+    },
+    "424": {
+      "id": 424,
+      "thm_name": "antirenaming",
+      "lean_root": "TTBFL",
+      "rel_path": "src/reduction.lean",
+      "category": "Type systems",
+      "record_sha256": "29f0333fe036dfbeed0a91779562c1d380ad0979f51f3f1732da12f86837d63c"
+    },
+    "425": {
+      "id": 425,
+      "thm_name": "wtRegularity",
+      "lean_root": "TTBFL",
+      "rel_path": "src/safety.lean",
+      "category": "Type systems",
+      "record_sha256": "f73ef7c3eca8882644537443ff5feee6391c715a6bbea1a3039203607c41ee1d"
+    },
+    "426": {
+      "id": 426,
+      "thm_name": "wtProgress",
+      "lean_root": "TTBFL",
+      "rel_path": "src/safety.lean",
+      "category": "Type systems",
+      "record_sha256": "123c2702fc7bd48e0ebcb893c28d377c2bf1bc8f5468b28a5bc1766ce81b8430"
+    },
+    "427": {
+      "id": 427,
+      "thm_name": "interpDet'",
+      "lean_root": "TTBFL",
+      "rel_path": "src/candidates.lean",
+      "category": "Type systems",
+      "record_sha256": "de3675eb2e8d439db6f8030759f12ad6b57fa78e9490e79586710768111fbdde"
+    },
+    "428": {
+      "id": 428,
+      "thm_name": "wtMty",
+      "lean_root": "TTBFL",
+      "rel_path": "src/safety.lean",
+      "category": "Type systems",
+      "record_sha256": "b4f5b615dc533f3e30789a1fdaa85acd9b3615e3e4e3c9abf6d7bcbddca9a86e"
+    },
+    "429": {
+      "id": 429,
+      "thm_name": "interpDet'",
+      "lean_root": "TTBFL",
+      "rel_path": "src/semantics.lean",
+      "category": "Type systems",
+      "record_sha256": "6ad4dcbd3d41bbb757b9ab8fcbd77ab3ddadd5f1d8be46e8a932a4bec8b0a0ba"
+    },
+    "430": {
+      "id": 430,
+      "thm_name": "interpFwd",
+      "lean_root": "TTBFL",
+      "rel_path": "src/candidates.lean",
+      "category": "Type systems",
+      "record_sha256": "ed5cce720b9356db84559f32a565b5c78b8064988cb0de9e6a84eef0dd368db5"
+    },
+    "431": {
+      "id": 431,
+      "thm_name": "wtReplace",
+      "lean_root": "TTBFL",
+      "rel_path": "src/safety.lean",
+      "category": "Type systems",
+      "record_sha256": "6db0923590736ae71e755f35f43472c159c61d6b7058616bd8d04d71e2bf7106"
+    },
+    "432": {
+      "id": 432,
+      "thm_name": "wtAbs",
+      "lean_root": "TTBFL",
+      "rel_path": "src/safety.lean",
+      "category": "Type systems",
+      "record_sha256": "317fbe605619115fea88e23bd18447708bd2a7d7bf11fe8fa23fc112de1daec0"
+    },
+    "433": {
+      "id": 433,
+      "thm_name": "interpsBwdsP",
+      "lean_root": "TTBFL",
+      "rel_path": "src/candidates.lean",
+      "category": "Type systems",
+      "record_sha256": "5941c035286dd139ed3a5e3ba2bdbd83eb713ccf40a0ca8be0f680e0753e1334"
+    },
+    "434": {
+      "id": 434,
+      "thm_name": "interpsBwdsP",
+      "lean_root": "TTBFL",
+      "rel_path": "src/semantics.lean",
+      "category": "Type systems",
+      "record_sha256": "89755037ffce4c58813353a713fd0ede041745e15d6eaf6c138307dee06e2680"
+    },
+    "435": {
+      "id": 435,
+      "thm_name": "wtfAbsInv",
+      "lean_root": "TTBFL",
+      "rel_path": "src/typing.lean",
+      "category": "Type systems",
+      "record_sha256": "622dfa66df0a64020d852d3ac4bc80005c0b04b9d6e323541e4a051429f815d8"
+    },
+    "436": {
+      "id": 436,
+      "thm_name": "interpLvlInv",
+      "lean_root": "TTBFL",
+      "rel_path": "src/candidates.lean",
+      "category": "Type systems",
+      "record_sha256": "3e345746bb27f71f8bfa634a11197376bbc81912ef3c2a000ffdd592e6aa9f76"
+    },
+    "437": {
+      "id": 437,
+      "thm_name": "wtfLvlInv",
+      "lean_root": "TTBFL",
+      "rel_path": "src/typing.lean",
+      "category": "Type systems",
+      "record_sha256": "1763cd087f4495fab773b26ad4588c7a556e448cd407ef617659e417371d37f4"
+    },
+    "438": {
+      "id": 438,
+      "thm_name": "wtfMtyInv",
+      "lean_root": "TTBFL",
+      "rel_path": "src/typing.lean",
+      "category": "Type systems",
+      "record_sha256": "f4cbd11ec1626f0fd2648585845295daa0537511107f454765882ec72370e002"
+    },
+    "439": {
+      "id": 439,
+      "thm_name": "parsAntirenaming",
+      "lean_root": "TTBFL",
+      "rel_path": "src/reduction.lean",
+      "category": "Type systems",
+      "record_sha256": "631e83967110a7a1050b1c490a8dcfb288492a21a4bfa0e4d07ca7f6a34efcdf"
+    },
+    "440": {
+      "id": 440,
+      "thm_name": "substUnion",
+      "lean_root": "TTBFL",
+      "rel_path": "src/syntactics.lean",
+      "category": "Type systems",
+      "record_sha256": "53ba8582717498ed4a8c22e3a41b37b1994896f330148183964a3ee79b01d08a"
+    },
+    "441": {
+      "id": 441,
+      "thm_name": "substDist",
+      "lean_root": "TTBFL",
+      "rel_path": "src/syntactics.lean",
+      "category": "Type systems",
+      "record_sha256": "5a088116daf8e162a8e965ac323dee0859cb9889b2693114ba8d804b8a9f0b41"
+    },
+    "442": {
+      "id": 442,
+      "thm_name": "wtfLofInv",
+      "lean_root": "TTBFL",
+      "rel_path": "src/typing.lean",
+      "category": "Type systems",
+      "record_sha256": "8856cc7950fe0549d4d7f617eac01934719014eaa561092f80cb7918041c20fc"
+    },
+    "443": {
+      "id": 443,
+      "thm_name": "StateT.set_get",
+      "lean_root": "VCV-io",
+      "rel_path": "ToMathlib/Control/Lawful/MonadState.lean",
+      "category": "Applied verif.",
+      "record_sha256": "4f23e1a511301a7587666f9cc5d6dabf09b33b06223839e6bf28b366f676ed56"
+    },
+    "444": {
+      "id": 444,
+      "thm_name": "triple_forIn_deacreasing",
+      "lean_root": "loom",
+      "rel_path": "Loom/MonadAlgebras/WP/Gen.lean",
+      "category": "Framework",
+      "record_sha256": "182cb76720ea1b6aac1d9edf7716097f664a431d8c5e0d8a02617b834940e82c"
+    },
+    "445": {
+      "id": 445,
+      "thm_name": "OracleComp.evalDist_liftComp",
+      "lean_root": "VCV-io",
+      "rel_path": "VCVio/OracleComp/Coercions/SubSpec.lean",
+      "category": "Applied verif.",
+      "record_sha256": "73d562a01327c85c5d224a3a0f822f0d0ce36169c6e30173023783800ae63b5c"
+    },
+    "446": {
+      "id": 446,
+      "thm_name": "OracleComp.pure_eq_bind_iff",
+      "lean_root": "VCV-io",
+      "rel_path": "VCVio/OracleComp/OracleComp.lean",
+      "category": "Applied verif.",
+      "record_sha256": "05cfd48d1da809ee0dccd654743409b711689409508c9742503432ebf548a82a"
+    },
+    "447": {
+      "id": 447,
+      "thm_name": "OracleComp.evalDist_uniformSelectFinset",
+      "lean_root": "VCV-io",
+      "rel_path": "VCVio/OracleComp/Constructions/UniformSelect.lean",
+      "category": "Applied verif.",
+      "record_sha256": "48687226e8cd3883a73bb57a166675598a86a9ed6ab7a876b8ccb55361051573"
+    },
+    "448": {
+      "id": 448,
+      "thm_name": "OracleComp.query_bind_eq_roll",
+      "lean_root": "VCV-io",
+      "rel_path": "VCVio/OracleComp/OracleComp.lean",
+      "category": "Applied verif.",
+      "record_sha256": "5c02a1d852028aeaacece9893fa37662ff62d4b552282af596e1c119b1e071d6"
+    },
+    "449": {
+      "id": 449,
+      "thm_name": "OracleComp.queryBind_inj",
+      "lean_root": "VCV-io",
+      "rel_path": "VCVio/OracleComp/OracleComp.lean",
+      "category": "Applied verif.",
+      "record_sha256": "df65a934fc55b433e30526e9ff4e8ccd82c1a2909bce00f6a92c688a821aee03"
+    },
+    "450": {
+      "id": 450,
+      "thm_name": "OracleComp.probFailure_bind_eq_sub_mul",
+      "lean_root": "VCV-io",
+      "rel_path": "VCVio/OracleComp/DistSemantics/EvalDist.lean",
+      "category": "Applied verif.",
+      "record_sha256": "4dbea353bc17f09c5bfbb57bdf18d7317d446471c2607e44c9566e6b35cb724e"
+    },
+    "451": {
+      "id": 451,
+      "thm_name": "BindEquiv.map_bind_inv",
+      "lean_root": "VCV-io",
+      "rel_path": "ToMathlib/Control/Monad/Equiv.lean",
+      "category": "Applied verif.",
+      "record_sha256": "80bea560fbd6706eb022d554dc4799e8f7abc23b380cd30fe6e6c99f35948869"
+    },
+    "452": {
+      "id": 452,
+      "thm_name": "OracleComp.mul_le_probEvent_bind",
+      "lean_root": "VCV-io",
+      "rel_path": "VCVio/OracleComp/DistSemantics/EvalDist.lean",
+      "category": "Applied verif.",
+      "record_sha256": "02434ef80e86621cdb419ef0c2fcdedfeaf09efd59b5698b93f3f731ed437675"
+    },
+    "453": {
+      "id": 453,
+      "thm_name": "OracleComp.probEvent_seq_map_eq_mul",
+      "lean_root": "VCV-io",
+      "rel_path": "VCVio/OracleComp/DistSemantics/Seq.lean",
+      "category": "Applied verif.",
+      "record_sha256": "24e9b8cefa897775f8cb6dd68413d5d614ab06d0f38bae098a63425a42787e6b"
+    },
+    "454": {
+      "id": 454,
+      "thm_name": "PMF.probOutput_eq",
+      "lean_root": "VCV-io",
+      "rel_path": "VCVio/EvalDist/Basic.lean",
+      "category": "Applied verif.",
+      "record_sha256": "cb53d517ad5a94767c7e83caa68a2b9f1d42ac4a4a679273e6167f31db9667d8"
+    },
+    "455": {
+      "id": 455,
+      "thm_name": "OracleComp.probEvent_congr'",
+      "lean_root": "VCV-io",
+      "rel_path": "VCVio/OracleComp/DistSemantics/EvalDist.lean",
+      "category": "Applied verif.",
+      "record_sha256": "82eea3e1e68b5f91e05e5d35cbc689c266ec3760fd5b1cbd109a3c8306ab9d85"
+    },
+    "456": {
+      "id": 456,
+      "thm_name": "PureEquiv.map_pure_inv",
+      "lean_root": "VCV-io",
+      "rel_path": "ToMathlib/Control/Monad/Equiv.lean",
+      "category": "Applied verif.",
+      "record_sha256": "a6b6382fd49762692ddceebd248296096eeab8822dd5482ea5e9fad5b4c5a1ef"
+    },
+    "457": {
+      "id": 457,
+      "thm_name": "OracleComp.isQueryBound_iff_probEvent",
+      "lean_root": "VCV-io",
+      "rel_path": "VCVio/OracleComp/QueryBound.lean",
+      "category": "Applied verif.",
+      "record_sha256": "ff6b7c5d14ae8d2918d398a813cb03f0dd4a0a1574f6c1b0a723725f57956290"
+    },
+    "458": {
+      "id": 458,
+      "thm_name": "OracleComp.probEvent_uniformFin",
+      "lean_root": "VCV-io",
+      "rel_path": "VCVio/OracleComp/DistSemantics/EvalDist.lean",
+      "category": "Applied verif.",
+      "record_sha256": "d3009cc5b491d7c1a0d373bf09ed215aa8ed68e391e4104c0712f7a71d5a05c2"
+    },
+    "459": {
+      "id": 459,
+      "thm_name": "OracleComp.probFailure_bind_of_const",
+      "lean_root": "VCV-io",
+      "rel_path": "VCVio/OracleComp/DistSemantics/EvalDist.lean",
+      "category": "Applied verif.",
+      "record_sha256": "57c5158641f00298783300da8afbd5bb1ab5efbf6709e4b743a2ed32b329207a"
+    },
+    "460": {
+      "id": 460,
+      "thm_name": "OracleComp.probEvent_seq_map_eq_probEvent_comp_uncurry",
+      "lean_root": "VCV-io",
+      "rel_path": "VCVio/OracleComp/DistSemantics/Seq.lean",
+      "category": "Applied verif.",
+      "record_sha256": "9a06ad45a13f7f5264e65f572e8da7425cb058edcf59fdaf7f6fb89efdea014d"
+    },
+    "461": {
+      "id": 461,
+      "thm_name": "OracleComp.liftM_inj",
+      "lean_root": "VCV-io",
+      "rel_path": "VCVio/OracleComp/OracleComp.lean",
+      "category": "Applied verif.",
+      "record_sha256": "9b7acae5bf444f8b9752f6bce8467ebb7cdf068e1c4de916c41e582b63c29f08"
+    },
+    "462": {
+      "id": 462,
+      "thm_name": "PFunctor.Lens.prodPair_fst_snd",
+      "lean_root": "VCV-io",
+      "rel_path": "ToMathlib/PFunctor/Lens/Basic.lean",
+      "category": "Applied verif.",
+      "record_sha256": "a82c203dd0565dfaf321ffbb901791fea1b3dd4c5e3202b78198b9d4ec5ed501"
+    },
+    "463": {
+      "id": 463,
+      "thm_name": "OracleSpec.QuerySeed.eq_takeAtIndex_length_iff",
+      "lean_root": "VCV-io",
+      "rel_path": "VCVio/OracleComp/QueryTracking/Structures.lean",
+      "category": "Applied verif.",
+      "record_sha256": "e5a4a02ac7354b47c2ab6ad37a01ce09d6cfcf4fbbcaa945ea85a09803e9cd10"
+    },
+    "464": {
+      "id": 464,
+      "thm_name": "OracleComp.allWhen_bind_iff",
+      "lean_root": "VCV-io",
+      "rel_path": "VCVio/OracleComp/Traversal.lean",
+      "category": "Applied verif.",
+      "record_sha256": "18afe1eb1656b8a84209a5cc56d59f7f86e4439745db9559f2ef2cb6431af713"
+    },
+    "465": {
+      "id": 465,
+      "thm_name": "OracleComp.probFailure_liftM",
+      "lean_root": "VCV-io",
+      "rel_path": "VCVio/OracleComp/DistSemantics/EvalDist.lean",
+      "category": "Applied verif.",
+      "record_sha256": "21f29a33e2fc70cf35e3075d87a4c2bf459d0850daf6ce7189c39335f4b30c1d"
+    },
+    "466": {
+      "id": 466,
+      "thm_name": "OracleComp.probOutput_seq_map_eq_mul",
+      "lean_root": "VCV-io",
+      "rel_path": "VCVio/OracleComp/DistSemantics/Seq.lean",
+      "category": "Applied verif.",
+      "record_sha256": "07ac20eaa481e045fbeb89543c47950f41293a60e4053f4b3ee6a3f0d90111d6"
+    },
+    "467": {
+      "id": 467,
+      "thm_name": "PFunctor.Lens.sumPair_inl_inr",
+      "lean_root": "VCV-io",
+      "rel_path": "ToMathlib/PFunctor/Lens/Basic.lean",
+      "category": "Applied verif.",
+      "record_sha256": "90f0e34c289813339ac0968a32eb45cb4a123e998cf8814cb1b60a24bc239730"
+    },
+    "468": {
+      "id": 468,
+      "thm_name": "Veil.bind_terminates",
+      "lean_root": "veil",
+      "rel_path": "Veil/DSL/Action/Theory.lean",
+      "category": "Framework",
+      "record_sha256": "8c415442159f6e931d55e13bacbf93802c9ab4d14a8ab395d1d2d343910000f5"
+    },
+    "469": {
+      "id": 469,
+      "thm_name": "Veil.lift_transition_big_step'",
+      "lean_root": "veil",
+      "rel_path": "Veil/DSL/Action/Theory.lean",
+      "category": "Framework",
+      "record_sha256": "abd1a776aa744b3ec8de8613881533a67e1f6d29ee49f104ace3ab782f06c9e4"
+    },
+    "470": {
+      "id": 470,
+      "thm_name": "Veil.big_step_to_wp",
+      "lean_root": "veil",
+      "rel_path": "Veil/DSL/Action/Theory.lean",
+      "category": "Framework",
+      "record_sha256": "a694f69545d6ce628bd3e935215bd609cedec07d8f574db6ddc346c1727df6c4"
+    },
+    "471": {
+      "id": 471,
+      "thm_name": "Veil.big_step_always_terminating_sound",
+      "lean_root": "veil",
+      "rel_path": "Veil/DSL/Action/Theory.lean",
+      "category": "Framework",
+      "record_sha256": "18e145bce5187ad3586013771925fc29a2dea1d89fc4d2d51e39add2e3e4c03e"
+    },
+    "472": {
+      "id": 472,
+      "thm_name": "Veil.TwoState_sound'_ret_unit",
+      "lean_root": "veil",
+      "rel_path": "Veil/DSL/Action/Theory.lean",
+      "category": "Framework",
+      "record_sha256": "cc29109d34de9c81a1d815e985852befbf26333b755ef2de74cf601072226442"
+    },
+    "473": {
+      "id": 473,
+      "thm_name": "FBA.slice_blocks_ne",
+      "lean_root": "veil",
+      "rel_path": "Examples/StellarConsensus/SCPTheory.lean",
+      "category": "Framework",
+      "record_sha256": "e95d2c2196c9d9251f7036bbe046154ce2ab8c11a7802e917fe2242f15cfe3fb"
+    },
+    "474": {
+      "id": 474,
+      "thm_name": "Term.lower_ite_hEquiv",
+      "lean_root": "verified-compiler",
+      "rel_path": "VerifiedCompiler.lean",
+      "category": "Compiler",
+      "record_sha256": "f2cf7342f37e72f638902e54736263bd8161a45e51fcecf906892c80e3f6a671"
+    },
+    "475": {
+      "id": 475,
+      "thm_name": "Term.lower_and_hEquiv",
+      "lean_root": "verified-compiler",
+      "rel_path": "VerifiedCompiler.lean",
+      "category": "Compiler",
+      "record_sha256": "bbfcf7484ed487ab5fdb895079ca5702f0d9a3d8641f4ac0cdb22c0f24878705"
+    },
+    "476": {
+      "id": 476,
+      "thm_name": "Term.lower_hEquiv",
+      "lean_root": "verified-compiler",
+      "rel_path": "VerifiedCompiler.lean",
+      "category": "Compiler",
+      "record_sha256": "5c0bfe87bc1d92eb7ff94f47fb694ae3b894b79ce0c994a6a53048d4161e6544"
+    },
+    "477": {
+      "id": 477,
+      "thm_name": "Term.constFold_equiv",
+      "lean_root": "verified-compiler",
+      "rel_path": "VerifiedCompiler.lean",
+      "category": "Compiler",
+      "record_sha256": "7c30339843bebd64ce0c3d209d308a8fad7dabb7be70eccbfd253e528a6ebd15"
+    },
+    "478": {
+      "id": 478,
+      "thm_name": "Program.exec_prog_mono",
+      "lean_root": "verified-compiler",
+      "rel_path": "VerifiedCompiler.lean",
+      "category": "Compiler",
+      "record_sha256": "4f0f8395f7878047d7e64b8d66cd82f175fc4f68017c1298a0e650b50da3c4e8"
+    },
+    "479": {
+      "id": 479,
+      "thm_name": "Program.exec_stack_mono",
+      "lean_root": "verified-compiler",
+      "rel_path": "VerifiedCompiler.lean",
+      "category": "Compiler",
+      "record_sha256": "f14708ce0aaef65ffe2c817c2dac75e7690863376699b5876cd5a74d57dd8cdf"
+    },
+    "480": {
+      "id": 480,
+      "thm_name": "Intmax.lemma4",
+      "lean_root": "FVIntmax",
+      "rel_path": "FVIntmax/Lemma4.lean",
+      "category": "Applied verif.",
+      "record_sha256": "0159f300a6d34d360de13f008dd24b89db25553b86f3910c75d20c74c0845536"
+    },
+    "481": {
+      "id": 481,
+      "thm_name": "add_aux1",
+      "lean_root": "wadray_verification",
+      "rel_path": "WadrayVerification/WadraySigned.lean",
+      "category": "Applied verif.",
+      "record_sha256": "4e34b212f87dbd0bc71d34565966c250d990f2c797cc21c90879e1437b28cf33"
+    },
+    "482": {
+      "id": 482,
+      "thm_name": "RAY_SCALE_val",
+      "lean_root": "wadray_verification",
+      "rel_path": "WadrayVerification/Wadray.lean",
+      "category": "Applied verif.",
+      "record_sha256": "7056567202361facbcc77ef136daf53c8e21873968ca8351d4c34caff3e13ac7"
+    },
+    "483": {
+      "id": 483,
+      "thm_name": "Wad.toRat_div",
+      "lean_root": "wadray_verification",
+      "rel_path": "WadrayVerification/Aux.lean",
+      "category": "Applied verif.",
+      "record_sha256": "2dacdd43d34c317c942b576361118c38635bf411cd9c67b6938f29cf5bd9a8c2"
+    },
+    "484": {
+      "id": 484,
+      "thm_name": "SignedWad.toRat_mul",
+      "lean_root": "wadray_verification",
+      "rel_path": "WadrayVerification/Aux.lean",
+      "category": "Applied verif.",
+      "record_sha256": "fab508b6c265ad4f04eca5cbe1d007c63d81325f9b53d3f20ea2408d3454c868"
+    },
+    "485": {
+      "id": 485,
+      "thm_name": "SignedRay.toRat_mul",
+      "lean_root": "wadray_verification",
+      "rel_path": "WadrayVerification/Aux.lean",
+      "category": "Applied verif.",
+      "record_sha256": "c35b645069f04d8f95aa7a214224c6dadff7ad3c7f8111f9c6c2a7aa61719c1a"
+    },
+    "486": {
+      "id": 486,
+      "thm_name": "Wad.toRat_mul",
+      "lean_root": "wadray_verification",
+      "rel_path": "WadrayVerification/Aux.lean",
+      "category": "Applied verif.",
+      "record_sha256": "39a0968232ed00afe84119389d34f3d212c2a170bb3423db45b9ee6e34531b98"
+    },
+    "487": {
+      "id": 487,
+      "thm_name": "Ray.toRat_mul",
+      "lean_root": "wadray_verification",
+      "rel_path": "WadrayVerification/Aux.lean",
+      "category": "Applied verif.",
+      "record_sha256": "435419816da705d1f8d097aa21e2a18a63c7d5da1ec818a3e90aba5f1ca9074e"
+    },
+    "488": {
+      "id": 488,
+      "thm_name": "SignedWad.toRat_div",
+      "lean_root": "wadray_verification",
+      "rel_path": "WadrayVerification/Aux.lean",
+      "category": "Applied verif.",
+      "record_sha256": "db338f55b55aafe806bbf1b87e405eeca6a8903fc9706029dc7104aaebe18c79"
+    },
+    "489": {
+      "id": 489,
+      "thm_name": "SignedRay.toRat_div",
+      "lean_root": "wadray_verification",
+      "rel_path": "WadrayVerification/Aux.lean",
+      "category": "Applied verif.",
+      "record_sha256": "4a3422ea8ed30ae5cf8d6e5a3bf928c9a6fba78f49f9822adae946e3918ebfec"
+    },
+    "490": {
+      "id": 490,
+      "thm_name": "Wad.toRat_nonneg",
+      "lean_root": "wadray_verification",
+      "rel_path": "WadrayVerification/Aux.lean",
+      "category": "Applied verif.",
+      "record_sha256": "a186f1a0d923a64657188864c72a588e71eaaadd2b770b2f8c4769f2b9c90138"
+    },
+    "491": {
+      "id": 491,
+      "thm_name": "SignedWad.val_eq_of_toRat_eq",
+      "lean_root": "wadray_verification",
+      "rel_path": "WadrayVerification/Aux.lean",
+      "category": "Applied verif.",
+      "record_sha256": "b33d40fe7e68e181c3143fdb1b8fbea24202a80a0e34155fb12c05eb54310aa4"
+    },
+    "492": {
+      "id": 492,
+      "thm_name": "SignedRay.val_eq_of_toRat_eq",
+      "lean_root": "wadray_verification",
+      "rel_path": "WadrayVerification/Aux.lean",
+      "category": "Applied verif.",
+      "record_sha256": "5b0447250a974f18487309de67bfe9567c47dd961c43e290ac1f48e135116cdb"
+    },
+    "493": {
+      "id": 493,
+      "thm_name": "Ray.toRat_nonneg",
+      "lean_root": "wadray_verification",
+      "rel_path": "WadrayVerification/Aux.lean",
+      "category": "Applied verif.",
+      "record_sha256": "532d52df60e6a2b9d3a8f4e11da210e96a24ec33684375a74219f40200506c2f"
+    },
+    "494": {
+      "id": 494,
+      "thm_name": "Ray.toRat_div",
+      "lean_root": "wadray_verification",
+      "rel_path": "WadrayVerification/Aux.lean",
+      "category": "Applied verif.",
+      "record_sha256": "ee869c939b57d96c8d00e030731cc1500e5a42ef1d7f9405bde2bf5a17d8b232"
+    },
+    "495": {
+      "id": 495,
+      "thm_name": "SignedWad.toRat_eq_zero_iff",
+      "lean_root": "wadray_verification",
+      "rel_path": "WadrayVerification/Aux.lean",
+      "category": "Applied verif.",
+      "record_sha256": "774284f1f36d43b909936aa016fe0e830c599e942c1629abf1b12e4e4737f7f4"
+    },
+    "496": {
+      "id": 496,
+      "thm_name": "SignedRay.toRat_eq_zero_iff",
+      "lean_root": "wadray_verification",
+      "rel_path": "WadrayVerification/Aux.lean",
+      "category": "Applied verif.",
+      "record_sha256": "087c62300459214dbce5fea166e298a39f2f43d1d2f9289f837c37662a252bb1"
+    },
+    "497": {
+      "id": 497,
+      "thm_name": "SignedWad.val_eq_zero_of_toRat_neg",
+      "lean_root": "wadray_verification",
+      "rel_path": "WadrayVerification/Aux.lean",
+      "category": "Applied verif.",
+      "record_sha256": "d86fe3158097a85c359c474ad6623b8147cc86b2e52308957917aa62e4d7188d"
+    },
+    "498": {
+      "id": 498,
+      "thm_name": "SignedWad.val_eq_zero_of_toRat_neg'",
+      "lean_root": "wadray_verification",
+      "rel_path": "WadrayVerification/Aux.lean",
+      "category": "Applied verif.",
+      "record_sha256": "9dc28474db740bca7247a92145ad0593b1cdf9357dfa7699778595110435e61e"
+    },
+    "499": {
+      "id": 499,
+      "thm_name": "Wad.toRat_le_toRat_of_val_le_val",
+      "lean_root": "wadray_verification",
+      "rel_path": "WadrayVerification/Aux.lean",
+      "category": "Applied verif.",
+      "record_sha256": "31612b194d978dfee245bc1118d29c810c88dfdd820b93fa022c4d351c92aaee"
+    },
+    "500": {
+      "id": 500,
+      "thm_name": "Wad.toRat_lt_toRat_of_val_lt_val",
+      "lean_root": "wadray_verification",
+      "rel_path": "WadrayVerification/Aux.lean",
+      "category": "Applied verif.",
+      "record_sha256": "4955a39cb47da89c32664d5e13d1875315dd4a3ab5f13c94da34902cde1b52da"
+    }
+  }
+}

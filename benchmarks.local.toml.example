@@ -1,0 +1,8 @@
+# Copy this file to benchmarks.local.toml and replace only the paths you use.
+# Every configured value must be an absolute path to an existing source directory.
+schema_version = 1
+
+[sources]
+code_prover_v2 = "/absolute/path/to/Code-Prover-V2"
+verisoftbench_release = "/absolute/path/to/VeriSoftBench"
+vero = "/absolute/path/to/Vero"

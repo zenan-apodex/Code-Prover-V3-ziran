@@ -1,0 +1,25 @@
+schema_version = 1
+
+[benchmarks.putnambench]
+display_name = "PutnamBench aligned Lean 4.28 campaign"
+source_key = "code_prover_v2"
+environment_variable = "CODE_PROVER_V2_ROOT"
+default_view = "tasks/_campaign_views/putnambench-672"
+
+[benchmarks.vericoding]
+display_name = "VeriCoding aligned Lean 4.28 campaign"
+source_key = "code_prover_v2"
+environment_variable = "CODE_PROVER_V2_ROOT"
+default_view = "tasks/_campaign_views/vericoding-aligned-lean428-2012"
+
+[benchmarks.verisoftbench]
+display_name = "VeriSoftBench filtered-context campaign"
+source_key = "verisoftbench_release"
+environment_variable = "VERISOFTBENCH_RELEASE_ROOT"
+default_view = "tasks/_campaign_views/verisoftbench-500"
+
+[benchmarks.vero]
+display_name = "Vero proof campaign"
+source_key = "vero"
+environment_variable = "VERO_BENCHMARK_ROOT"
+default_view = "tasks/_campaign_views/vero-proof-44"

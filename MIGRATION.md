@@ -17,6 +17,9 @@
    只有实测发现能力缺口时才按 V3 方式重写。
 5. **不丢本地状态。** V2 的 local-only refs、stash、tracked/untracked 改动全部完成
    分类和持久化之前，不执行 archive/delete/clean。
+6. **代码与大规模数据分离。** Git 保存 materializer/grader、source revision、hash chain
+   和轻量 descriptor；机器绝对路径只进本地忽略配置，批量 Harbor task 生成到
+   `tasks/_campaign_views/`，不提交 payload。
 
 ## 2026-07-21 基线
 
@@ -64,7 +67,7 @@ V3 架构实现；`部分覆盖` 表示已有基础但尚未证明与 V2 关键�
 | SGLang model server | 部分覆盖 | 核对 V2 `a8d7cb5` 的 context soft-limit 行为，不复制旧 prove configs |
 | Miles token-level episode + checkpoint convert | 部分覆盖 | 补 source provenance、preflight、resume/offload 验收；先决定 sync/async contract |
 | 可审计 pass@k、paired metrics、source attestation | V3 原生（首版） | `tools/harbor_results.py`；仍需 Harbor oracle/nop 新跑与跨 agent paired 实跑 |
-| Putnam/VeriSoft/VeriCoding/Vero campaign | 部分覆盖 | 先做数据集清单差异；缺失数据按 task+manifest 原子迁移 |
+| Putnam/VeriSoft/VeriCoding/Vero campaign | 已迁（runtime gate 待补） | 四条 frozen identity/contract 均由 pinned external source + ignored materializer 重建；Git 不保存批量 task payload |
 | agent deadline/budget/truncation/repair guards | 部分覆盖 | 逐行为对照，不迁 `claude_direct` 大文件或其重构历史 |
 | V2 Web/API/data panel | Abandon（默认） | 使用 Harbor viewer；只有实测缺口才做 V3 薄层工具 |
 | vendored opengauss/自研 agent harness | Abandon | Harbor/独立 V3 agents 已替代 |
@@ -110,8 +113,21 @@ V3 架构实现；`部分覆盖` 表示已有基础但尚未证明与 V2 关键�
 
 ### 3. 补齐 benchmark campaign
 
-- 对比 V2 frozen manifests/4.28 overlays 与 V3 `tasks/`，先输出缺失/等价/冲突清单。
-- 数据、task metadata、verifier 快照、manifest 和配置作为一个原子 feature。
+- [x] 保存四条 frozen campaign 的 registry、ordered IDs、逐题/聚合 hash、toolchain 与
+  native evaluator/prompt pins；committed-only `verify` 不依赖工作站绝对路径。
+- [x] VeriCoding 2,012 selection 在 materialize 时链接 1,874 个 pristine canonical task，
+  并只在 ignored view 中复制覆盖 138 个 Lean 4.28 compatibility task；不改写 Git 中
+  `tasks/vericoding_lean`。
+- [x] PutnamBench 672 从 pinned V2 source 重新生成到 ignored view，生成前验证 upstream
+  revision、registry、source/rewrite aggregate、Lake/Mathlib 和既有 672/672 audit；不提交
+  5,377 个派生 task 文件。
+- [x] VeriSoftBench 500 与 Vero 44 保持 native source/materializer/grader 模式，分别绑定
+  repository/toolchain pins 与 fresh build/axiom-audit contract。
+- [ ] 补 runtime gate：PutnamBench 672 全量 compile/axiom；VeriSoftBench 约 110 GB
+  pinned image 的 oracle/nop；Vero 44 fresh Docker/Lean build；VeriCoding 五条人工语义复核。
+
+本地 source 通过 `benchmarks.local.toml`、环境变量或显式 CLI 参数解析。路径本身不构成
+provenance；只有 revision/tree/content hashes 全部匹配后才能生成运行视图。
 
 ### 4. 收敛 RL/Miles
 
@@ -146,6 +162,6 @@ checkout：
 1. V2 来源（完整 SHA、路径、保留的行为）；
 2. V3-native 设计和明确未迁内容；
 3. focused tests/fixtures；
-4. 相关 dataset validate 与正/负 smoke 结果；
+4. 相关 materialized dataset validate 与正/负 smoke 结果；
 5. provenance/manifest 更新；
 6. 回滚方式及本表状态更新。
