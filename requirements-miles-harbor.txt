@@ -1,0 +1,8 @@
+-r requirements-harbor.txt
+
+# Versions used by the audited official-Miles/V3 smoke environment.
+e2b==2.23.0
+fastapi==0.139.2
+httpx==0.28.1
+pydantic==2.13.4
+uvicorn==0.51.0
