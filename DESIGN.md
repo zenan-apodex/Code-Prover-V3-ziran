@@ -2,7 +2,10 @@
 
 > V3 = 用 [Harbor](https://github.com/harbor-framework/harbor)（Terminal-Bench 2.0 官方 harness）
 > 替换 V2 自研的 agent 编排层（`ExperimentRunner` / `agents/` / vendored opengauss harness），
-> 保留 V2 已验证的领域资产：Lean 4 spec 任务契约、判分语义、agent skill、（可选的）formalize pipeline。
+> 保留 V2 已验证且仍属于产品的领域资产：Lean 4 spec 任务契约、判分语义、模型服务与 RL 集成契约。
+
+逐 feature 的迁移状态、明确 abandon 项和 V2 最终退役门槛见
+[MIGRATION.md](MIGRATION.md)。
 
 ## 1. 动机
 

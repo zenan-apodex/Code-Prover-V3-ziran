@@ -8,7 +8,8 @@
 git clone https://github.com/Lizn-zn/Code-Prover-V3.git && cd Code-Prover-V3
 
 # harbor 需要 Python >= 3.13
-uv venv .venv --python 3.13 && uv pip install -p .venv/bin/python harbor
+uv venv .venv --python 3.13
+uv pip install -p .venv/bin/python -r requirements-harbor.txt
 
 # DSW 的 docker 缺 compose v2 插件，装一次：
 mkdir -p ~/.docker/cli-plugins && curl -fsSL -o ~/.docker/cli-plugins/docker-compose \
