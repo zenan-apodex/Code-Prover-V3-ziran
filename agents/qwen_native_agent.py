@@ -32,6 +32,7 @@ import os
 import random
 import re
 import shlex
+import uuid
 from pathlib import Path
 
 import httpx
@@ -141,6 +142,12 @@ class QwenNativeAgent(BaseAgent):
         self._tool_primer = bool(tool_primer)
         self._headers = {"Authorization": f"Bearer {self._api_key}",
                          **(extra_headers or {})}
+        # llm-hub account-pool routing: one instance == one trial, and a
+        # stable session id pins every call of the trial to one underlying
+        # account so the (10x cheaper) prompt cache survives across calls.
+        # Per-trial uuid, NOT config-level: a shared value would funnel all
+        # concurrent trials onto a single pool account.
+        self._headers.setdefault("X-Llmhub-Session", str(uuid.uuid4()))
         self._max_api_calls = int(max_api_calls)
         self._max_tokens = int(max_tokens)
         self._temperature = float(temperature)
