@@ -1,31 +1,32 @@
-# TODO — 下一步(更新于 2026-07-22)
+# TODO — 下一步(更新于 2026-07-24)
 
-## 当前状态快照
+## 当前状态快照(07-24 01:15 UTC)
 
-- **蒸馏主线(dpsk → SFT 数据)**:数据集 `data/coding-v2.1-full-20260721`
-  (25,880 题,6 轮 = 5×5000 + 880,seed 20260721)。Round1 进度:
-  4,468/5,000 clean(1,895 solved,42.4%),**532 题待补**(e2b.dev 沙箱
-  07-22 05:49-06:07 UTC 被池控制器误杀)。transcript 蒸馏链路已验证:
-  think 覆盖 99.97%+,codec 可逐字回放;每题均值 ~1.2M in / 33K out tokens,
-  round1 成本预估 $307-$1,155(视 prompt cache 命中)。
-- **内部 Aliyun e2b 平台迁移**(替代 e2b.dev,目标集群 **JB/Johor**):
-  代码全部完成并验证(`f6c7d0fa0` + `60256c289`)——harbor aliyun 模式、
-  双集群 per-cluster key、claim/上传/MCP/DPSK 全链路 E2E 通。
-  **阻塞在平台侧资源**,见 §1。
-- **math 新题集(已洗完,07-23)**:`data/math-v0-unsolved-20260722/tasks/`
-  38,457 个 harbor 任务目录(manifest 45fe10b0…),源自 numina 未解题
-  (attempted-unsolved 10,966 + never-attempted 27,491,task.toml
-  metadata.pool 区分)。生成:`dataset.py make-math`(math flavor:单定理
-  + NL 题面只读注释 + proof/proof_aux 可编辑区,判分器零改动)。
-  验证:38,457/38,457 validate 通过;200 题抽样在 4.28 镜像编译
-  **200/200 全过**(题源 4.29,漂移为零,无需预编译过滤);spec_intact
-  接受合法编辑/拒绝改陈述;refresh 圆环字节稳定。
-  **round1(5K)07-23 在 SG 500 并发完赛**(`distill-math-round1`,4h16m):
-  solve 1,331/5,000(26.6%),spec_intact 100%,think 99.97%,异常仅 8
-  (7 RemoteProtocolError + 1 TypeError,rescue 集极小);均值 1.34M in /
-  50K out tokens/题,轮成本 $292(全缓存)-$1,977(全 miss)。吞吐
-  ~1,200 题/h @500 并发,SG 平台零沙箱事故。rounds 2-8 待启动
-  (seed 20260723 分配已就位,每轮启动前确认)。
+- **coding 蒸馏主线**:v2.1 campaign(25,880 题,6 轮)已收官,solved
+  9,505/25,880 → 未解题 carve 成 `data/coding-v2.2-unsolved-20260723`
+  (16,375 题,4 轮,seed 20260723)。**v2.2 campaign 07-23 全部跑完**:
+  solved 3,334/16,375(20.4%;r1 906 / r2 1,054 / r3 1,083 / r4 291),
+  SFT 导出在 `data/coding-v2.2-unsolved-20260723/distilled/round{1..4}-solved.jsonl`
+  (3,334 条;v2.3 同款在其 `distilled/`,1,587 条;目录约定与 v2.1 一致)。未解题再 carve 成
+  `data/coding-v2.3-unsolved-20260723`(13,041 题,3 轮 5000/5000/3041,
+  seed 20260723,工具 `tools/carve_unsolved.py`)。**v2.3 campaign 07-23
+  17:19 启动**(e2b.dev,1024 并发):r1 完(solved 396,exceptions
+  2,153 ⚠️ 晚间 e2b.dev 波动)、r2 完(solved 730,exc 2)、r3 接近完成
+  (solved 461,exc 1)。
+- **coding-v1 线**(`data/coding-v1-unsolved-20260721`,round1 4,836 题
+  @ JB zenan-no-internet):3,481/4,836,solved 313,exceptions 2,224 ⚠️
+  (大部分是 env-start 超时 bug 时代坏账,见已知坑)。harbor 续跑中。
+- **math 线**(`data/math-v0-unsolved-20260722`,38,457 题,8 轮,
+  driver `tools/run_math_rounds.sh`):round1 完(solved 1,331/5,000,
+  26.6%,异常仅 8);round2 完但成绩报废(solved 221/5,000,4,254
+  ConnectError——11:40 误双开 driver 两个 harbor 同跑所致,待 rescue);
+  round3 进行中(1,602/5,000,solved 95,exc 1,298 ⚠️ 事故窗口坏账)。
+  driver 自动跑到 round8。
+- **07-23 事故日汇总**(细节见"已知坑"):DSW 机器 13:00 重启杀光全部
+  driver(JB 泄漏 119 个沙箱已清,工具 `tools/kill_jb_orphans.py`);
+  SG DNS 事故(dnsmasq shim 绕过,DSW 重启需重做);env-start 超时 bug
+  (multiplier=3 修复);改 config 后 resume 三层补丁;18:46 两个 aliyun
+  harbor 被不明强杀(无 OOM/无日志),07-24 01:12 重新拉起。
 - **RL(miles)**:rollout 端到端已通,SMOKE 冒烟通过(07-22);
   下一步去掉 `--debug-rollout-only` 小步跑真 GRPO。
 
@@ -34,8 +35,8 @@
 - [x] **SG 已扩容 2c/8GiB 并冒烟通过**(07-23):reward 1.0 全绿、
       think 40/40、transcript 完整(`smoke-dpsk-distill-aliyun-sg2c8g`,
       8min E2E)。2 CPU 判分够用。
-- [ ] **JB 集群扩容未生效**:强制新 pod 仍 1c/2GB,跟平台确认 JB 的
-      变更是否已发(JB 其余全就绪:key/johor ACR 镜像/claim)。
+- [x] **JB 集群扩容已生效 2c/8GiB**(07-23 Zenan 确认;此前"强制新 pod
+      仍 1c/2GB"的观察已过时)。
 - [ ] **resourcequota**:128 并发起步(512 核/1TB),目标 512 并发
       (2048 核/4TB,可后扩)。
 - [x] **镜像路线已解决**:主用 johor ACR
@@ -52,18 +53,17 @@
 
 ## 2. 蒸馏 campaign
 
-- [ ] **532 题 round1 补漏**(待定:等 JB 就绪一起跑 vs 先用 e2b.dev
-      现有模板清掉,约半小时+)。
-- [ ] JB sandboxset 扩到 4c/8GB 后:直接重跑
-      `configs/smoke-dpsk-distill-aliyun.yaml`(已切 jb + Docker Hub 镜像),
-      期望 reward 1.0。
+- [ ] **集中 rescue**(各轮跑完后一起做,exception 任务都在,不丢):
+      math round2(4,254 ConnectError)、math round3(1,298)、
+      v1 round1(2,224)、v2.3 round1(2,153)。
+      `distill_ops rescue --job jobs/<job> --round roundN`(注意二次
+      rescue 换 --out,materialize 只增不删)。
+- [ ] **导出**:v1 / math / v2.3 各 campaign 收官后
+      `distill_ops collect --jobs ... --solved-only`(v2.2 已导出)。
+- [ ] v2.3 跑完后:如继续 carve v2.4,用 `tools/carve_unsolved.py`
+      (用法见 CMD.md §4)。
 - [ ] `tools/distill_ops.py` 的 CONFIG_TEMPLATE 切 aliyun 模式
-      (现在渲染的还是 e2b.dev 配置)。
-- [ ] rounds 2-6:`distill_ops rounds` + `config` 生成,逐轮启动
-      (**每次启动前需确认**)。
-- [ ] round1 导出:`distill_ops collect --jobs jobs/distill-dpsk-round1
-      jobs/distill-dpsk-round1-rescue jobs/distill-dpsk-round1-rescue-e2b
-      ... --solved-only`。
+      (现在渲染的还是 e2b.dev 配置;math 线是 sed 改 round1 yaml 绕的)。
 
 ## 3. RL 线
 
@@ -104,8 +104,23 @@
   ~25min 全静默才恢复(风暴后连单发都挂,pod state=dead)。修复:aliyun
   模式 create 加信号量(`create_concurrency`,默认 24,tools/e2b_env.py)
   ——只限"同时在建",跑的并发不受限;节点缓存热后 create ~2min,不再触发。
-  新集群/新镜像首跑务必带此限流。另:harbor 同 job 改 config 不能 resume
-  (FileExistsError),零产出时直接删 job 目录重开。
+  新集群/新镜像首跑务必带此限流。
+- **env-start 超时 bug(07-23 实锤)**:harbor 环境启动限时 1800s **从
+  trial 排队就计时**,包含在 create_concurrency 信号量上排队的时间;
+  500 并发 ÷ 24 create 槽 ⇒ 队尾等 40-50min ⇒ 成批
+  `Environment start timed out after 1800s`(v1/math 数千 exception 的
+  主因)。修复:job config 顶层 `environment_build_timeout_multiplier: 3`
+  (见 configs/distill-dpsk-v1-round1.yaml 注释;只影响环境启动容忍)。
+- **改 config 后 resume 旧 job = 三层存档补丁**(07-23 连环崩三次定位):
+  harbor 全等比较,缺一层就崩——① `jobs/<job>/config.json` 不一致 →
+  启动秒崩 FileExistsError;② **每个 trial** 的
+  `jobs/<job>/<trial>/config.json` 不一致 → 对账阶段
+  ValueError(trial 多时 NFS 要 5-20min 才走到,像"启动成功后又崩");
+  ③ `lock.json` trials[*]。补法:json 读入→设字段→写回。
+  或换新 job 目录(丢已完成 trial)。
+- **driver 严禁双开**:math round2 报废(221/5000)就是 11:40 误开第二个
+  driver,两个 harbor 同 job 并跑 + `>` 截断日志。重启 driver 前必
+  `pgrep -f run_math_rounds`/`run_distill_rounds` 确认无存活。
 
 ### harbor / e2b 通用
 - harbor 自定义 env 构造参数必须嵌在 `environment.kwargs` 下,顶层同名
