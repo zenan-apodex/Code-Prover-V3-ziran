@@ -14,24 +14,29 @@ from __future__ import annotations
 import asyncio
 import hashlib
 import hmac
+import ipaddress
+import logging
+import math
 import os
 import re
 import time
 import uuid
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
-from urllib.parse import urlsplit
+from typing import Annotated, Any
+from urllib.parse import urlsplit, urlunsplit
 
-from fastapi import FastAPI, Header, HTTPException
+from fastapi import FastAPI, Header, HTTPException, Request
 from pydantic import BaseModel, ConfigDict, Field
 
 app = FastAPI(title="CodeProver V3 Miles Harbor adapter")
+logger = logging.getLogger(__name__)
 
 _ACTIVE_TRIALS: dict[str, set[asyncio.Task[Any]]] = {}
 _RUN_SEMAPHORE: asyncio.Semaphore | None = None
 _SAFE_NAME_RE = re.compile(r"[^A-Za-z0-9_.-]+")
 _INFRA_STOP_REASONS = frozenset({"request_transport_error", "request_rejected_400"})
+SessionInstanceId = Annotated[str, Field(pattern=r"^[0-9a-f]{32}$")]
 
 
 class RunRequest(BaseModel):
@@ -44,13 +49,15 @@ class RunRequest(BaseModel):
     sampling_params: dict[str, Any] = Field(default_factory=dict)
     max_seq_len: int | None = Field(default=None, gt=0)
     session_server_id: str | None = None
-    session_server_instance_id: str | None = None
+    session_server_instance_id: SessionInstanceId
 
 
 class FlushRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    session_server_instance_ids: list[str] = Field(default_factory=list)
+    session_server_instance_ids: list[SessionInstanceId] = Field(
+        default_factory=list, max_length=10000
+    )
 
 
 @dataclass(frozen=True)
@@ -70,6 +77,9 @@ class ServerSettings:
     context_soft_limit_tokens: int
     save_transcript: bool
     max_concurrent: int
+    router_allowed_hosts: tuple[str, ...]
+    trial_cleanup_margin_sec: float
+    flush_timeout_sec: float
 
     @classmethod
     def from_env(cls) -> "ServerSettings":
@@ -79,26 +89,30 @@ class ServerSettings:
             raise RuntimeError("CODEPROVER_TASKS_DIR is required")
         if not image:
             raise RuntimeError("CODEPROVER_E2B_IMAGE is required")
-        return cls(
+        router_allowed_hosts = tuple(
+            host.strip().lower()
+            for host in os.getenv("CODEPROVER_MILES_ROUTER_ALLOWED_HOSTS", "").split(
+                ","
+            )
+            if host.strip()
+        )
+        if not router_allowed_hosts:
+            raise RuntimeError("CODEPROVER_MILES_ROUTER_ALLOWED_HOSTS is required")
+
+        settings = cls(
             tasks_dir=Path(tasks_dir),
             trials_dir=Path(os.getenv("CODEPROVER_TRIALS_DIR", "jobs/miles-harbor")),
             e2b_cluster=os.getenv("CODEPROVER_E2B_CLUSTER", "sg"),
-            e2b_template=os.getenv(
-                "CODEPROVER_E2B_TEMPLATE", "zenan-allow-internet"
-            ),
+            e2b_template=os.getenv("CODEPROVER_E2B_TEMPLATE", "zenan-allow-internet"),
             e2b_image=image,
             sandbox_timeout_sec=int(
-                os.getenv("CODEPROVER_E2B_SANDBOX_TIMEOUT_SEC", "7200")
+                os.getenv("CODEPROVER_E2B_SANDBOX_TIMEOUT_SEC", "7800")
             ),
-            claim_timeout_sec=int(
-                os.getenv("CODEPROVER_E2B_CLAIM_TIMEOUT_SEC", "540")
-            ),
+            claim_timeout_sec=int(os.getenv("CODEPROVER_E2B_CLAIM_TIMEOUT_SEC", "540")),
             wait_ready_timeout_sec=int(
                 os.getenv("CODEPROVER_E2B_WAIT_READY_TIMEOUT_SEC", "540")
             ),
-            agent_timeout_sec=float(
-                os.getenv("CODEPROVER_AGENT_TIMEOUT_SEC", "5400")
-            ),
+            agent_timeout_sec=float(os.getenv("CODEPROVER_AGENT_TIMEOUT_SEC", "5400")),
             model_request_timeout_sec=float(
                 os.getenv("CODEPROVER_MODEL_REQUEST_TIMEOUT_SEC", "1800")
             ),
@@ -110,8 +124,39 @@ class ServerSettings:
                 os.getenv("CODEPROVER_CONTEXT_SOFT_LIMIT_TOKENS", "100000")
             ),
             save_transcript=os.getenv("CODEPROVER_SAVE_TRANSCRIPT", "1") != "0",
-            max_concurrent=max(1, int(os.getenv("CODEPROVER_AGENT_MAX_CONCURRENT", "8"))),
+            max_concurrent=max(
+                1, int(os.getenv("CODEPROVER_AGENT_MAX_CONCURRENT", "8"))
+            ),
+            router_allowed_hosts=router_allowed_hosts,
+            trial_cleanup_margin_sec=float(
+                os.getenv("CODEPROVER_TRIAL_CLEANUP_MARGIN_SEC", "300")
+            ),
+            flush_timeout_sec=float(os.getenv("CODEPROVER_FLUSH_TIMEOUT_SEC", "30")),
         )
+        positive_timeouts = {
+            "sandbox": settings.sandbox_timeout_sec,
+            "claim": settings.claim_timeout_sec,
+            "wait ready": settings.wait_ready_timeout_sec,
+            "agent": settings.agent_timeout_sec,
+            "model request": settings.model_request_timeout_sec,
+            "verifier": settings.verifier_timeout_sec,
+            "cleanup margin": settings.trial_cleanup_margin_sec,
+            "flush": settings.flush_timeout_sec,
+        }
+        invalid = [name for name, value in positive_timeouts.items() if value <= 0]
+        if invalid:
+            raise RuntimeError(f"timeouts must be positive: {', '.join(invalid)}")
+        required_lease = (
+            settings.agent_timeout_sec
+            + settings.verifier_timeout_sec
+            + settings.trial_cleanup_margin_sec
+        )
+        if settings.sandbox_timeout_sec < required_lease:
+            raise RuntimeError(
+                "CODEPROVER_E2B_SANDBOX_TIMEOUT_SEC must cover the agent and "
+                "verifier timeouts plus CODEPROVER_TRIAL_CLEANUP_MARGIN_SEC"
+            )
+        return settings
 
 
 def resolve_task_dir(tasks_dir: Path, task_name: str) -> Path:
@@ -129,18 +174,35 @@ def resolve_task_dir(tasks_dir: Path, task_name: str) -> Path:
     return candidate
 
 
-def _validate_session_url(base_url: str) -> str:
+def _validate_session_url(base_url: str, allowed_hosts: tuple[str, ...]) -> str:
     parsed = urlsplit(base_url.rstrip("/"))
     if parsed.scheme not in {"http", "https"} or not parsed.netloc:
         raise ValueError("base_url must be an HTTP(S) URL")
-    url = base_url.rstrip("/")
-    return url if url.endswith("/v1") else f"{url}/v1"
+    if parsed.username is not None or parsed.password is not None:
+        raise ValueError("base_url must not contain user information")
+    if parsed.query or parsed.fragment:
+        raise ValueError("base_url must not contain a query or fragment")
+    try:
+        host = parsed.hostname
+        parsed.port
+    except ValueError as exc:
+        raise ValueError("base_url contains an invalid port") from exc
+    if host is None or host.lower() not in allowed_hosts:
+        raise ValueError(
+            "base_url host is not in CODEPROVER_MILES_ROUTER_ALLOWED_HOSTS"
+        )
+    path = parsed.path.rstrip("/")
+    if not path.endswith("/v1"):
+        path += "/v1"
+    return urlunsplit((parsed.scheme, parsed.netloc, path, "", ""))
 
 
 def verify_instruction_sha256(task_dir: Path, expected: str) -> None:
     instruction_path = task_dir / "instruction.md"
     if not instruction_path.is_file():
-        raise FileNotFoundError(f"Harbor task is missing instruction.md: {task_dir.name}")
+        raise FileNotFoundError(
+            f"Harbor task is missing instruction.md: {task_dir.name}"
+        )
     actual = hashlib.sha256(instruction_path.read_bytes()).hexdigest()
     if not hmac.compare_digest(actual, expected):
         raise ValueError(
@@ -156,7 +218,9 @@ def build_agent_kwargs(request: RunRequest, settings: ServerSettings) -> dict[st
     for key in ("model", "messages"):
         sampling.pop(key, None)
     return {
-        "api_base": _validate_session_url(request.base_url),
+        "api_base": _validate_session_url(
+            request.base_url, settings.router_allowed_hosts
+        ),
         # QwenNativeAgent resolves this indirection at runtime and falls back
         # to dummy, so the persisted Harbor config never contains a secret.
         "api_key": "$CODEPROVER_MILES_API_KEY",
@@ -216,7 +280,8 @@ def _result_payload(result: Any, elapsed: float) -> dict[str, Any]:
         return {
             "exit_status": "infra_error",
             "infra_error": _safe_exception(
-                "MissingVerifierReward", "Harbor verifier did not produce rewards.reward"
+                "MissingVerifierReward",
+                "Harbor verifier did not produce rewards.reward",
             ),
             "agent_metrics": {"total_time": elapsed},
         }
@@ -240,8 +305,25 @@ def _result_payload(result: Any, elapsed: float) -> dict[str, Any]:
         **context_metadata,
     }
     metrics = {key: value for key, value in metrics.items() if value is not None}
+    try:
+        reward = float(rewards["reward"])
+    except (TypeError, ValueError) as exc:
+        return {
+            "exit_status": "infra_error",
+            "infra_error": _safe_exception(type(exc).__name__, str(exc)),
+            "agent_metrics": metrics,
+        }
+    if not math.isfinite(reward):
+        return {
+            "exit_status": "infra_error",
+            "infra_error": _safe_exception(
+                "NonFiniteVerifierReward",
+                f"Harbor verifier produced a non-finite reward: {reward!r}",
+            ),
+            "agent_metrics": metrics,
+        }
     return {
-        "reward": float(rewards["reward"]),
+        "reward": reward,
         "exit_status": "completed",
         "eval_report": rewards,
         "agent_metrics": metrics,
@@ -314,12 +396,39 @@ def _unregister(instance_id: str | None, task: asyncio.Task[Any]) -> None:
         _ACTIVE_TRIALS.pop(instance_id, None)
 
 
-def _check_admin(authorization: str | None) -> None:
+async def _cancel_tasks(
+    tasks: set[asyncio.Task[Any]], timeout: float
+) -> tuple[int, int]:
+    for task in tasks:
+        task.cancel()
+    if not tasks:
+        return 0, 0
+    done, pending = await asyncio.wait(tasks, timeout=max(0.1, timeout))
+    return len(done), len(pending)
+
+
+def _is_loopback(host: str | None) -> bool:
+    if host is None:
+        return False
+    try:
+        return ipaddress.ip_address(host).is_loopback
+    except ValueError:
+        return host.lower() == "localhost"
+
+
+def _check_admin(authorization: str | None, client_host: str | None) -> None:
     secret = os.getenv(
         "CODEPROVER_HARBOR_ADMIN_SECRET", os.getenv("HARBOR_ADMIN_SECRET", "")
     )
     if not secret:
-        return
+        if os.getenv(
+            "CODEPROVER_ALLOW_UNAUTHENTICATED_LOOPBACK", ""
+        ) == "1" and _is_loopback(client_host):
+            return
+        raise HTTPException(
+            status_code=503,
+            detail="admin authorization is not configured",
+        )
     expected = f"Bearer {secret}"
     if authorization is None or not hmac.compare_digest(authorization, expected):
         raise HTTPException(status_code=403, detail="invalid admin authorization")
@@ -333,13 +442,37 @@ async def health() -> dict[str, Any]:
     }
 
 
+@app.get("/ready")
+async def ready() -> dict[str, Any]:
+    try:
+        settings = ServerSettings.from_env()
+        if not settings.tasks_dir.is_dir():
+            raise RuntimeError("CODEPROVER_TASKS_DIR is not a directory")
+        if (
+            not os.getenv("CODEPROVER_HARBOR_ADMIN_SECRET")
+            and not os.getenv("HARBOR_ADMIN_SECRET")
+            and os.getenv("CODEPROVER_ALLOW_UNAUTHENTICATED_LOOPBACK", "") != "1"
+        ):
+            raise RuntimeError("Harbor admin authorization is not configured")
+    except Exception as exc:
+        raise HTTPException(status_code=503, detail=str(exc)) from exc
+    return {
+        "status": "ready",
+        "active_trials": sum(len(tasks) for tasks in _ACTIVE_TRIALS.values()),
+    }
+
+
 @app.post("/run")
 async def run_endpoint(
     request: RunRequest,
+    http_request: Request,
     authorization: str | None = Header(default=None),
 ) -> dict[str, Any]:
     global _RUN_SEMAPHORE
-    _check_admin(authorization)
+    _check_admin(
+        authorization,
+        http_request.client.host if http_request.client is not None else None,
+    )
     current = asyncio.current_task()
     assert current is not None
     _register(request.session_server_instance_id, current)
@@ -352,10 +485,17 @@ async def run_endpoint(
     except asyncio.CancelledError:
         raise
     except Exception as exc:
+        request_id = uuid.uuid4().hex
+        logger.exception(
+            "V3 Harbor request %s failed for task %s and session instance %s",
+            request_id,
+            request.task_name,
+            request.session_server_instance_id,
+        )
         return {
             "exit_status": "infra_error",
             "infra_error": _safe_exception(type(exc).__name__, str(exc)),
-            "agent_metrics": {},
+            "agent_metrics": {"request_id": request_id},
         }
     finally:
         _unregister(request.session_server_instance_id, current)
@@ -364,17 +504,19 @@ async def run_endpoint(
 @app.post("/flush")
 async def flush_endpoint(
     request: FlushRequest,
+    http_request: Request,
     authorization: str | None = Header(default=None),
 ) -> dict[str, int]:
-    _check_admin(authorization)
+    _check_admin(
+        authorization,
+        http_request.client.host if http_request.client is not None else None,
+    )
     tasks = {
         task
         for instance_id in request.session_server_instance_ids
         for task in _ACTIVE_TRIALS.get(instance_id, set())
         if not task.done()
     }
-    for task in tasks:
-        task.cancel()
-    if tasks:
-        await asyncio.gather(*tasks, return_exceptions=True)
-    return {"cancelled": len(tasks)}
+    timeout = float(os.getenv("CODEPROVER_FLUSH_TIMEOUT_SEC", "30"))
+    cancelled, pending = await _cancel_tasks(tasks, timeout)
+    return {"cancelled": cancelled, "pending": pending}

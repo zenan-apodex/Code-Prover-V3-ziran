@@ -14,7 +14,9 @@ from __future__ import annotations
 import asyncio
 import hashlib
 import logging
+import math
 import os
+import re
 from collections.abc import Mapping
 from typing import Any
 from urllib.parse import urlsplit, urlunsplit
@@ -23,11 +25,26 @@ import httpx
 
 logger = logging.getLogger(__name__)
 
-_ACTIVE_INSTANCE_IDS: set[str] = set()
+_ACTIVE_INSTANCE_COUNTS: dict[str, int] = {}
+_SESSION_INSTANCE_RE = re.compile(r"^[0-9a-f]{32}$")
 
 
 class InfrastructureError(RuntimeError):
     """A rollout failed outside the policy/verifier reward contract."""
+
+
+def _register_instance(instance_id: str) -> None:
+    _ACTIVE_INSTANCE_COUNTS[instance_id] = (
+        _ACTIVE_INSTANCE_COUNTS.get(instance_id, 0) + 1
+    )
+
+
+def _unregister_instance(instance_id: str) -> None:
+    count = _ACTIVE_INSTANCE_COUNTS.get(instance_id, 0)
+    if count <= 1:
+        _ACTIVE_INSTANCE_COUNTS.pop(instance_id, None)
+    else:
+        _ACTIVE_INSTANCE_COUNTS[instance_id] = count - 1
 
 
 def _session_api_base(base_url: str) -> str:
@@ -92,14 +109,20 @@ def build_run_request(
         ),
         "sampling_params": dict(request_kwargs or {}),
     }
-    for key in (
-        "max_seq_len",
-        "session_server_id",
-        "session_server_instance_id",
-    ):
+    for key in ("max_seq_len", "session_server_id"):
         value = metadata.get(key)
         if value is not None:
             request[key] = value
+
+    instance_id = metadata.get("session_server_instance_id")
+    if not isinstance(instance_id, str) or not _SESSION_INSTANCE_RE.fullmatch(
+        instance_id
+    ):
+        raise ValueError(
+            "sample metadata must contain a 32-character lowercase-hex "
+            "session_server_instance_id"
+        )
+    request["session_server_instance_id"] = instance_id
     return request
 
 
@@ -155,8 +178,8 @@ async def run(
         return _infra_metadata(type(exc).__name__, str(exc))
 
     instance_id = request.get("session_server_instance_id")
-    if isinstance(instance_id, str) and instance_id:
-        _ACTIVE_INSTANCE_IDS.add(instance_id)
+    if isinstance(instance_id, str):
+        _register_instance(instance_id)
 
     server_url = os.getenv(
         "CODEPROVER_AGENT_SERVER_URL",
@@ -167,7 +190,7 @@ async def run(
     except asyncio.CancelledError:
         # Do not defeat Miles' cancellation semantics.  Ask Harbor to release
         # the E2B sandbox first, then propagate cancellation to the generator.
-        if isinstance(instance_id, str) and instance_id:
+        if isinstance(instance_id, str):
             try:
                 await asyncio.wait_for(
                     _post_json(
@@ -177,14 +200,18 @@ async def run(
                     timeout=10,
                 )
             except BaseException:  # best-effort cleanup while already cancelling
-                logger.warning("Failed to flush cancelled V3 Harbor trial", exc_info=True)
+                logger.warning(
+                    "Failed to flush cancelled V3 Harbor trial", exc_info=True
+                )
         raise
     except Exception as exc:  # network/server faults must never become reward 0
-        logger.exception("V3 Harbor rollout request failed for %s", request["task_name"])
+        logger.exception(
+            "V3 Harbor rollout request failed for %s", request["task_name"]
+        )
         return _infra_metadata(type(exc).__name__, str(exc))
     finally:
         if isinstance(instance_id, str):
-            _ACTIVE_INSTANCE_IDS.discard(instance_id)
+            _unregister_instance(instance_id)
 
     result: dict[str, Any] = {
         "exit_status": response.get("exit_status", ""),
@@ -196,7 +223,9 @@ async def run(
     if response.get("infra_error") is not None:
         result["infra_error"] = response["infra_error"]
     if "reward" not in result and "infra_error" not in result:
-        result.update(_infra_metadata("MissingReward", "Harbor response omitted reward"))
+        result.update(
+            _infra_metadata("MissingReward", "Harbor response omitted reward")
+        )
     return result
 
 
@@ -205,15 +234,22 @@ def _sample_reward(sample: Any) -> float:
     if not isinstance(metadata, Mapping):
         raise InfrastructureError("sample metadata is missing or is not a mapping")
     if metadata.get("infra_error") is not None:
-        raise InfrastructureError(f"rollout infrastructure error: {metadata['infra_error']!r}")
+        raise InfrastructureError(
+            f"rollout infrastructure error: {metadata['infra_error']!r}"
+        )
     if "reward" not in metadata:
         raise InfrastructureError("successful rollout metadata omitted reward")
     try:
-        return float(metadata["reward"])
+        reward = float(metadata["reward"])
     except (TypeError, ValueError) as exc:
         raise InfrastructureError(
             f"rollout reward is not numeric: {metadata['reward']!r}"
         ) from exc
+    if not math.isfinite(reward):
+        raise InfrastructureError(
+            f"rollout reward is not finite: {metadata['reward']!r}"
+        )
+    return reward
 
 
 def _mark_sample_aborted(sample: Any, error: InfrastructureError) -> float:
@@ -306,9 +342,7 @@ def fail_on_infrastructure(args: Any, samples: list[Any], **kwargs: Any) -> bool
                 else mismatches
             )
             if strict_mismatches:
-                failures.append(
-                    f"strict tito_session_mismatch: {strict_mismatches!r}"
-                )
+                failures.append(f"strict tito_session_mismatch: {strict_mismatches!r}")
                 continue
         status = getattr(sample, "status", None)
         if getattr(status, "value", status) == "aborted":
@@ -323,7 +357,7 @@ def fail_on_infrastructure(args: Any, samples: list[Any], **kwargs: Any) -> bool
 
 async def abort(args: Any) -> None:
     """Cancel in-flight Harbor trials during Miles oversampling teardown."""
-    instance_ids = set(_ACTIVE_INSTANCE_IDS)
+    instance_ids = set(_ACTIVE_INSTANCE_COUNTS)
     arg_instance_id = getattr(args, "session_server_instance_id", None)
     if isinstance(arg_instance_id, str) and arg_instance_id:
         instance_ids.add(arg_instance_id)
@@ -335,9 +369,13 @@ async def abort(args: Any) -> None:
         os.getenv("AGENT_SERVER_URL", "http://127.0.0.1:11000"),
     ).rstrip("/")
     try:
-        await _post_json(
-            f"{server_url}/flush",
-            {"session_server_instance_ids": sorted(instance_ids)},
+        timeout = max(0.1, float(os.getenv("CODEPROVER_ABORT_FLUSH_TIMEOUT_SEC", "15")))
+        await asyncio.wait_for(
+            _post_json(
+                f"{server_url}/flush",
+                {"session_server_instance_ids": sorted(instance_ids)},
+            ),
+            timeout=timeout,
         )
     except Exception:
         # Miles' abort hook is best-effort; local TITO/SGLang abort must proceed.
