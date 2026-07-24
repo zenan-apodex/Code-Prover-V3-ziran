@@ -1,0 +1,2949 @@
+{
+  "schema_version": 1,
+  "benchmark": "vericoding",
+  "track": "aligned-lean428",
+  "toolchain": "leanprover/lean4:v4.28.0",
+  "generated_at": "2026-07-19T02:13:10.090073+00:00",
+  "generator": "scripts/build_vericoding_lean428_manifest.py",
+  "selection_csv_sha256": "bbfa7a3554f18f65effd9b0bf7abcdba860e73df3ac75d5a80cea593dc6cbabb",
+  "initial_audit_path": "results/benchmark-campaign/vericoding-lean428-compat-20260719/full-2012.json",
+  "initial_audit_sha256": "b3203333ae5359b730d9dcbb3bf339668d746e645c15f44b6a6ad7b0b71d836e",
+  "final_audit_path": "results/benchmark-campaign/vericoding-lean428-compat-20260719/final-2012.json",
+  "final_audit_sha256": "dd242504f0e356c14a5b360806315cbf51072e6b2ac3cca583b8ac72710a01b3",
+  "final_audit_command": "python3 scripts/audit_vericoding_lean_compat.py --toolchain leanprover/lean4:v4.28.0 --parallel 48 --timeout-seconds 120 --overlay lean428 --output results/benchmark-campaign/vericoding-lean428-compat-20260719/final-2012.json",
+  "task_count": 138,
+  "tasks": {
+    "LA0004": {
+      "source": "apps",
+      "original_path": "specs/LA0004_specs.lean",
+      "overlay_path": "lean428/specs/LA0004_specs.lean",
+      "original_sha256": "1fada1d4f2c159582ded1027fc1e3b79ac0225c926441b5fea2c3e66e835cb2d",
+      "overlay_sha256": "69e2db66be916350c92cefacc44fdd9974659ad2e03d52cece8273fbf9566049",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing"
+      ],
+      "original_error_summary": "8:27: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0004_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0005": {
+      "source": "apps",
+      "original_path": "specs/LA0005_specs.lean",
+      "overlay_path": "lean428/specs/LA0005_specs.lean",
+      "original_sha256": "fa20d5ac40697253529a3e67cfa5e6475692e48f6196e871519e9290c9d5432f",
+      "overlay_sha256": "290259cefd4a97b34d2b5eed4f1c3f54a06c3e962203d0d6f2c0954a9ead0edf",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization"
+      ],
+      "original_error_summary": "8:26: error(lean.synthInstanceFailed): failed to synthesize instance of type class",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0005_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0007": {
+      "source": "apps",
+      "original_path": "specs/LA0007_specs.lean",
+      "overlay_path": "lean428/specs/LA0007_specs.lean",
+      "original_sha256": "5e9ddbc4930f4c94748f81bf664494c833f290d09e12de54bc708dccb59af9c3",
+      "overlay_sha256": "8448245374951d5abc1e72b89138414fc7f18fcc37104a34be8afa610863dbf1",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing"
+      ],
+      "original_error_summary": "6:36: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0007_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0019": {
+      "source": "apps",
+      "original_path": "specs/LA0019_specs.lean",
+      "overlay_path": "lean428/specs/LA0019_specs.lean",
+      "original_sha256": "5e44fdf0f185d58663d6ee1fb6c3ecc22f423c125e3fbc3086041fb88ccda06f",
+      "overlay_sha256": "aa4d2ddf243c3b673126da483befb469d954e57f49a961dcfe076a03709ece1b",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing",
+        "slice-materialization"
+      ],
+      "original_error_summary": "15:40: error: Application type mismatch: The argument",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior; Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0019_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0033": {
+      "source": "apps",
+      "original_path": "specs/LA0033_specs.lean",
+      "overlay_path": "lean428/specs/LA0033_specs.lean",
+      "original_sha256": "b1e6021bd5770367980573d3a74ddc8b0daa19bfd912ef5af879a7d3893ef0d6",
+      "overlay_sha256": "ad54fa8efa9b4dbfa4b5d8d4ef6f2db8dd7822a9232f93b518f846ab7f6aa227",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization"
+      ],
+      "original_error_summary": "34:16: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0033_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0041": {
+      "source": "apps",
+      "original_path": "specs/LA0041_specs.lean",
+      "overlay_path": "lean428/specs/LA0041_specs.lean",
+      "original_sha256": "7c5919dd4a0c6af7f58cc063ae4595dcbf8604d63ac264432a49c8c6a7532e37",
+      "overlay_sha256": "9c87460f0ac7ff4e43699e2b93827cb5038be533dc65f6f3afaec9c0a5da361b",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "char-list-string-construction",
+        "prop-ite-restructure"
+      ],
+      "original_error_summary": "16:4: error: Insufficient number of fields for `\u27e8...\u27e9` constructor: Constructor `String.ofByteArray` has 2 explicit field, but only 1 was provided",
+      "rationale": "the String structure constructor is now `String.ofByteArray`; character-list construction uses the public `String.ofList`/`String.mk` functions instead of anonymous constructor syntax; the postcondition's top-level Prop `if` on a Bool condition makes Lean 4.28 whnf diverge through the byte-based String runtime; restructured to the propositionally equivalent conjunction of the two guarded cases",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0041_specs.lean"
+      },
+      "review_status": "needs-human-review: top-level Prop `if` restructured into an equivalent conjunction"
+    },
+    "LA0052": {
+      "source": "apps",
+      "original_path": "specs/LA0052_specs.lean",
+      "overlay_path": "lean428/specs/LA0052_specs.lean",
+      "original_sha256": "cb9db4b18da2bc62f9efbafaf433dcb34f77c87eda33685bd43cce0ce82d605c",
+      "overlay_sha256": "50a0d93d479bd6bb6f3075b50db00f9fa0482a0c732fc9d617e1a216b45fdee9",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing"
+      ],
+      "original_error_summary": "4:37: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0052_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0055": {
+      "source": "apps",
+      "original_path": "specs/LA0055_specs.lean",
+      "overlay_path": "lean428/specs/LA0055_specs.lean",
+      "original_sha256": "99cdcde8f464fd27e6d55c2c3122df6f405c170a5d2f525123165380a84dfebc",
+      "overlay_sha256": "ce4a7f376b03e39103a16779ed2137448363228036e0e3474a5d12f067a59dd6",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing",
+        "index-type-annotation"
+      ],
+      "original_error_summary": "27:30: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior; `xs[i]!` no longer pins the index/element type the way `.get!` did; explicit type ascriptions restore the exact Lean 4.23 elaboration",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0055_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0061": {
+      "source": "apps",
+      "original_path": "specs/LA0061_specs.lean",
+      "overlay_path": "lean428/specs/LA0061_specs.lean",
+      "original_sha256": "e5284a053372bb2afc5401fb0d6b0d3c8d2374fef38c895f5b96ee2e2aee6880",
+      "overlay_sha256": "701b1546b1c61841cad4945fc9b7c15807721e2ac9a97774cc3aedb0f40223fc",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing"
+      ],
+      "original_error_summary": "14:78: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0061_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0077": {
+      "source": "apps",
+      "original_path": "specs/LA0077_specs.lean",
+      "overlay_path": "lean428/specs/LA0077_specs.lean",
+      "original_sha256": "6d54eea3db7e01bfe636dcbecfad20b788bb26be57c6482d32d3f93a12607ec5",
+      "overlay_sha256": "691f72bd256f5bc5086bfa4ec91c6de3448ae7c4654aea8a3b3017ed910abec3",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization"
+      ],
+      "original_error_summary": "4:66: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0077_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0088": {
+      "source": "apps",
+      "original_path": "specs/LA0088_specs.lean",
+      "overlay_path": "lean428/specs/LA0088_specs.lean",
+      "original_sha256": "64b826d2a29fd70cb4b31593cff6037e78fdcb70a8881f16dac883661bc17821",
+      "overlay_sha256": "692b7ab71bb91a7cd5d57dd9ff22af1a0362af56c6e12610032464a0803e15f3",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "char-list-string-construction"
+      ],
+      "original_error_summary": "25:11: error: Insufficient number of fields for `\u27e8...\u27e9` constructor: Constructor `String.ofByteArray` has 2 explicit field, but only 1 was provided",
+      "rationale": "the String structure constructor is now `String.ofByteArray`; character-list construction uses the public `String.ofList`/`String.mk` functions instead of anonymous constructor syntax",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0088_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0093": {
+      "source": "apps",
+      "original_path": "specs/LA0093_specs.lean",
+      "overlay_path": "lean428/specs/LA0093_specs.lean",
+      "original_sha256": "304a3cd2890aba94c5ce37648036ba310686f6bc443ad307c82ebea486e59e70",
+      "overlay_sha256": "b623906b95dfbfde4548d15828470be538f71185108feaa8681584f6f4ed88a3",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization"
+      ],
+      "original_error_summary": "13:31: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0093_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0094": {
+      "source": "apps",
+      "original_path": "specs/LA0094_specs.lean",
+      "overlay_path": "lean428/specs/LA0094_specs.lean",
+      "original_sha256": "84abba467822f0cc02134fc6e238f6d2f594ffffe8420d66327bf2f23907e6f4",
+      "overlay_sha256": "9efc5564c3ee0ff114f9fd31839716b8db849e01672701f33f31fa2c33ff5c5a",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization"
+      ],
+      "original_error_summary": "19:38: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0094_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0096": {
+      "source": "apps",
+      "original_path": "specs/LA0096_specs.lean",
+      "overlay_path": "lean428/specs/LA0096_specs.lean",
+      "original_sha256": "7550d9779b487dce2bc2f4a941b3317b5ed8bcdfe8937d76df240c9f1bac1cf8",
+      "overlay_sha256": "bf7fb169e8e77825c830c7438ed98ff8470cdeba25c3416a34c423208b8f6fc0",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization"
+      ],
+      "original_error_summary": "26:58: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0096_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0097": {
+      "source": "apps",
+      "original_path": "specs/LA0097_specs.lean",
+      "overlay_path": "lean428/specs/LA0097_specs.lean",
+      "original_sha256": "fc09698b34cb697ff21d4d8aa9a16acb72be2b1358ed9f809052380c795de10e",
+      "overlay_sha256": "4568020989463d2e5284def44255992a5151ea624b7218c684d6c073f4e9a160",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization"
+      ],
+      "original_error_summary": "24:42: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0097_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0109": {
+      "source": "apps",
+      "original_path": "specs/LA0109_specs.lean",
+      "overlay_path": "lean428/specs/LA0109_specs.lean",
+      "original_sha256": "39222b439f1a3880cbcbf8f35de5ce5b12320a88e555727b15e366b69b133bcc",
+      "overlay_sha256": "b3c5d8265441f452ba7385af7b9d80c91c25fbc2f95e0ecf53fd221db3071013",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization"
+      ],
+      "original_error_summary": "27:21: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0109_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0112": {
+      "source": "apps",
+      "original_path": "specs/LA0112_specs.lean",
+      "overlay_path": "lean428/specs/LA0112_specs.lean",
+      "original_sha256": "69612dcf3f456eb60c77394802aceb6cd899abc162fb85fabdc2f5f54ba8668d",
+      "overlay_sha256": "bbe7ca4731dfcc5bdd5f6693971ad2ede427fb4ee4b032866f417653b0081204",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization"
+      ],
+      "original_error_summary": "27:31: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0112_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0114": {
+      "source": "apps",
+      "original_path": "specs/LA0114_specs.lean",
+      "overlay_path": "lean428/specs/LA0114_specs.lean",
+      "original_sha256": "4c69cb6a5a9c0baf9eac92261d37327228dc34f35aeee12cc524fd07748f24bb",
+      "overlay_sha256": "b4fd6bdeedcf503113b7e45f6c98c9c85883cba48bf6ec08a0b1780571abb994",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing"
+      ],
+      "original_error_summary": "15:22: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0114_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0124": {
+      "source": "apps",
+      "original_path": "specs/LA0124_specs.lean",
+      "overlay_path": "lean428/specs/LA0124_specs.lean",
+      "original_sha256": "e6cdbe5cb584ff70f74576a9ddeef52f349a7629d08090e8abbdcd78937d0898",
+      "overlay_sha256": "a9b486b1f2d0aa9d37b8b2e886dc6f9460d3cf460361a12bd5bf412accccb76c",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing"
+      ],
+      "original_error_summary": "3:58: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0124_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0130": {
+      "source": "apps",
+      "original_path": "specs/LA0130_specs.lean",
+      "overlay_path": "lean428/specs/LA0130_specs.lean",
+      "original_sha256": "fe4512817741d9f601d866fcd52084d0407a6dd31788c54a30ca737c4498a424",
+      "overlay_sha256": "b2414eeb7373159cf133d30ee8f28bc7bc86e8bbbc9b8d90e407840a1c3fe798",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization"
+      ],
+      "original_error_summary": "94:60: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0130_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0146": {
+      "source": "apps",
+      "original_path": "specs/LA0146_specs.lean",
+      "overlay_path": "lean428/specs/LA0146_specs.lean",
+      "original_sha256": "32a12993de299a1fdc3e72a8255db333af14ada1524bd4f3e99e94302989161c",
+      "overlay_sha256": "c8b3e6a60846ab464532a4796b210efeb1e10c55daa98f1fae6a4d9340d23268",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization"
+      ],
+      "original_error_summary": "4:101: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0146_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0151": {
+      "source": "apps",
+      "original_path": "specs/LA0151_specs.lean",
+      "overlay_path": "lean428/specs/LA0151_specs.lean",
+      "original_sha256": "adbb3063ff138b8d40d8d8531c734b8933d04c30cc5ac925985d81d10c14b455",
+      "overlay_sha256": "ff369e9d9c756a391387796cdbaddf6d9974501195072adcf253968f13a979d9",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "pos-raw"
+      ],
+      "original_error_summary": "8:52: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `String.Pos` is dependent/proof-carrying; raw UTF-8 byte-offset semantics preserved via the public `String.Pos.Raw` API",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0151_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0154": {
+      "source": "apps",
+      "original_path": "specs/LA0154_specs.lean",
+      "overlay_path": "lean428/specs/LA0154_specs.lean",
+      "original_sha256": "76216b980efe221b099dd7472813a551bf702e5c10e0f3ac3e03fccf58be24cd",
+      "overlay_sha256": "5eab528aba424a2e30b3673692a268a6ccb0f300d5b7e3fd778b7c745b145780",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing"
+      ],
+      "original_error_summary": "9:17: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0154_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0156": {
+      "source": "apps",
+      "original_path": "specs/LA0156_specs.lean",
+      "overlay_path": "lean428/specs/LA0156_specs.lean",
+      "original_sha256": "64f6bcb63bbbdb53ed155a9221420bfe601722eb2f931eac333265f8c3b99a38",
+      "overlay_sha256": "880fa6b1126be4a07650deb775a65b2e53914f3b37a5c0d9b1e101345ca42b8f",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing"
+      ],
+      "original_error_summary": "4:31: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0156_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0160": {
+      "source": "apps",
+      "original_path": "specs/LA0160_specs.lean",
+      "overlay_path": "lean428/specs/LA0160_specs.lean",
+      "original_sha256": "7e4146f351a55ca5b19bb6241bb3d1846a36730197dddc34ae22f38941f46cf7",
+      "overlay_sha256": "e623c1e46e48aeb9dce4385a001e319ec892b8d478deb2cf2b2f54f405f28b8f",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization",
+        "pos-raw"
+      ],
+      "original_error_summary": "3:66: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value; Lean 4.28 `String.Pos` is dependent/proof-carrying; raw UTF-8 byte-offset semantics preserved via the public `String.Pos.Raw` API",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0160_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0171": {
+      "source": "apps",
+      "original_path": "specs/LA0171_specs.lean",
+      "overlay_path": "lean428/specs/LA0171_specs.lean",
+      "original_sha256": "2b8970bb3251d1977a3a7761a086c64925900b58a17abc3f67a71bf7768604b1",
+      "overlay_sha256": "cf7f2e6b039e713280db6259de435f95182955f642d2e9c05427910ecec81fd1",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization"
+      ],
+      "original_error_summary": "18:4: error: Type mismatch",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0171_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0174": {
+      "source": "apps",
+      "original_path": "specs/LA0174_specs.lean",
+      "overlay_path": "lean428/specs/LA0174_specs.lean",
+      "original_sha256": "58ce3d30a330431916bbf7ac07cc13f6875f39c7a7a05053d7419bbbebe8bc47",
+      "overlay_sha256": "1bf46964e7910a73135035878f370ecf9f54a86ed47a0271cfebd4883431c359",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing"
+      ],
+      "original_error_summary": "3:56: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0174_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0181": {
+      "source": "apps",
+      "original_path": "specs/LA0181_specs.lean",
+      "overlay_path": "lean428/specs/LA0181_specs.lean",
+      "original_sha256": "4c283097bd6437f4eaa9e972b2eb06314951c59d4424976edbe1b63839005f36",
+      "overlay_sha256": "228d1bf4cefdcbecd00837038c04a0a1626efb682ea64afa68e5d1b3e6f0a174",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing"
+      ],
+      "original_error_summary": "4:44: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0181_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0185": {
+      "source": "apps",
+      "original_path": "specs/LA0185_specs.lean",
+      "overlay_path": "lean428/specs/LA0185_specs.lean",
+      "original_sha256": "593374b448469c19ee3be48308f4d7ca75a5f0802630e4132b88c28433abcebc",
+      "overlay_sha256": "b6bdd5251ad2375b5be569bed5e0830ea9b0cf742ccd5418547bac53ed5a37d8",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing"
+      ],
+      "original_error_summary": "4:18: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0185_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0191": {
+      "source": "apps",
+      "original_path": "specs/LA0191_specs.lean",
+      "overlay_path": "lean428/specs/LA0191_specs.lean",
+      "original_sha256": "e0e1115b1a36c52e36ad7a13b7184219a777f148da306f7686ca0e6bbc5b5f23",
+      "overlay_sha256": "cff4e098a8262612569953098854f4d4c44eca06beb229288f2621809928da84",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization"
+      ],
+      "original_error_summary": "4:4: error(lean.synthInstanceFailed): failed to synthesize instance of type class",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0191_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0194": {
+      "source": "apps",
+      "original_path": "specs/LA0194_specs.lean",
+      "overlay_path": "lean428/specs/LA0194_specs.lean",
+      "original_sha256": "dc038800b35dbed466f07c6617f7980630464197e09b558dd35c708f678ae7f5",
+      "overlay_sha256": "291be39f4c1956d2e7830380e5624c84090128790c379bab1a6ed40681ec7f10",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "pos-raw"
+      ],
+      "original_error_summary": "5:65: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `String.Pos` is dependent/proof-carrying; raw UTF-8 byte-offset semantics preserved via the public `String.Pos.Raw` API",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0194_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0202": {
+      "source": "apps",
+      "original_path": "specs/LA0202_specs.lean",
+      "overlay_path": "lean428/specs/LA0202_specs.lean",
+      "original_sha256": "0a8bef72400b6070a17bcbfd179b2292845f0b0102b9825e83a6b07e534fd2ac",
+      "overlay_sha256": "f07969b22ebfc468d6561fa34d8527b80f31bf425b8297bb5367af470ea55edb",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization"
+      ],
+      "original_error_summary": "92:18: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0202_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0207": {
+      "source": "apps",
+      "original_path": "specs/LA0207_specs.lean",
+      "overlay_path": "lean428/specs/LA0207_specs.lean",
+      "original_sha256": "18e94ca67a2fb6f41d2083b344d94810bc938fc6c4faea153eab04a5050d6620",
+      "overlay_sha256": "402a873c3f36bcb95c9bab5bd709b1086edb32ca58f473095c44efa0cf805d63",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization"
+      ],
+      "original_error_summary": "27:19: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0207_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0216": {
+      "source": "apps",
+      "original_path": "specs/LA0216_specs.lean",
+      "overlay_path": "lean428/specs/LA0216_specs.lean",
+      "original_sha256": "f6555fb85395984c7a705fdc2c1504da2e179a440636043475baea0f539af553",
+      "overlay_sha256": "5d6d2bf2369be6b9be1dffa1543b6e30a092b8f8fa9bf5e3c3f0a06e3241a32b",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing"
+      ],
+      "original_error_summary": "9:51: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0216_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0222": {
+      "source": "apps",
+      "original_path": "specs/LA0222_specs.lean",
+      "overlay_path": "lean428/specs/LA0222_specs.lean",
+      "original_sha256": "807ce8d82b4839857bae00de26f08c686afc69d90158482fbe7014f9e75598d2",
+      "overlay_sha256": "53250b9a2b142ae85619f95ebc8d5601f42ab9444d97f113e4075573c7670a9f",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "split-iterator"
+      ],
+      "original_error_summary": "3:2: error: Type mismatch",
+      "rationale": "`String.split` now returns a slice iterator; converted back to the original `List String` via `.map (\u00b7.toString) |>.toList` (differentially tested against Lean 4.25 on empty/edge/non-ASCII inputs)",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0222_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0233": {
+      "source": "apps",
+      "original_path": "specs/LA0233_specs.lean",
+      "overlay_path": "lean428/specs/LA0233_specs.lean",
+      "original_sha256": "ede63465a660c1d75bd7250456c30b5bc819d82f82f3ad19de3a51bdea520aa3",
+      "overlay_sha256": "c60864275e61f2672ca7911fe865e9c79bde4f93ee0f2161e7b80b795d09224b",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "pos-raw"
+      ],
+      "original_error_summary": "3:48: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `String.Pos` is dependent/proof-carrying; raw UTF-8 byte-offset semantics preserved via the public `String.Pos.Raw` API",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0233_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0245": {
+      "source": "apps",
+      "original_path": "specs/LA0245_specs.lean",
+      "overlay_path": "lean428/specs/LA0245_specs.lean",
+      "original_sha256": "7ee9d167c042b87e5f9d0354988f1582e88ce741311a7c17399594234692b034",
+      "overlay_sha256": "b1ab6eb8c95755983b57ba82203e339fdb97623b17f804e267386be5f91aeed1",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing"
+      ],
+      "original_error_summary": "4:43: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0245_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0249": {
+      "source": "apps",
+      "original_path": "specs/LA0249_specs.lean",
+      "overlay_path": "lean428/specs/LA0249_specs.lean",
+      "original_sha256": "692c29df8e4a721752611532e200794bbabd940ed2142c24bd5653a52e53f099",
+      "overlay_sha256": "35ed06cf99ff7a729ce766c008a39ecf6f89758120420add971e647d31ab6883",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization"
+      ],
+      "original_error_summary": "27:23: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0249_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0254": {
+      "source": "apps",
+      "original_path": "specs/LA0254_specs.lean",
+      "overlay_path": "lean428/specs/LA0254_specs.lean",
+      "original_sha256": "d7a5f2ef2f03993e20618d1a7f1038bc602bf0a611fa70bf29c1a7f54529e4b2",
+      "overlay_sha256": "a22a73c974672672595dd7140dd5d8a7e917e162e958cc6a938eb50bdad5cb5a",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing"
+      ],
+      "original_error_summary": "11:15: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0254_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0256": {
+      "source": "apps",
+      "original_path": "specs/LA0256_specs.lean",
+      "overlay_path": "lean428/specs/LA0256_specs.lean",
+      "original_sha256": "dcc33d63ec64d0e34080efac2e5fc36e5202f85174017912d93ab6c4769ca7d9",
+      "overlay_sha256": "8a9ae7384d6719b15987c2c944a08794b3256f131a8cba7ddd9cf1c9e4a12218",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing"
+      ],
+      "original_error_summary": "3:37: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0256_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0266": {
+      "source": "apps",
+      "original_path": "specs/LA0266_specs.lean",
+      "overlay_path": "lean428/specs/LA0266_specs.lean",
+      "original_sha256": "35d4c784c6ce9805c243a0c17457550b41c60b622dff0610a53f617af5cfe30d",
+      "overlay_sha256": "ab6cff86842398d500cd61f3f8f90967c0d9b85c3d686ab19f568da7781e0d46",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization"
+      ],
+      "original_error_summary": "7:29: error(lean.synthInstanceFailed): failed to synthesize instance of type class",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0266_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0269": {
+      "source": "apps",
+      "original_path": "specs/LA0269_specs.lean",
+      "overlay_path": "lean428/specs/LA0269_specs.lean",
+      "original_sha256": "72506616468ffe3dd2bff96ef5ee120162127cad8a9571b49eff4a65d0eb6b41",
+      "overlay_sha256": "5ebe2f1415de2b89af78daf15e8dafce3a8c6b1562a3cb8147bc36a113ee6cb4",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing"
+      ],
+      "original_error_summary": "3:64: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0269_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0271": {
+      "source": "apps",
+      "original_path": "specs/LA0271_specs.lean",
+      "overlay_path": "lean428/specs/LA0271_specs.lean",
+      "original_sha256": "1911aa65dace096bda4d50c80cef9c96f5eb22eea57b04aa47400e8f717baabb",
+      "overlay_sha256": "cfe5475c233de5c167b135696954863855db6a413857b2715b26c45035d4f9a4",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing"
+      ],
+      "original_error_summary": "12:48: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0271_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0272": {
+      "source": "apps",
+      "original_path": "specs/LA0272_specs.lean",
+      "overlay_path": "lean428/specs/LA0272_specs.lean",
+      "original_sha256": "68418343148d6b23d07ba96c814847fc5b0af9f2d20446438ec5b23b54ad2a48",
+      "overlay_sha256": "ba46b0580566a1ad1110d70e254cebf73988c43562fbe3ad691cf119732ffc6a",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "split-iterator"
+      ],
+      "original_error_summary": "17:2: error: Type mismatch",
+      "rationale": "`String.split` now returns a slice iterator; converted back to the original `List String` via `.map (\u00b7.toString) |>.toList` (differentially tested against Lean 4.25 on empty/edge/non-ASCII inputs)",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0272_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0273": {
+      "source": "apps",
+      "original_path": "specs/LA0273_specs.lean",
+      "overlay_path": "lean428/specs/LA0273_specs.lean",
+      "original_sha256": "f4d644e42948dd89b5ec7d2d2ec878709dc32c090049675730b42b40b250d2f7",
+      "overlay_sha256": "d2750236af76cc3d55bfe55a8c6fe8c3d988c49deb662d35dd6de7351f193ce9",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "constructor-pattern-match"
+      ],
+      "original_error_summary": "10:4: error: Insufficient number of fields for `\u27e8...\u27e9` constructor: Constructor `String.ofByteArray` has 2 explicit field, but only 1 was provided",
+      "rationale": "pattern matching on the old `String.mk (List Char)` constructor is impossible in Lean 4.28; rewritten as a structurally recursive `where go` helper over `s.toList` computing the identical value",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0273_specs.lean"
+      },
+      "review_status": "needs-human-review: constructor pattern match rewritten as `where go` recursion"
+    },
+    "LA0284": {
+      "source": "apps",
+      "original_path": "specs/LA0284_specs.lean",
+      "overlay_path": "lean428/specs/LA0284_specs.lean",
+      "original_sha256": "71f4e8e0e4f1821233890c0774dd1b355b1d882b33d2ff6bffbc4c04885792c4",
+      "overlay_sha256": "ae413bddfb720ab3a6f98cc93243056a31d1ea0e1ba2b0db55d7f84bf4b46762",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing"
+      ],
+      "original_error_summary": "11:47: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0284_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0288": {
+      "source": "apps",
+      "original_path": "specs/LA0288_specs.lean",
+      "overlay_path": "lean428/specs/LA0288_specs.lean",
+      "original_sha256": "c2a107bb5bd95ac5b5add2a46c6d107d27fe56c9ce4097e5162af03a8b05b18a",
+      "overlay_sha256": "ffe6b1a82c98c6e2fc0977e90d12568839f5c4d77b2cbe2250a439dc72813734",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization"
+      ],
+      "original_error_summary": "21:16: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0288_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0289": {
+      "source": "apps",
+      "original_path": "specs/LA0289_specs.lean",
+      "overlay_path": "lean428/specs/LA0289_specs.lean",
+      "original_sha256": "706166ede1baebac2ffa3f233270da1a6f6cf94622a6055c93dba1de12ec2af5",
+      "overlay_sha256": "b4eeb4e740c26627ff059bf75b5b308ea66423100eecd27ca71fa22869aed73f",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization",
+        "char-list-string-construction",
+        "constructor-pattern-match"
+      ],
+      "original_error_summary": "4:4: error: Insufficient number of fields for `\u27e8...\u27e9` constructor: Constructor `String.ofByteArray` has 2 explicit field, but only 1 was provided",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value; the String structure constructor is now `String.ofByteArray`; character-list construction uses the public `String.ofList`/`String.mk` functions instead of anonymous constructor syntax; pattern matching on the old `String.mk (List Char)` constructor is impossible in Lean 4.28; rewritten as a structurally recursive `where go` helper over `s.toList` computing the identical value",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0289_specs.lean"
+      },
+      "review_status": "needs-human-review: constructor pattern match rewritten as `where go` recursion"
+    },
+    "LA0291": {
+      "source": "apps",
+      "original_path": "specs/LA0291_specs.lean",
+      "overlay_path": "lean428/specs/LA0291_specs.lean",
+      "original_sha256": "3f887f2871ef774b5cf51332707ead8679f030dc814797215fc9124e2e837b09",
+      "overlay_sha256": "990850e3d37a6e42854ec3f2851feb2d3671de4d7936d64b72b88db3b4ea6e25",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing"
+      ],
+      "original_error_summary": "11:62: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0291_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0293": {
+      "source": "apps",
+      "original_path": "specs/LA0293_specs.lean",
+      "overlay_path": "lean428/specs/LA0293_specs.lean",
+      "original_sha256": "ec9ed118460a936d458b4019ded9aaa0a1a1a1235b84460a869cfd3501dc0056",
+      "overlay_sha256": "594e65d0602b493637c0cdb766f4815bdb87c10b808c6921932a52df64ddca06",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing"
+      ],
+      "original_error_summary": "4:38: error(lean.invalidField): Invalid field `get?`: The environment does not contain `List.get?`, so it is not possible to project the field `get?` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0293_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0301": {
+      "source": "apps",
+      "original_path": "specs/LA0301_specs.lean",
+      "overlay_path": "lean428/specs/LA0301_specs.lean",
+      "original_sha256": "784dd30253f3e5759d21c1f9d33debb4275e703898914f27102aac953a9a957f",
+      "overlay_sha256": "bfd0908a3457f5489995daa9849f039af3e44ebfc52da0cf9dc1e84e7dd87911",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing"
+      ],
+      "original_error_summary": "5:11: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0301_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0304": {
+      "source": "apps",
+      "original_path": "specs/LA0304_specs.lean",
+      "overlay_path": "lean428/specs/LA0304_specs.lean",
+      "original_sha256": "987e7d1a4c590ed14dbeaa6c9a379aaf053cf7a09e734e68ea94bd2685bb951c",
+      "overlay_sha256": "08aa415fd34ca69f0ac3578dcef3d236712eee764df18db4132cfc3c1734a644",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization"
+      ],
+      "original_error_summary": "15:4: error(lean.synthInstanceFailed): failed to synthesize instance of type class",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0304_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0313": {
+      "source": "apps",
+      "original_path": "specs/LA0313_specs.lean",
+      "overlay_path": "lean428/specs/LA0313_specs.lean",
+      "original_sha256": "8d0844b2e76d3b225578d9a457c069b4cff16cd0d8fab634bf8bbeb83bbcbc57",
+      "overlay_sha256": "c74bca956065b604133182a8e1ca1d117b3e9bb3b58d298d7e0d22855cf5ef7f",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization",
+        "pos-raw"
+      ],
+      "original_error_summary": "32:48: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value; Lean 4.28 `String.Pos` is dependent/proof-carrying; raw UTF-8 byte-offset semantics preserved via the public `String.Pos.Raw` API",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0313_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0320": {
+      "source": "apps",
+      "original_path": "specs/LA0320_specs.lean",
+      "overlay_path": "lean428/specs/LA0320_specs.lean",
+      "original_sha256": "c8e99a26f2050d2a89dd1badc1fca439b735dc326426aba39e58c311f170694f",
+      "overlay_sha256": "7cd6fe40bb95a4fb3b67a00693351ce08625dae0324a27f6d7a9474962ee2ef7",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "pos-raw"
+      ],
+      "original_error_summary": "3:66: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `String.Pos` is dependent/proof-carrying; raw UTF-8 byte-offset semantics preserved via the public `String.Pos.Raw` API",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0320_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0321": {
+      "source": "apps",
+      "original_path": "specs/LA0321_specs.lean",
+      "overlay_path": "lean428/specs/LA0321_specs.lean",
+      "original_sha256": "6fdb5efd98e2b7d96d7019a52ce6e1a7d77a3f29db43be67ce04e9e0938aa067",
+      "overlay_sha256": "ae05e147433f73678e0d055298bb2631a5dfa2110cade44a0e7602d4c1b771f6",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization"
+      ],
+      "original_error_summary": "31:7: error(lean.synthInstanceFailed): failed to synthesize instance of type class",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0321_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0325": {
+      "source": "apps",
+      "original_path": "specs/LA0325_specs.lean",
+      "overlay_path": "lean428/specs/LA0325_specs.lean",
+      "original_sha256": "35dc86594d332a76dfb33e6489536012b9c8053419aab689897c9d55fc74b02d",
+      "overlay_sha256": "67773f9bdd7283a89b1635de367faa625dae29391db2ae76ca79b889eb6cb4e3",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing"
+      ],
+      "original_error_summary": "4:30: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0325_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0343": {
+      "source": "apps",
+      "original_path": "specs/LA0343_specs.lean",
+      "overlay_path": "lean428/specs/LA0343_specs.lean",
+      "original_sha256": "8ab66529b7bb6f41aaf26687d6e68fc0b41f67034d73c17067a7c88a8c2be707",
+      "overlay_sha256": "b72fa5ac4928398e776501b1360ddce0d779432a437321014e47bffbc0336f7a",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing"
+      ],
+      "original_error_summary": "27:48: error(lean.invalidField): Invalid field `get?`: The environment does not contain `List.get?`, so it is not possible to project the field `get?` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0343_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0348": {
+      "source": "apps",
+      "original_path": "specs/LA0348_specs.lean",
+      "overlay_path": "lean428/specs/LA0348_specs.lean",
+      "original_sha256": "9379f2fa0b912412775e6ec62aabdf4aa06e3e60547c09564a3e7bfbbb50df54",
+      "overlay_sha256": "96cfabbd79941d55216dd97e144618cf68ea7fb48934c23dd5760d9df797b101",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing"
+      ],
+      "original_error_summary": "5:36: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0348_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0352": {
+      "source": "apps",
+      "original_path": "specs/LA0352_specs.lean",
+      "overlay_path": "lean428/specs/LA0352_specs.lean",
+      "original_sha256": "8a3f045e4a590b2a4b011b87c98f7e8b3aa905b6c6ff70f3f7146d8c9c847df1",
+      "overlay_sha256": "bd696015326d89f9420b33a54a142666aabf16056c5218cd9a44ef93fbf8ae9b",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing",
+        "slice-materialization",
+        "pos-raw"
+      ],
+      "original_error_summary": "5:28: error: Application type mismatch: The argument",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior; Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value; Lean 4.28 `String.Pos` is dependent/proof-carrying; raw UTF-8 byte-offset semantics preserved via the public `String.Pos.Raw` API",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0352_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0354": {
+      "source": "apps",
+      "original_path": "specs/LA0354_specs.lean",
+      "overlay_path": "lean428/specs/LA0354_specs.lean",
+      "original_sha256": "52a44cf3dc432f8a11ba41f160f7a4e6e6a3f940995e981e592200826f654f91",
+      "overlay_sha256": "c5607a42bab78adfaba950038c7d82c6197fe07a95e19230927f2091c58d6963",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing"
+      ],
+      "original_error_summary": "38:33: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0354_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0356": {
+      "source": "apps",
+      "original_path": "specs/LA0356_specs.lean",
+      "overlay_path": "lean428/specs/LA0356_specs.lean",
+      "original_sha256": "07e2c320927bb9cb35727c44eea6006dea1f5244f6a71b59ae824f74c20eb47f",
+      "overlay_sha256": "5750120e037af505ec7ae80817f3f17ff4aa96f38be4298bbb46bb14a2b390dd",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing",
+        "index-type-annotation"
+      ],
+      "original_error_summary": "5:22: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior; `xs[i]!` no longer pins the index/element type the way `.get!` did; explicit type ascriptions restore the exact Lean 4.23 elaboration",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0356_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0362": {
+      "source": "apps",
+      "original_path": "specs/LA0362_specs.lean",
+      "overlay_path": "lean428/specs/LA0362_specs.lean",
+      "original_sha256": "fc248c6d8a1017021d505bf7bae602cbcd82b256ccbcf266e258519a78938f98",
+      "overlay_sha256": "4cc0ae8987344ccac1eb04ee5c9e19bf9cdfcff908b89e8541f60afe956ee02d",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization",
+        "pos-raw"
+      ],
+      "original_error_summary": "8:42: error: Insufficient number of fields for `\u27e8...\u27e9` constructor: Constructor `String.Pos.mk` has 2 explicit field, but only 1 was provided",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value; Lean 4.28 `String.Pos` is dependent/proof-carrying; raw UTF-8 byte-offset semantics preserved via the public `String.Pos.Raw` API",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0362_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0370": {
+      "source": "apps",
+      "original_path": "specs/LA0370_specs.lean",
+      "overlay_path": "lean428/specs/LA0370_specs.lean",
+      "original_sha256": "9e7d5e6c582156354e9ee2ffcdf0987d0b3c657adffaad85ba72a8127d6532a9",
+      "overlay_sha256": "a0845aa5edacc7a841a496f5ac6a51a4675289935f79dcae55e3af248a0beffa",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing"
+      ],
+      "original_error_summary": "12:8: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0370_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0371": {
+      "source": "apps",
+      "original_path": "specs/LA0371_specs.lean",
+      "overlay_path": "lean428/specs/LA0371_specs.lean",
+      "original_sha256": "445188540b05b547fc5e3cab3f136a208b6c4f8411367964cec5e91dc1f9aacd",
+      "overlay_sha256": "0a1aa80a1cdb384e1d59749af8e70af2904f3ff8894e7807faacaf94ff6b8300",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "pos-raw"
+      ],
+      "original_error_summary": "20:35: error: Insufficient number of fields for `\u27e8...\u27e9` constructor: Constructor `String.Pos.mk` has 2 explicit field, but only 1 was provided",
+      "rationale": "Lean 4.28 `String.Pos` is dependent/proof-carrying; raw UTF-8 byte-offset semantics preserved via the public `String.Pos.Raw` API",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0371_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0376": {
+      "source": "apps",
+      "original_path": "specs/LA0376_specs.lean",
+      "overlay_path": "lean428/specs/LA0376_specs.lean",
+      "original_sha256": "6bacc39cc64895f9000643fc91d81e259cbef06e1395d28f818afba255a9aefc",
+      "overlay_sha256": "69ce5a0d3ee124a165e270d306cfaf2caf6252b77d33dcb3e1495bb2f318289b",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing"
+      ],
+      "original_error_summary": "10:10: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0376_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0378": {
+      "source": "apps",
+      "original_path": "specs/LA0378_specs.lean",
+      "overlay_path": "lean428/specs/LA0378_specs.lean",
+      "original_sha256": "bc750e2548f0262aa86fb797e2b05c4507daa3bc0c7d1330d38ce059f70a71d7",
+      "overlay_sha256": "e65a8bc7b20dc3cb4b9ea475a2983f893f6bedda42b14f14eaac052d98d7cea7",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing"
+      ],
+      "original_error_summary": "4:32: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0378_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0382": {
+      "source": "apps",
+      "original_path": "specs/LA0382_specs.lean",
+      "overlay_path": "lean428/specs/LA0382_specs.lean",
+      "original_sha256": "38eb5a250070d16051c66ea7073abb61ae1375a1549d2f05ce8a84ab2bc5d1b3",
+      "overlay_sha256": "694dc571f6b8bd7983a5c48f2139b7332b7474f8ccb958387c6efb9152c59ca9",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization"
+      ],
+      "original_error_summary": "27:6: error(lean.synthInstanceFailed): failed to synthesize instance of type class",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0382_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0391": {
+      "source": "apps",
+      "original_path": "specs/LA0391_specs.lean",
+      "overlay_path": "lean428/specs/LA0391_specs.lean",
+      "original_sha256": "9f05e3823d171679b365f39eca95bfda99e7ea6e15c08428e5b5d13f7f8fe7dd",
+      "overlay_sha256": "0dd93c5cfeb433952be518f39c43321fc6f09c2c6b5bebffb1518b6546a1d537",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "split-iterator"
+      ],
+      "original_error_summary": "3:2: error: Type mismatch",
+      "rationale": "`String.split` now returns a slice iterator; converted back to the original `List String` via `.map (\u00b7.toString) |>.toList` (differentially tested against Lean 4.25 on empty/edge/non-ASCII inputs)",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0391_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0401": {
+      "source": "apps",
+      "original_path": "specs/LA0401_specs.lean",
+      "overlay_path": "lean428/specs/LA0401_specs.lean",
+      "original_sha256": "4f15418a53d426a4fdf7ee570b158133d2dbb114c50285fcc32fcd5c98e4c93f",
+      "overlay_sha256": "6cb8f0b250e9fbc5956d5ad44b8b2642869f3b2416c56091ebc7910f83418738",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing",
+        "slice-materialization",
+        "split-iterator"
+      ],
+      "original_error_summary": "3:2: error: Type mismatch",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior; Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value; `String.split` now returns a slice iterator; converted back to the original `List String` via `.map (\u00b7.toString) |>.toList` (differentially tested against Lean 4.25 on empty/edge/non-ASCII inputs)",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0401_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0417": {
+      "source": "apps",
+      "original_path": "specs/LA0417_specs.lean",
+      "overlay_path": "lean428/specs/LA0417_specs.lean",
+      "original_sha256": "b23f7fbaf912a91be7331b1c801e4e1e97652469a9a89ccdc2b73754dfe0957f",
+      "overlay_sha256": "a5d5ad29b29b5dfb3d47ff14a1ca9c8a0295cbb767d34295bd6ba1e2737d2ba2",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing"
+      ],
+      "original_error_summary": "3:87: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0417_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0427": {
+      "source": "apps",
+      "original_path": "specs/LA0427_specs.lean",
+      "overlay_path": "lean428/specs/LA0427_specs.lean",
+      "original_sha256": "83b3b4ec3b61235c262d0f59d1df215dce575fdc39888efe29c2b3906e4c4481",
+      "overlay_sha256": "a63922058d743f6c3e0a50a9968555be96f359240ad42c78fb2eb8272ef4d9a3",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing"
+      ],
+      "original_error_summary": "4:32: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0427_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0432": {
+      "source": "apps",
+      "original_path": "specs/LA0432_specs.lean",
+      "overlay_path": "lean428/specs/LA0432_specs.lean",
+      "original_sha256": "48bd2ae1e10e5f9d685c30bbbe551c21aadbc7f7dfc0cda9255a1658b03ce773",
+      "overlay_sha256": "058a72d687cd15703a2730147f3d9dfb67099ec8ff09f72ef2d5441ba37751b4",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization"
+      ],
+      "original_error_summary": "14:71: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0432_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0436": {
+      "source": "apps",
+      "original_path": "specs/LA0436_specs.lean",
+      "overlay_path": "lean428/specs/LA0436_specs.lean",
+      "original_sha256": "ce1b9247d58bb35c2ffba043516657236f61bf120703cbcc3f7eb6f73db7d70e",
+      "overlay_sha256": "160a11f296e23b285c8e9f5c8287e0bbf6dc91d15dc025e226537839a9886384",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing"
+      ],
+      "original_error_summary": "15:25: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0436_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0437": {
+      "source": "apps",
+      "original_path": "specs/LA0437_specs.lean",
+      "overlay_path": "lean428/specs/LA0437_specs.lean",
+      "original_sha256": "ac1138a3fe68867cf510142f34ac8f87f9fe0504c27a6457087c8f3fa056fa84",
+      "overlay_sha256": "1557d271bf836f13865f0aeb5bb328f6f573004eaf3c542420b6e7e0a660d3e7",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing"
+      ],
+      "original_error_summary": "10:56: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0437_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0470": {
+      "source": "apps",
+      "original_path": "specs/LA0470_specs.lean",
+      "overlay_path": "lean428/specs/LA0470_specs.lean",
+      "original_sha256": "0aefcc617604fff130b5dbbd3c427afa0d34bca637c4d991f99ec33d88cc5f33",
+      "overlay_sha256": "bc5d67956947481e2d202fbd4cbda73f0397776d934ec3bae99782d4a205293c",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing"
+      ],
+      "original_error_summary": "11:30: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0470_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0473": {
+      "source": "apps",
+      "original_path": "specs/LA0473_specs.lean",
+      "overlay_path": "lean428/specs/LA0473_specs.lean",
+      "original_sha256": "ffb3a9e15b0f93b1d0c4c7bbd68715996e60d7fdfa28f5de15c3ac82fc0bc7ee",
+      "overlay_sha256": "7b8121864dea25feb40990bc10ed8c0ccfc746d1e575d6920fb194b7bc7a39b0",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing",
+        "slice-materialization"
+      ],
+      "original_error_summary": "94:20: error: Application type mismatch: The argument",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior; Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0473_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0474": {
+      "source": "apps",
+      "original_path": "specs/LA0474_specs.lean",
+      "overlay_path": "lean428/specs/LA0474_specs.lean",
+      "original_sha256": "33dcaa46138a05a3d5524bd032738edfff89425d0caaa61924edae401ee34ee0",
+      "overlay_sha256": "f268d96b1746741c58ecc68b52bdb9e521ee4a79b766328a9405c9b3d1e56d89",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization",
+        "char-list-string-construction"
+      ],
+      "original_error_summary": "13:40: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value; the String structure constructor is now `String.ofByteArray`; character-list construction uses the public `String.ofList`/`String.mk` functions instead of anonymous constructor syntax",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0474_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0479": {
+      "source": "apps",
+      "original_path": "specs/LA0479_specs.lean",
+      "overlay_path": "lean428/specs/LA0479_specs.lean",
+      "original_sha256": "1055f3c9c022b6ece86421e55e99bfa834aaf16cea7a318a662592a29099e943",
+      "overlay_sha256": "a954cc82d151a6c7fe8fcf7b9f4fafbce46c7a33c1209bb0cec3efb41030ed10",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing"
+      ],
+      "original_error_summary": "15:48: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0479_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0481": {
+      "source": "apps",
+      "original_path": "specs/LA0481_specs.lean",
+      "overlay_path": "lean428/specs/LA0481_specs.lean",
+      "original_sha256": "0bd74813bb50f51d6091ce9bc0a46915d8c39d8107e0c487a025854de908d98a",
+      "overlay_sha256": "00da9327be0bf4fada6044fa6fd67d3d4817551fe24d237533f4f787599f9703",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization"
+      ],
+      "original_error_summary": "27:26: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0481_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0491": {
+      "source": "apps",
+      "original_path": "specs/LA0491_specs.lean",
+      "overlay_path": "lean428/specs/LA0491_specs.lean",
+      "original_sha256": "543f8b825181d04e4c085c7d27f6b99f4c82d98549e351b00cd62f6e79b26baf",
+      "overlay_sha256": "c9dc2c2d5391acf9f4ec4112f6214352429137175f513cfe03dea531156772d4",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization"
+      ],
+      "original_error_summary": "36:44: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0491_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0495": {
+      "source": "apps",
+      "original_path": "specs/LA0495_specs.lean",
+      "overlay_path": "lean428/specs/LA0495_specs.lean",
+      "original_sha256": "54bf7732497a59fa48147e77b2eb3dba27e7b1eef4318c6c95d916d16aa9691a",
+      "overlay_sha256": "3929a41b473f0d8200f321abb138e922815c8f68cc4c036e6fea594047144c71",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization"
+      ],
+      "original_error_summary": "26:29: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0495_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0497": {
+      "source": "apps",
+      "original_path": "specs/LA0497_specs.lean",
+      "overlay_path": "lean428/specs/LA0497_specs.lean",
+      "original_sha256": "e4bd30faff851c25439da440d0bcd5fa9f510e20acde784418204192d9d63a59",
+      "overlay_sha256": "a6a1aa6be8ae7c4605f1b20848ea1d6768489f973ef6fc4d241bad5d4f505a09",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing"
+      ],
+      "original_error_summary": "4:32: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0497_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0508": {
+      "source": "apps",
+      "original_path": "specs/LA0508_specs.lean",
+      "overlay_path": "lean428/specs/LA0508_specs.lean",
+      "original_sha256": "d4eb4ceb5fb259b11e0eb95a74fca9ee984afd7685b7dd92f2ce97ca12de4cbd",
+      "overlay_sha256": "4a39eb54172f52b6c4acd71562664bee82e36fe824ac2936fd11173e47662e9c",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing"
+      ],
+      "original_error_summary": "8:37: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0508_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0510": {
+      "source": "apps",
+      "original_path": "specs/LA0510_specs.lean",
+      "overlay_path": "lean428/specs/LA0510_specs.lean",
+      "original_sha256": "d5c962d99f92279fd61984a788566d85d6030fc75742a40dfc9dce524be6e772",
+      "overlay_sha256": "06e78af82505cc6d6f497e78f8a2643f98daf31e7658c282ec98429dfbdd6400",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization"
+      ],
+      "original_error_summary": "20:17: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0510_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0514": {
+      "source": "apps",
+      "original_path": "specs/LA0514_specs.lean",
+      "overlay_path": "lean428/specs/LA0514_specs.lean",
+      "original_sha256": "2e205080ef14e5360b7a61125e28e21ecda977a0a2d08b87b0495afd7351b2e6",
+      "overlay_sha256": "6c0c202aab03c4d55754be6b983c449edb3db5509bfa7ae98a1e8e7027e5a2de",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "pos-raw"
+      ],
+      "original_error_summary": "19:33: error(lean.synthInstanceFailed): failed to synthesize instance of type class",
+      "rationale": "Lean 4.28 `String.Pos` is dependent/proof-carrying; raw UTF-8 byte-offset semantics preserved via the public `String.Pos.Raw` API",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0514_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0516": {
+      "source": "apps",
+      "original_path": "specs/LA0516_specs.lean",
+      "overlay_path": "lean428/specs/LA0516_specs.lean",
+      "original_sha256": "3eda4a78ef611e20c05db1fded0b71420014b779421196d018f2ea599d87c9e0",
+      "overlay_sha256": "567007bb072c73d68b455cfbf0d2069ee66d251de61358ca4ffa9f52d73aede1",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing"
+      ],
+      "original_error_summary": "3:25: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0516_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0527": {
+      "source": "apps",
+      "original_path": "specs/LA0527_specs.lean",
+      "overlay_path": "lean428/specs/LA0527_specs.lean",
+      "original_sha256": "cb9d207853ba3c44746445741ec05b689cbbc4711f1b7443273086b06bb41df6",
+      "overlay_sha256": "c91ea986041fe9ce459aac845d5fff060b534f00e19e32994e4dda3dc794397e",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing"
+      ],
+      "original_error_summary": "30:11: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0527_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0536": {
+      "source": "apps",
+      "original_path": "specs/LA0536_specs.lean",
+      "overlay_path": "lean428/specs/LA0536_specs.lean",
+      "original_sha256": "aba6686a82ea2227e8343f75e96d24939e00f593d5a719f7313eef200b36fca2",
+      "overlay_sha256": "3fb790fd4379e8b49172d25afed39414444b8c5cbe5954458f2a8c9dd51fd0aa",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization"
+      ],
+      "original_error_summary": "23:30: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0536_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0541": {
+      "source": "apps",
+      "original_path": "specs/LA0541_specs.lean",
+      "overlay_path": "lean428/specs/LA0541_specs.lean",
+      "original_sha256": "6b4823ff3af7634e08d3188303c7052d5155341dd5f03e2265c7e07acb2ba5e9",
+      "overlay_sha256": "a2f4d6c8a4319fd17ff20643228e95d7e8a7493c0641fb942466daabeeba2d2d",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "pos-raw"
+      ],
+      "original_error_summary": "22:53: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `String.Pos` is dependent/proof-carrying; raw UTF-8 byte-offset semantics preserved via the public `String.Pos.Raw` API",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0541_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0545": {
+      "source": "apps",
+      "original_path": "specs/LA0545_specs.lean",
+      "overlay_path": "lean428/specs/LA0545_specs.lean",
+      "original_sha256": "d1d022050fa4d988c839607424fc51cd06f653874848b5e2493c9dc61bf074b2",
+      "overlay_sha256": "388bd9492b60f7d33feaa6987781738b23769638911da3180fa408b6527a894f",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing"
+      ],
+      "original_error_summary": "7:41: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0545_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0546": {
+      "source": "apps",
+      "original_path": "specs/LA0546_specs.lean",
+      "overlay_path": "lean428/specs/LA0546_specs.lean",
+      "original_sha256": "6c15c1e1cc6f37dcc3bac6a5a98fcbb62832f3282b3fd41aa2a4e606ccc84cb3",
+      "overlay_sha256": "9cbe8bdc6e05574e27b08ea7abdb16b5c3378c64a9f2854bc78984f9b5b0b6b8",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing",
+        "slice-materialization"
+      ],
+      "original_error_summary": "8:84: error: Application type mismatch: The argument",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior; Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0546_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0551": {
+      "source": "apps",
+      "original_path": "specs/LA0551_specs.lean",
+      "overlay_path": "lean428/specs/LA0551_specs.lean",
+      "original_sha256": "f3dba4d367c288d3c5d5593b283a9c8c76751c20a62eadb50f4d45a5e3138b6e",
+      "overlay_sha256": "90b94f0be2415b45ff26a31c46e9f3413f209aa3f1f895d4e54f343439e181ee",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing"
+      ],
+      "original_error_summary": "6:71: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0551_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0565": {
+      "source": "apps",
+      "original_path": "specs/LA0565_specs.lean",
+      "overlay_path": "lean428/specs/LA0565_specs.lean",
+      "original_sha256": "208caa23252228548b78120a4aaf6552cba2e5c0991bd44f45d7b495f17dba11",
+      "overlay_sha256": "691db2b837e9fa368ae43812278a4fb4f93dde4107f7cc9993d7cbede0de7d9a",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing",
+        "char-list-string-construction"
+      ],
+      "original_error_summary": "4:35: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior; the String structure constructor is now `String.ofByteArray`; character-list construction uses the public `String.ofList`/`String.mk` functions instead of anonymous constructor syntax",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0565_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0568": {
+      "source": "apps",
+      "original_path": "specs/LA0568_specs.lean",
+      "overlay_path": "lean428/specs/LA0568_specs.lean",
+      "original_sha256": "ff7c58ba90b83d78cabf06d3bdfb761f27d6eb33e8b9f810fd0aa2d000d1971b",
+      "overlay_sha256": "7ea241738452ee3c3df1f5824313c78e123ef7f223bfaedbf1c3a5f5200c1ec2",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization",
+        "char-list-string-construction"
+      ],
+      "original_error_summary": "33:72: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value; the String structure constructor is now `String.ofByteArray`; character-list construction uses the public `String.ofList`/`String.mk` functions instead of anonymous constructor syntax",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0568_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0570": {
+      "source": "apps",
+      "original_path": "specs/LA0570_specs.lean",
+      "overlay_path": "lean428/specs/LA0570_specs.lean",
+      "original_sha256": "085f757d049654662004f9bee3b8b8883bac511ff9854f4b69e62b36fe8a4bd3",
+      "overlay_sha256": "f3da3263ebe42bbb64f6b61b71cc559f5541764a0df011cd6be0e618ce467ddd",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization"
+      ],
+      "original_error_summary": "7:7: error(lean.synthInstanceFailed): failed to synthesize instance of type class",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0570_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0571": {
+      "source": "apps",
+      "original_path": "specs/LA0571_specs.lean",
+      "overlay_path": "lean428/specs/LA0571_specs.lean",
+      "original_sha256": "37658844e47b7730ff6e4da7a52c7e0e09b94a726435207c133655652edeba70",
+      "overlay_sha256": "d3096b18c863905853a190c79121de87209f7f88c1975d77f7942aed6aa1785d",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "pos-raw"
+      ],
+      "original_error_summary": "3:66: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `String.Pos` is dependent/proof-carrying; raw UTF-8 byte-offset semantics preserved via the public `String.Pos.Raw` API",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0571_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0572": {
+      "source": "apps",
+      "original_path": "specs/LA0572_specs.lean",
+      "overlay_path": "lean428/specs/LA0572_specs.lean",
+      "original_sha256": "72e9ca0b9c9ffa596304ee93303d3fe29850f5495955f236e15349fab7ae7e8b",
+      "overlay_sha256": "0c0a0010008d3c9bbb054138275e5f987e40a1c3007965be1d7c32dfea510b68",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization"
+      ],
+      "original_error_summary": "18:14: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0572_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0579": {
+      "source": "apps",
+      "original_path": "specs/LA0579_specs.lean",
+      "overlay_path": "lean428/specs/LA0579_specs.lean",
+      "original_sha256": "061529354dc1030d21b05ed0a7d9287f03b69403759c879c34403bd8cfa3f8e5",
+      "overlay_sha256": "bae7741f04def0286d3b53c99a5ae58524da8f0d423405bb736d48914504bfa2",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing",
+        "slice-materialization"
+      ],
+      "original_error_summary": "22:49: error: Application type mismatch: The argument",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior; Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0579_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0580": {
+      "source": "apps",
+      "original_path": "specs/LA0580_specs.lean",
+      "overlay_path": "lean428/specs/LA0580_specs.lean",
+      "original_sha256": "868b3122d3cff0c5ad23510b455328d5bf2bd33d837b0f934ee4e388155764d9",
+      "overlay_sha256": "ee6ec6d2e8fd139c7be730aa3a4a043ae2a0ab1de23bce7fadafc0b24a5460a7",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing"
+      ],
+      "original_error_summary": "3:38: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0580_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0581": {
+      "source": "apps",
+      "original_path": "specs/LA0581_specs.lean",
+      "overlay_path": "lean428/specs/LA0581_specs.lean",
+      "original_sha256": "57c26545a8356bba7e8633f8eb6749a0335cc0db7decd65a38a9fe1228b0070f",
+      "overlay_sha256": "70f7fbee9218ba89131c016621e3ea287c452b30d335d67c758cf1e8a12103f5",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "char-list-string-construction"
+      ],
+      "original_error_summary": "19:11: error: Insufficient number of fields for `\u27e8...\u27e9` constructor: Constructor `String.ofByteArray` has 2 explicit field, but only 1 was provided",
+      "rationale": "the String structure constructor is now `String.ofByteArray`; character-list construction uses the public `String.ofList`/`String.mk` functions instead of anonymous constructor syntax",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0581_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0593": {
+      "source": "apps",
+      "original_path": "specs/LA0593_specs.lean",
+      "overlay_path": "lean428/specs/LA0593_specs.lean",
+      "original_sha256": "c8dd43e1c75d817daafe62e8119cdd42185b0398b35f23a1b0241ff199eb0645",
+      "overlay_sha256": "0f6c3449f810cf5c7294da4658012ae5b7604bad47a15375d420d89a891286e3",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "split-iterator"
+      ],
+      "original_error_summary": "13:2: error: Type mismatch",
+      "rationale": "`String.split` now returns a slice iterator; converted back to the original `List String` via `.map (\u00b7.toString) |>.toList` (differentially tested against Lean 4.25 on empty/edge/non-ASCII inputs)",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0593_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0596": {
+      "source": "apps",
+      "original_path": "specs/LA0596_specs.lean",
+      "overlay_path": "lean428/specs/LA0596_specs.lean",
+      "original_sha256": "40b44c6b788586e06a2cd573c68e9af2b810b5dcaf1362a60ebfa8175cfc652a",
+      "overlay_sha256": "dc4b2e5ef662b24079af45dd3e5af63af8d75330a4a801a3b76cccdd583c6d92",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization"
+      ],
+      "original_error_summary": "22:51: error(lean.invalidField): Invalid field `get!`: The environment does not contain `String.Slice.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0596_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0605": {
+      "source": "apps",
+      "original_path": "specs/LA0605_specs.lean",
+      "overlay_path": "lean428/specs/LA0605_specs.lean",
+      "original_sha256": "753a77faebdf862c3ecdbda1adc5cbd02c7d9214b4861401d461ac7936c2de96",
+      "overlay_sha256": "5e22aa88d08968a61475ba9bf3f049239b1d19b2e2fffcf78c0eafe6a14d82c0",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization"
+      ],
+      "original_error_summary": "9:65: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0605_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0606": {
+      "source": "apps",
+      "original_path": "specs/LA0606_specs.lean",
+      "overlay_path": "lean428/specs/LA0606_specs.lean",
+      "original_sha256": "1082dde36ef8d99894c7950548b2569578c9a3a9a3ab21b90ef1319f17f9b925",
+      "overlay_sha256": "11b2e6517e23cf0ccaca288aadef0c84b7348ae9302643147cd945bed167d5df",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization"
+      ],
+      "original_error_summary": "8:23: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0606_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0613": {
+      "source": "apps",
+      "original_path": "specs/LA0613_specs.lean",
+      "overlay_path": "lean428/specs/LA0613_specs.lean",
+      "original_sha256": "99eb8510bef8e9900568f8035030a6b416fbf651a71fcda2160f75a67c91f315",
+      "overlay_sha256": "4f84e41d14de53f9c324bd0009690cc416fe8f74dec9d956f47443c33fe94553",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "pos-raw"
+      ],
+      "original_error_summary": "3:66: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `String.Pos` is dependent/proof-carrying; raw UTF-8 byte-offset semantics preserved via the public `String.Pos.Raw` API",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0613_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0616": {
+      "source": "apps",
+      "original_path": "specs/LA0616_specs.lean",
+      "overlay_path": "lean428/specs/LA0616_specs.lean",
+      "original_sha256": "0b22b2ff9e20a1b5694a476732f8d747b27387cc2d74d5f0739d955671d0c47d",
+      "overlay_sha256": "81650337e0d759ec6fdf9a72ffed726d8e6d24a1d868d1df3864a4c73a679256",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing",
+        "slice-materialization"
+      ],
+      "original_error_summary": "8:23: error: Application type mismatch: The argument",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior; Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value",
+      "holes_before": 1,
+      "holes_after": 1,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0616_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0618": {
+      "source": "apps",
+      "original_path": "specs/LA0618_specs.lean",
+      "overlay_path": "lean428/specs/LA0618_specs.lean",
+      "original_sha256": "3b4b55b1e81636785b9187a213136f2093203a621668a7bf9f34cb1148d5b9aa",
+      "overlay_sha256": "912d174cd3ce25fb971fdc79ecbdf30d150fa688c0f451f381d78855291c6294",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing",
+        "index-type-annotation"
+      ],
+      "original_error_summary": "9:33: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior; `xs[i]!` no longer pins the index/element type the way `.get!` did; explicit type ascriptions restore the exact Lean 4.23 elaboration",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0618_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0619": {
+      "source": "apps",
+      "original_path": "specs/LA0619_specs.lean",
+      "overlay_path": "lean428/specs/LA0619_specs.lean",
+      "original_sha256": "7ccb3972203f0ad6c58bc455b4842edeb61d38ae9bbadd4415c53ba0516aaa0a",
+      "overlay_sha256": "d1242dc3706b5baa41cf336e19a3bc6c225de490d01b96ba5b88bc0482adb195",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "pos-raw"
+      ],
+      "original_error_summary": "5:34: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `String.Pos` is dependent/proof-carrying; raw UTF-8 byte-offset semantics preserved via the public `String.Pos.Raw` API",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0619_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0622": {
+      "source": "apps",
+      "original_path": "specs/LA0622_specs.lean",
+      "overlay_path": "lean428/specs/LA0622_specs.lean",
+      "original_sha256": "2a2829842b2310ddbb252ce794365942f4a2419eb07596978992565cc81cd846",
+      "overlay_sha256": "42db0e11355e3f09ceafc202456dae9e1828c2f8c541b478f89cf8cc42a4df7d",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing"
+      ],
+      "original_error_summary": "4:32: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0622_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0628": {
+      "source": "apps",
+      "original_path": "specs/LA0628_specs.lean",
+      "overlay_path": "lean428/specs/LA0628_specs.lean",
+      "original_sha256": "9263d7cce217ab5ddff1a4200955f3ab251447eb1bc854c89cb322f758987c15",
+      "overlay_sha256": "47c4855ba95c1dcdbcfe54b529413a8102cd9b31638fcea98d15632aba519e29",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "pos-raw"
+      ],
+      "original_error_summary": "10:40: error: Insufficient number of fields for `\u27e8...\u27e9` constructor: Constructor `String.Pos.mk` has 2 explicit field, but only 1 was provided",
+      "rationale": "Lean 4.28 `String.Pos` is dependent/proof-carrying; raw UTF-8 byte-offset semantics preserved via the public `String.Pos.Raw` API",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0628_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0630": {
+      "source": "apps",
+      "original_path": "specs/LA0630_specs.lean",
+      "overlay_path": "lean428/specs/LA0630_specs.lean",
+      "original_sha256": "afe78cc1e7514246a0bdc8616c98a197e95310167e19398720e3bd438305b0d9",
+      "overlay_sha256": "94d1c6f146cf501e837c2df7b6fc5ebbf0011142fe4e4b939bab843335a1cae2",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "split-iterator"
+      ],
+      "original_error_summary": "3:2: error: Type mismatch",
+      "rationale": "`String.split` now returns a slice iterator; converted back to the original `List String` via `.map (\u00b7.toString) |>.toList` (differentially tested against Lean 4.25 on empty/edge/non-ASCII inputs)",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0630_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0640": {
+      "source": "apps",
+      "original_path": "specs/LA0640_specs.lean",
+      "overlay_path": "lean428/specs/LA0640_specs.lean",
+      "original_sha256": "89dfe2a6db1aed190279f8f17c3a79e5bac0cac74056ae5ed50c41ab9fef7d38",
+      "overlay_sha256": "f47c63f7f399dfa5376ac733c1b8a32a20f3fd4f3b9e79b8ef078f08494011fd",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization"
+      ],
+      "original_error_summary": "44:23: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0640_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0645": {
+      "source": "apps",
+      "original_path": "specs/LA0645_specs.lean",
+      "overlay_path": "lean428/specs/LA0645_specs.lean",
+      "original_sha256": "11ba5aef8f59c31219a812c1df2b7394a796c25be64f14ad13c718093ad164bf",
+      "overlay_sha256": "b76323aecd6e756884240f4de85669e6b1e46e756841a003020218854bfac742",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing"
+      ],
+      "original_error_summary": "19:65: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0645_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0646": {
+      "source": "apps",
+      "original_path": "specs/LA0646_specs.lean",
+      "overlay_path": "lean428/specs/LA0646_specs.lean",
+      "original_sha256": "2b878034c13bda51cfcaa4f36e2ec7731526a619c4e092da5f39f447d9429fc5",
+      "overlay_sha256": "a148d9b0cf4995ac24fa55acd446f51be02e7659703faff0d1a40a582027a765",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization",
+        "pos-raw"
+      ],
+      "original_error_summary": "9:37: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value; Lean 4.28 `String.Pos` is dependent/proof-carrying; raw UTF-8 byte-offset semantics preserved via the public `String.Pos.Raw` API",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0646_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0652": {
+      "source": "apps",
+      "original_path": "specs/LA0652_specs.lean",
+      "overlay_path": "lean428/specs/LA0652_specs.lean",
+      "original_sha256": "0bec3737b832fb006676f247a33067b0e39491686e1f287e475f0089f8df203f",
+      "overlay_sha256": "4436ef54c41f183cc5e00210c1b70f1be70ae88c832d0038391354917dcd66a7",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization",
+        "split-iterator",
+        "char-list-string-construction"
+      ],
+      "original_error_summary": "3:2: error: Type mismatch",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value; `String.split` now returns a slice iterator; converted back to the original `List String` via `.map (\u00b7.toString) |>.toList` (differentially tested against Lean 4.25 on empty/edge/non-ASCII inputs); the String structure constructor is now `String.ofByteArray`; character-list construction uses the public `String.ofList`/`String.mk` functions instead of anonymous constructor syntax",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0652_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0653": {
+      "source": "apps",
+      "original_path": "specs/LA0653_specs.lean",
+      "overlay_path": "lean428/specs/LA0653_specs.lean",
+      "original_sha256": "23ad27c99cb719b0c3902c7749cbc2241bae41e34656b9f8c819a5ea6bb1925f",
+      "overlay_sha256": "aab4be1a7404a54d18805e88bd0afe4342531276bd30a9b320e40ad6fd0fe6af",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization"
+      ],
+      "original_error_summary": "8:35: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0653_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0654": {
+      "source": "apps",
+      "original_path": "specs/LA0654_specs.lean",
+      "overlay_path": "lean428/specs/LA0654_specs.lean",
+      "original_sha256": "ed04719a41c0000d0d03517e1b55a9cd532f859b456c678244dc2df4503f8f64",
+      "overlay_sha256": "f3f1e08df078edbeed46b4a612356f5bffc67da94460a37dc322419e9c214508",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing"
+      ],
+      "original_error_summary": "3:44: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0654_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LA0670": {
+      "source": "apps",
+      "original_path": "specs/LA0670_specs.lean",
+      "overlay_path": "lean428/specs/LA0670_specs.lean",
+      "original_sha256": "8fdf9ee23f8d82ac9442a4f8639362106ef3938352dbf0ab0f76d5db072ef848",
+      "overlay_sha256": "25ca1b3678892d984cf20227eea7c617db73aa4a70b48a4e608cd29197d662ee",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "pos-raw"
+      ],
+      "original_error_summary": "9:44: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `String.Pos` is dependent/proof-carrying; raw UTF-8 byte-offset semantics preserved via the public `String.Pos.Raw` API",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LA0670_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LD0004": {
+      "source": "dafnybench",
+      "original_path": "specs/LD0004_specs.lean",
+      "overlay_path": "lean428/specs/LD0004_specs.lean",
+      "original_sha256": "2face15c7a7d2a9f63c356857fbffcf95c48a6d05aa127e476aca21b49712e30",
+      "overlay_sha256": "ecc9590ca06517db1a65ab1e6a427f396394674dc18476e0f90037738bf92d36",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "pos-raw"
+      ],
+      "original_error_summary": "4:36: error: Insufficient number of fields for `\u27e8...\u27e9` constructor: Constructor `String.Pos.mk` has 2 explicit field, but only 1 was provided",
+      "rationale": "Lean 4.28 `String.Pos` is dependent/proof-carrying; raw UTF-8 byte-offset semantics preserved via the public `String.Pos.Raw` API",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LD0004_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LD0011": {
+      "source": "dafnybench",
+      "original_path": "specs/LD0011_specs.lean",
+      "overlay_path": "lean428/specs/LD0011_specs.lean",
+      "original_sha256": "3d6b09268347e6127f8c14a24b3f1f29eb28ecc42d9cee3305dfdd8afd98706f",
+      "overlay_sha256": "53d7e90acd0533b33fde7e868293e8e877df2d4074ce86d92051fa479ea9fcd2",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing"
+      ],
+      "original_error_summary": "6:2: error(lean.invalidField): Invalid field `get!`: The environment does not contain `Array.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior",
+      "holes_before": 3,
+      "holes_after": 3,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LD0011_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LD0290": {
+      "source": "dafnybench",
+      "original_path": "specs/LD0290_specs.lean",
+      "overlay_path": "lean428/specs/LD0290_specs.lean",
+      "original_sha256": "653f5bd24a52bc9e580bee4ee153a0ad54368c33a101c9d994f6ac5c3c2a44b4",
+      "overlay_sha256": "684604ca43f1552cd406d97b5b74ab7342b5158aab92faa7894c50fc3621d127",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization",
+        "pos-raw"
+      ],
+      "original_error_summary": "11:47: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value; Lean 4.28 `String.Pos` is dependent/proof-carrying; raw UTF-8 byte-offset semantics preserved via the public `String.Pos.Raw` API",
+      "holes_before": 6,
+      "holes_after": 6,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LD0290_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LD0292": {
+      "source": "dafnybench",
+      "original_path": "specs/LD0292_specs.lean",
+      "overlay_path": "lean428/specs/LD0292_specs.lean",
+      "original_sha256": "8d004e2fef26de4160adbbdc29e9055dfe0b79c236ee4e5f1bdf12dc60445adf",
+      "overlay_sha256": "9f42ed86d3173186386a0a4612751b0276f82fc026eeda32be8db3e012e0b13f",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization",
+        "pos-raw"
+      ],
+      "original_error_summary": "11:47: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value; Lean 4.28 `String.Pos` is dependent/proof-carrying; raw UTF-8 byte-offset semantics preserved via the public `String.Pos.Raw` API",
+      "holes_before": 4,
+      "holes_after": 4,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LD0292_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LD0293": {
+      "source": "dafnybench",
+      "original_path": "specs/LD0293_specs.lean",
+      "overlay_path": "lean428/specs/LD0293_specs.lean",
+      "original_sha256": "f2843361d29e1a9d783bddda64e0a254587de2a6c20775894b6804bf17b1e06c",
+      "overlay_sha256": "448591b7d9f9a3740e363fb085f7346ecfff05ef3b855fd1aea1576f3ea47ad8",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization",
+        "pos-raw"
+      ],
+      "original_error_summary": "15:47: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value; Lean 4.28 `String.Pos` is dependent/proof-carrying; raw UTF-8 byte-offset semantics preserved via the public `String.Pos.Raw` API",
+      "holes_before": 4,
+      "holes_after": 4,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LD0293_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LD0294": {
+      "source": "dafnybench",
+      "original_path": "specs/LD0294_specs.lean",
+      "overlay_path": "lean428/specs/LD0294_specs.lean",
+      "original_sha256": "e6023784de7638e5a53bba532cacee27a4342930a8de5dce2af7ffce67cdc5d1",
+      "overlay_sha256": "16143d56992fe1b90ea27a51b2f0be5adfbe68b1b2225bc8a441de56a9148d4a",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization"
+      ],
+      "original_error_summary": "3:0: error: Type mismatch",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value",
+      "holes_before": 6,
+      "holes_after": 6,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LD0294_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LD0297": {
+      "source": "dafnybench",
+      "original_path": "specs/LD0297_specs.lean",
+      "overlay_path": "lean428/specs/LD0297_specs.lean",
+      "original_sha256": "3c030f6ce87dc66dee99949fa609130cd6904e267daf3d5d2abe24cc4cfd1ad3",
+      "overlay_sha256": "ed6b0168bedda850deedb1f7903630567f2fa7a4380f63bde8db1d17dfc3f5eb",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization"
+      ],
+      "original_error_summary": "11:52: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value",
+      "holes_before": 8,
+      "holes_after": 8,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LD0297_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LD0298": {
+      "source": "dafnybench",
+      "original_path": "specs/LD0298_specs.lean",
+      "overlay_path": "lean428/specs/LD0298_specs.lean",
+      "original_sha256": "21f7097d1dbe12d87e760c9a24e583e430c6a804b267270af4008c2ea949c9ce",
+      "overlay_sha256": "6b162eb09e751d5ed9d514d0a2fd31a76f0aeb427966b8534d663a290aba28eb",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization",
+        "pos-raw"
+      ],
+      "original_error_summary": "11:47: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value; Lean 4.28 `String.Pos` is dependent/proof-carrying; raw UTF-8 byte-offset semantics preserved via the public `String.Pos.Raw` API",
+      "holes_before": 6,
+      "holes_after": 6,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LD0298_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LD0301": {
+      "source": "dafnybench",
+      "original_path": "specs/LD0301_specs.lean",
+      "overlay_path": "lean428/specs/LD0301_specs.lean",
+      "original_sha256": "40be9cdd0c8651dc4494694389bbda447da75194f71c14d6b0b38aef6d66e6ab",
+      "overlay_sha256": "c0f6559e26036c5b8689320a7370a36f379bd79357466e13a3c51688dd12fe2a",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization",
+        "pos-raw"
+      ],
+      "original_error_summary": "3:55: error: Insufficient number of fields for `\u27e8...\u27e9` constructor: Constructor `String.Pos.mk` has 2 explicit field, but only 1 was provided",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value; Lean 4.28 `String.Pos` is dependent/proof-carrying; raw UTF-8 byte-offset semantics preserved via the public `String.Pos.Raw` API",
+      "holes_before": 4,
+      "holes_after": 4,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LD0301_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LD0572": {
+      "source": "dafnybench",
+      "original_path": "specs/LD0572_specs.lean",
+      "overlay_path": "lean428/specs/LD0572_specs.lean",
+      "original_sha256": "dc91bfcd194a5153154bd1db87d5fb325a2bb52d5fa5140b1e2d4cbfc1fe1a32",
+      "overlay_sha256": "e76ceff686d125bf3d8db966f517c1bf6b3940c93f42363a8a28e333190045a6",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "pos-raw"
+      ],
+      "original_error_summary": "57:17: error: Insufficient number of fields for `\u27e8...\u27e9` constructor: Constructor `String.Pos.mk` has 2 explicit field, but only 1 was provided",
+      "rationale": "Lean 4.28 `String.Pos` is dependent/proof-carrying; raw UTF-8 byte-offset semantics preserved via the public `String.Pos.Raw` API",
+      "holes_before": 6,
+      "holes_after": 6,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LD0572_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LD0850": {
+      "source": "dafnybench",
+      "original_path": "specs/LD0850_specs.lean",
+      "overlay_path": "lean428/specs/LD0850_specs.lean",
+      "original_sha256": "4a57d7eb0800d4dc1e1b644300c3f6016cd060b4d67823769850d623433d65b0",
+      "overlay_sha256": "c657b6af43c5222b0d808d1bdda9dd3092bc3e7dd511ff4fd7df556e421a9559",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization",
+        "pos-raw"
+      ],
+      "original_error_summary": "11:47: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value; Lean 4.28 `String.Pos` is dependent/proof-carrying; raw UTF-8 byte-offset semantics preserved via the public `String.Pos.Raw` API",
+      "holes_before": 6,
+      "holes_after": 6,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LD0850_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LD0851": {
+      "source": "dafnybench",
+      "original_path": "specs/LD0851_specs.lean",
+      "overlay_path": "lean428/specs/LD0851_specs.lean",
+      "original_sha256": "0d8e59de608d4693510086ad857d12410f4ef0b0d496f1ec15e151bb5c8d4365",
+      "overlay_sha256": "249fcf7028d75906ce21e213c99f899f29518b12f7fdce686bc90e6f7571a872",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization",
+        "pos-raw"
+      ],
+      "original_error_summary": "9:47: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value; Lean 4.28 `String.Pos` is dependent/proof-carrying; raw UTF-8 byte-offset semantics preserved via the public `String.Pos.Raw` API",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LD0851_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LD0852": {
+      "source": "dafnybench",
+      "original_path": "specs/LD0852_specs.lean",
+      "overlay_path": "lean428/specs/LD0852_specs.lean",
+      "original_sha256": "bed2bac89f28e2e984d1873e51e06cbda1c89bb006848d354ddc77f261d03a72",
+      "overlay_sha256": "07b24c56f6e4ed579e981b16e292c47bf21fb7593421d8956af89191e8afbd73",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization",
+        "pos-raw"
+      ],
+      "original_error_summary": "11:47: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value; Lean 4.28 `String.Pos` is dependent/proof-carrying; raw UTF-8 byte-offset semantics preserved via the public `String.Pos.Raw` API",
+      "holes_before": 4,
+      "holes_after": 4,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LD0852_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LD0853": {
+      "source": "dafnybench",
+      "original_path": "specs/LD0853_specs.lean",
+      "overlay_path": "lean428/specs/LD0853_specs.lean",
+      "original_sha256": "880c6a72772e47fba5dadbc48f8bc6dd7532d65dc148f38f7d197fc0b2a11ba1",
+      "overlay_sha256": "ef65a3040587a0fda7d5c2ce7261124bc89c804dbda3f9b7702028596b8eabc4",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization",
+        "pos-raw"
+      ],
+      "original_error_summary": "4:13: error: Insufficient number of fields for `\u27e8...\u27e9` constructor: Constructor `String.Pos.mk` has 2 explicit field, but only 1 was provided",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value; Lean 4.28 `String.Pos` is dependent/proof-carrying; raw UTF-8 byte-offset semantics preserved via the public `String.Pos.Raw` API",
+      "holes_before": 4,
+      "holes_after": 4,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LD0853_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LT0015": {
+      "source": "numpy_triple",
+      "original_path": "specs/LT0015_specs.lean",
+      "overlay_path": "lean428/specs/LT0015_specs.lean",
+      "original_sha256": "63c8bb43b5e4867120a3a0a3ea034fd28f6b323cd85695b2a5e35b5ca715d6fc",
+      "overlay_sha256": "a8cf2928f0cf589d18ca1fe85e1f68854c842327e9cfef121c14155d53f1d707",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "legacy-total-indexing"
+      ],
+      "original_error_summary": "32:34: error(lean.invalidField): Invalid field `get!`: The environment does not contain `List.get!`, so it is not possible to project the field `get!` from an expression",
+      "rationale": "removed List/Array `.get!`/`.get?` fields rewritten to `xs[i]!`/`xs[i]?`, preserving total/default out-of-bounds behavior",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LT0015_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LT0082": {
+      "source": "numpy_triple",
+      "original_path": "specs/LT0082_specs.lean",
+      "overlay_path": "lean428/specs/LT0082_specs.lean",
+      "original_sha256": "c0962c50c53fce282cd1190d6416e9bccbec75f701b7f0bbc9ecf0da836d89d7",
+      "overlay_sha256": "6b8e412fc3e7933fcc36bf858575fe059c3ea28fb7d62b3a95c3e5f29fd4ecdd",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization"
+      ],
+      "original_error_summary": "20:18: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LT0082_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LT0340": {
+      "source": "numpy_triple",
+      "original_path": "specs/LT0340_specs.lean",
+      "overlay_path": "lean428/specs/LT0340_specs.lean",
+      "original_sha256": "739c6bcc0ea01d1cc40a98d5fa94fb2c592dbbebe7a5aeb14c10635fdd3ac059",
+      "overlay_sha256": "e7483cdfe6130d802d5f0e3795d9de1ed93574ebec40710ef5746addf62885b9",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "batteries-inline"
+      ],
+      "original_error_summary": "2:0: error: unknown module prefix 'Batteries'",
+      "rationale": "`Batteries.Lean.Float` is unavailable in the aligned standalone workspace; the single used constant `Float.inf := 1/0` is inlined verbatim from Batteries",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LT0340_specs.lean"
+      },
+      "review_status": "needs-human-review: Batteries import replaced by verbatim inlined `Float.inf`"
+    },
+    "LT0346": {
+      "source": "numpy_triple",
+      "original_path": "specs/LT0346_specs.lean",
+      "overlay_path": "lean428/specs/LT0346_specs.lean",
+      "original_sha256": "19f37ad4bf61bd44ab6a2ddd5868e952f1844299c6d7d076c8e2aa4f497235f6",
+      "overlay_sha256": "854b51de6f1a7bcd4e32728593c0e57a0529b1c38179728b818e4901eba8c3d9",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "batteries-inline"
+      ],
+      "original_error_summary": "2:0: error: unknown module prefix 'Batteries'",
+      "rationale": "`Batteries.Lean.Float` is unavailable in the aligned standalone workspace; the single used constant `Float.inf := 1/0` is inlined verbatim from Batteries",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LT0346_specs.lean"
+      },
+      "review_status": "needs-human-review: Batteries import replaced by verbatim inlined `Float.inf`"
+    },
+    "LT0635": {
+      "source": "numpy_triple",
+      "original_path": "specs/LT0635_specs.lean",
+      "overlay_path": "lean428/specs/LT0635_specs.lean",
+      "original_sha256": "a16b8c09a5f5fe78fc0dc5d4d391931ab36ab609266f8101ff5080f9f2442cf2",
+      "overlay_sha256": "4b1260512713aea2f793930c77ecf89c3fb3d7e34f491bbed8591a744f69bcfc",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization"
+      ],
+      "original_error_summary": "26:29: error: Application type mismatch: The argument",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LT0635_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    },
+    "LT0645": {
+      "source": "numpy_triple",
+      "original_path": "specs/LT0645_specs.lean",
+      "overlay_path": "lean428/specs/LT0645_specs.lean",
+      "original_sha256": "217eb9b6185f8fb50a3a486add19a8d0321bbbeb2c4cf8bbbdbc0d970627c59c",
+      "overlay_sha256": "3f40e61cfe800aca628b426574d3381213514335583c065dda3df13892f0011e",
+      "toolchain": "leanprover/lean4:v4.28.0",
+      "failure_categories": [
+        "slice-materialization",
+        "pos-raw"
+      ],
+      "original_error_summary": "29:34: error: Insufficient number of fields for `\u27e8...\u27e9` constructor: Constructor `String.Pos.mk` has 2 explicit field, but only 1 was provided",
+      "rationale": "Lean 4.28 `take`/`drop`/`takeWhile`/`dropWhile` now return `String.Slice`; results are materialized with `.toString` at the site that produced them so every expression keeps its Lean 4.23 String type and value; Lean 4.28 `String.Pos` is dependent/proof-carrying; raw UTF-8 byte-offset semantics preserved via the public `String.Pos.Raw` API",
+      "holes_before": 2,
+      "holes_after": 2,
+      "compile": {
+        "status": "passed",
+        "returncode": 0,
+        "command": "elan run leanprover/lean4:v4.28.0 lean lean428/specs/LT0645_specs.lean"
+      },
+      "review_status": "agent-reviewed"
+    }
+  }
+}

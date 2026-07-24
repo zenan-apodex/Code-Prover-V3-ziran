@@ -1,0 +1,2 @@
+# Runtime version whose lock/result schema is covered by tools/harbor_results.py.
+harbor==0.20.0

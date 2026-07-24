@@ -1,0 +1,446 @@
+{
+  "schema_version": 1,
+  "kind": "v2_migrated_benchmark_campaign",
+  "name": "vero-proof-44",
+  "source": {
+    "upstream_url": "https://github.com/sunblaze-ucb/vero.git",
+    "upstream_revision": "64d5a8fb827a489b82119f667b6b54322a70e538",
+    "upstream_tree": "802f54c76b7d2d0fe00f983481964a326b961238",
+    "v2_registry": "benchmarks/campaigns/formal-benchmark-campaign-v1.campaign.json",
+    "selection": "lexically ordered conf/benchmark/*.yaml IDs, excluding bankledger exemplar and tiny_unsat fixture"
+  },
+  "track": "proof",
+  "lean_toolchain": "leanprover/lean4:v4.29.1",
+  "dataset_identity": {
+    "independent_campaign": true,
+    "not_a_substitute_for": "tasks/verobench_124"
+  },
+  "task_count": 44,
+  "ordered_ids": [
+    "arithmetic",
+    "base58",
+    "cachetools",
+    "croniter",
+    "dafny_vmc",
+    "dedekind_reals",
+    "deposit_sc",
+    "difflib",
+    "dijkstar",
+    "ecdsa",
+    "flocq",
+    "galoistools",
+    "greenery",
+    "huffman",
+    "intervaltree",
+    "ipaddress",
+    "json",
+    "jsonpatch",
+    "linked_list",
+    "munkres",
+    "netaddr",
+    "networkx",
+    "ntheory",
+    "packaging_version",
+    "piggybank",
+    "portion",
+    "primefac",
+    "primepy",
+    "prolepticgregorian",
+    "pyradix",
+    "pythonconstraint",
+    "reedsolo",
+    "rsa",
+    "semver",
+    "sequences",
+    "sortedcontainers",
+    "textdistance",
+    "textwrap",
+    "toposort",
+    "unicode",
+    "verdict",
+    "verified_bitmasks",
+    "verified_ironkv",
+    "vest"
+  ],
+  "ordered_ids_sha256": "9c33b9dfb611908854b6a0e5ab16f41de00ed38b306bceb40cc20630faa05317",
+  "excluded": [
+    {
+      "id": "bankledger",
+      "role": "canonical_exemplar"
+    },
+    {
+      "id": "tiny_unsat",
+      "role": "test_fixture"
+    }
+  ],
+  "grader": {
+    "adapter": "vero/harbor_grade.py",
+    "native_lifecycle": [
+      "schema_driven_extract",
+      "fresh_render_from_frozen_benchmark",
+      "fresh_harness_build",
+      "per_theorem_axiom_audit",
+      "native_spec_aggregation"
+    ],
+    "fail_closed": true
+  },
+  "harbor": {
+    "schema_version": "1.3",
+    "default_materialized_view": "tasks/_campaign_views/vero-proof-44",
+    "base_image": "lizenan1995/code-prover-lean:latest"
+  },
+  "tasks": {
+    "arithmetic": {
+      "id": "arithmetic",
+      "config_path": "conf/benchmark/arithmetic.yaml",
+      "benchmark_path": "benchmarks/Arithmetic",
+      "manifest_benchmark_id": "arithmetic-v2",
+      "root_package": "ArithmeticV2",
+      "snapshot_sha256": "bacf6d1e213a6341cd79f99d1b4b58c88c3261bba848cab1cd10677b0c8d1f7b"
+    },
+    "base58": {
+      "id": "base58",
+      "config_path": "conf/benchmark/base58.yaml",
+      "benchmark_path": "benchmarks/base58",
+      "manifest_benchmark_id": "base58",
+      "root_package": "Base58",
+      "snapshot_sha256": "f49937fc7312c0975855e1335f2dd9f641542e0f33f0a266ed6a1d5fa467199c"
+    },
+    "cachetools": {
+      "id": "cachetools",
+      "config_path": "conf/benchmark/cachetools.yaml",
+      "benchmark_path": "benchmarks/cachetools",
+      "manifest_benchmark_id": "cachetools",
+      "root_package": "Cachetools",
+      "snapshot_sha256": "8973c0156d02e582ffc204bc5734ac3217403708f88f5f296d2f1caac4ace62c"
+    },
+    "croniter": {
+      "id": "croniter",
+      "config_path": "conf/benchmark/croniter.yaml",
+      "benchmark_path": "benchmarks/croniter",
+      "manifest_benchmark_id": "croniter",
+      "root_package": "Croniter",
+      "snapshot_sha256": "561b0fa16aa65b028e4a1d624a497d03193b48b19c55c916f18991f2ad4b7ebb"
+    },
+    "dafny_vmc": {
+      "id": "dafny_vmc",
+      "config_path": "conf/benchmark/dafny_vmc.yaml",
+      "benchmark_path": "benchmarks/DafnyVmc",
+      "manifest_benchmark_id": "dafny_vmc",
+      "root_package": "DafnyVMC",
+      "snapshot_sha256": "20b503e2b7559e70b3ba452c2d4743aa1e89f963ea23d235e2b9de516e303ecc"
+    },
+    "dedekind_reals": {
+      "id": "dedekind_reals",
+      "config_path": "conf/benchmark/dedekind_reals.yaml",
+      "benchmark_path": "benchmarks/DedekindReals",
+      "manifest_benchmark_id": "dedekind-reals",
+      "root_package": "DedekindReals",
+      "snapshot_sha256": "779624df00bee0e8ba277740d62e1d23ab0c5e63f646cb0f083e7e7bdb37afcc"
+    },
+    "deposit_sc": {
+      "id": "deposit_sc",
+      "config_path": "conf/benchmark/deposit_sc.yaml",
+      "benchmark_path": "benchmarks/deposit_sc",
+      "manifest_benchmark_id": "deposit_sc",
+      "root_package": "DepositSc",
+      "snapshot_sha256": "3a2d6fa4a18298c75ceb28dfd71108833cdc3ff388b055c7a9f7dca71dbbab84"
+    },
+    "difflib": {
+      "id": "difflib",
+      "config_path": "conf/benchmark/difflib.yaml",
+      "benchmark_path": "benchmarks/difflib",
+      "manifest_benchmark_id": "difflib",
+      "root_package": "Difflib",
+      "snapshot_sha256": "552ac2e8f346afbb723abdf00e6a05f477df00aa0d5ed8a4ade108f2a608b4af"
+    },
+    "dijkstar": {
+      "id": "dijkstar",
+      "config_path": "conf/benchmark/dijkstar.yaml",
+      "benchmark_path": "benchmarks/dijkstar",
+      "manifest_benchmark_id": "dijkstar",
+      "root_package": "Dijkstar",
+      "snapshot_sha256": "e16e8d3c676da7070509c30e523c0911a3b1ead29d38c7fe411923443a830e30"
+    },
+    "ecdsa": {
+      "id": "ecdsa",
+      "config_path": "conf/benchmark/ecdsa.yaml",
+      "benchmark_path": "benchmarks/ecdsa",
+      "manifest_benchmark_id": "ecdsa",
+      "root_package": "Ecdsa",
+      "snapshot_sha256": "9bd1bdd0d8b8f403ec6ebbb56631a530e895e7ab977f8b084ff927f9a126e58d"
+    },
+    "flocq": {
+      "id": "flocq",
+      "config_path": "conf/benchmark/flocq.yaml",
+      "benchmark_path": "benchmarks/Flocq",
+      "manifest_benchmark_id": "flocq",
+      "root_package": "Flocq",
+      "snapshot_sha256": "2b7e538af61d0ab67e2869c1a5669b12688baa0482f9ef0b846ddfb4cbb1b5b6"
+    },
+    "galoistools": {
+      "id": "galoistools",
+      "config_path": "conf/benchmark/galoistools.yaml",
+      "benchmark_path": "benchmarks/galoistools",
+      "manifest_benchmark_id": "galoistools",
+      "root_package": "Galoistools",
+      "snapshot_sha256": "a317d8748aaf7443ee9ae71e4a6e0ad2bee2ed11a4feac95c1c527ddd8dcbb41"
+    },
+    "greenery": {
+      "id": "greenery",
+      "config_path": "conf/benchmark/greenery.yaml",
+      "benchmark_path": "benchmarks/greenery",
+      "manifest_benchmark_id": "greenery",
+      "root_package": "Greenery",
+      "snapshot_sha256": "22b3f89cdd18981efb5c0d1f74f7a6f0d219b5eea90078561250d985547243f8"
+    },
+    "huffman": {
+      "id": "huffman",
+      "config_path": "conf/benchmark/huffman.yaml",
+      "benchmark_path": "benchmarks/Huffman",
+      "manifest_benchmark_id": "huffman",
+      "root_package": "Huffman",
+      "snapshot_sha256": "469a4b20a9491acc926f537cebb22730e784877376d13629bf81979efb10f908"
+    },
+    "intervaltree": {
+      "id": "intervaltree",
+      "config_path": "conf/benchmark/intervaltree.yaml",
+      "benchmark_path": "benchmarks/intervaltree",
+      "manifest_benchmark_id": "intervaltree",
+      "root_package": "Intervaltree",
+      "snapshot_sha256": "c6807a359966d5a8a313ca9dfadf2c523ef0d9f6f4857207a87859284b119cd3"
+    },
+    "ipaddress": {
+      "id": "ipaddress",
+      "config_path": "conf/benchmark/ipaddress.yaml",
+      "benchmark_path": "benchmarks/ipaddress",
+      "manifest_benchmark_id": "ipaddress",
+      "root_package": "Ipaddress",
+      "snapshot_sha256": "2d0dd11ba2c8fc61b28624669b2eb90c0c8604ec830842d90844acea1d4d7880"
+    },
+    "json": {
+      "id": "json",
+      "config_path": "conf/benchmark/json.yaml",
+      "benchmark_path": "benchmarks/Json",
+      "manifest_benchmark_id": "json-v2",
+      "root_package": "JsonV2",
+      "snapshot_sha256": "7342b63823c0db2a6387bb575c0b5306981b1dec0003ac41d1becd6c148b0599"
+    },
+    "jsonpatch": {
+      "id": "jsonpatch",
+      "config_path": "conf/benchmark/jsonpatch.yaml",
+      "benchmark_path": "benchmarks/jsonpatch",
+      "manifest_benchmark_id": "jsonpatch",
+      "root_package": "JsonPatch",
+      "snapshot_sha256": "bbac6844cdf5ec9430aa87e62f2b06833b19400d480808e854704244a8a6ce86"
+    },
+    "linked_list": {
+      "id": "linked_list",
+      "config_path": "conf/benchmark/linked_list.yaml",
+      "benchmark_path": "benchmarks/linked_list",
+      "manifest_benchmark_id": "linked_list",
+      "root_package": "LinkedList",
+      "snapshot_sha256": "21b819b150402de1ad7fc57260f9ffbf160cbbdd8da0559eb2edd646bacb17d3"
+    },
+    "munkres": {
+      "id": "munkres",
+      "config_path": "conf/benchmark/munkres.yaml",
+      "benchmark_path": "benchmarks/munkres",
+      "manifest_benchmark_id": "munkres",
+      "root_package": "Munkres",
+      "snapshot_sha256": "b1a2d963cd9ab406bc088121d4c24a5493ac54845843f633d0d70e72ed03a053"
+    },
+    "netaddr": {
+      "id": "netaddr",
+      "config_path": "conf/benchmark/netaddr.yaml",
+      "benchmark_path": "benchmarks/netaddr",
+      "manifest_benchmark_id": "netaddr",
+      "root_package": "Netaddr",
+      "snapshot_sha256": "1794703756a46ec43eee13b679221df9d6e8cb0d85e6d1543505fb73f6c43ebf"
+    },
+    "networkx": {
+      "id": "networkx",
+      "config_path": "conf/benchmark/networkx.yaml",
+      "benchmark_path": "benchmarks/networkx",
+      "manifest_benchmark_id": "networkx",
+      "root_package": "Networkx",
+      "snapshot_sha256": "5fcdb7d25a400e27767e71ba6c921a9f0d4d6c67fc6f09aa6e3fd36343c50f17"
+    },
+    "ntheory": {
+      "id": "ntheory",
+      "config_path": "conf/benchmark/ntheory.yaml",
+      "benchmark_path": "benchmarks/ntheory",
+      "manifest_benchmark_id": "ntheory",
+      "root_package": "Ntheory",
+      "snapshot_sha256": "1c195d1d577fe5b415ebc3211e00fdd8be26f87ab104335b70b2a56cc85678cf"
+    },
+    "packaging_version": {
+      "id": "packaging_version",
+      "config_path": "conf/benchmark/packaging_version.yaml",
+      "benchmark_path": "benchmarks/packaging_version",
+      "manifest_benchmark_id": "packaging_version",
+      "root_package": "PackagingVersion",
+      "snapshot_sha256": "b5e0142d502aadd2edad77303e606df41015885af3496ea2a2b0e4995454a7e1"
+    },
+    "piggybank": {
+      "id": "piggybank",
+      "config_path": "conf/benchmark/piggybank.yaml",
+      "benchmark_path": "benchmarks/piggybank",
+      "manifest_benchmark_id": "piggybank-v2",
+      "root_package": "PiggybankV2",
+      "snapshot_sha256": "deb09363bd2944afb0972e91d224d133f00d23465664e27f2b62d2449be105d7"
+    },
+    "portion": {
+      "id": "portion",
+      "config_path": "conf/benchmark/portion.yaml",
+      "benchmark_path": "benchmarks/portion",
+      "manifest_benchmark_id": "portion",
+      "root_package": "Portion",
+      "snapshot_sha256": "18583a62bfb25d3f2c3e603302dd7a3bcb5f1205cddc6ddf8af630300279c1a2"
+    },
+    "primefac": {
+      "id": "primefac",
+      "config_path": "conf/benchmark/primefac.yaml",
+      "benchmark_path": "benchmarks/primefac",
+      "manifest_benchmark_id": "primefac",
+      "root_package": "Primefac",
+      "snapshot_sha256": "f1f68c60cdd8bdfe602d0b4225a27da60d5fb00cd7560054aeb9e68b5f998379"
+    },
+    "primepy": {
+      "id": "primepy",
+      "config_path": "conf/benchmark/primepy.yaml",
+      "benchmark_path": "benchmarks/primepy",
+      "manifest_benchmark_id": "primepy",
+      "root_package": "Primepy",
+      "snapshot_sha256": "0c724fae4e853265de8e6a9c4de48e5e710e068de1772ae777d1fc53bffe2f58"
+    },
+    "prolepticgregorian": {
+      "id": "prolepticgregorian",
+      "config_path": "conf/benchmark/prolepticgregorian.yaml",
+      "benchmark_path": "benchmarks/prolepticgregorian",
+      "manifest_benchmark_id": "prolepticgregorian",
+      "root_package": "ProlepticGregorian",
+      "snapshot_sha256": "00e3d77927562c8346475484604eec7fa76a3966acabf8b5865cfd6604c3b143"
+    },
+    "pyradix": {
+      "id": "pyradix",
+      "config_path": "conf/benchmark/pyradix.yaml",
+      "benchmark_path": "benchmarks/pyradix",
+      "manifest_benchmark_id": "pyradix",
+      "root_package": "Pyradix",
+      "snapshot_sha256": "bfe982453cb93e9a81df1d9250466650194cc5445e805cdcdfea257afaa24d11"
+    },
+    "pythonconstraint": {
+      "id": "pythonconstraint",
+      "config_path": "conf/benchmark/pythonconstraint.yaml",
+      "benchmark_path": "benchmarks/pythonconstraint",
+      "manifest_benchmark_id": "pythonconstraint",
+      "root_package": "Pythonconstraint",
+      "snapshot_sha256": "30bad84139eabb49ba500274aac83e12b3f1ab1eefe5293baa38e5a7ff238e34"
+    },
+    "reedsolo": {
+      "id": "reedsolo",
+      "config_path": "conf/benchmark/reedsolo.yaml",
+      "benchmark_path": "benchmarks/reedsolo",
+      "manifest_benchmark_id": "reedsolo",
+      "root_package": "Reedsolo",
+      "snapshot_sha256": "4448dd7b501f90c1b3295a91c2e9251616bb74110cc019dbdf49733790824371"
+    },
+    "rsa": {
+      "id": "rsa",
+      "config_path": "conf/benchmark/rsa.yaml",
+      "benchmark_path": "benchmarks/rsa",
+      "manifest_benchmark_id": "rsa",
+      "root_package": "Rsa",
+      "snapshot_sha256": "7da0510855402b99c9b09b365674c9e737b055d8d8030dfabef545daac723b35"
+    },
+    "semver": {
+      "id": "semver",
+      "config_path": "conf/benchmark/semver.yaml",
+      "benchmark_path": "benchmarks/semver",
+      "manifest_benchmark_id": "semver",
+      "root_package": "Semver",
+      "snapshot_sha256": "28daff39eaa655a9bf5d47bfeea3543d15cbfda618418f0426de738aac1fc7d9"
+    },
+    "sequences": {
+      "id": "sequences",
+      "config_path": "conf/benchmark/sequences.yaml",
+      "benchmark_path": "benchmarks/Sequences",
+      "manifest_benchmark_id": "sequences-v2",
+      "root_package": "SequencesV2",
+      "snapshot_sha256": "0f68f311019658a5c69d334b8a7077ca64b9212b8128e4049d1cb8a1f0db8e45"
+    },
+    "sortedcontainers": {
+      "id": "sortedcontainers",
+      "config_path": "conf/benchmark/sortedcontainers.yaml",
+      "benchmark_path": "benchmarks/sortedcontainers",
+      "manifest_benchmark_id": "sortedcontainers/core",
+      "root_package": "SortedcontainersCore",
+      "snapshot_sha256": "f60f4fd84c082cb48b673571aa67d738560601e13b274e64551ee07899c6bc48"
+    },
+    "textdistance": {
+      "id": "textdistance",
+      "config_path": "conf/benchmark/textdistance.yaml",
+      "benchmark_path": "benchmarks/textdistance",
+      "manifest_benchmark_id": "textdistance",
+      "root_package": "Textdistance",
+      "snapshot_sha256": "f121366c55300cc3b6128ee49c5ae4f8fb9417f764789abd3bdc12a530ae3335"
+    },
+    "textwrap": {
+      "id": "textwrap",
+      "config_path": "conf/benchmark/textwrap.yaml",
+      "benchmark_path": "benchmarks/textwrap",
+      "manifest_benchmark_id": "textwrap",
+      "root_package": "Textwrap",
+      "snapshot_sha256": "7226aaa2ec73692475e298ea8533cba777e45b82b0bb203069627e736fde3f0e"
+    },
+    "toposort": {
+      "id": "toposort",
+      "config_path": "conf/benchmark/toposort.yaml",
+      "benchmark_path": "benchmarks/toposort",
+      "manifest_benchmark_id": "toposort/sort",
+      "root_package": "ToposortSort",
+      "snapshot_sha256": "3d5929a838bdcb77e93c807760493244013ea0bd8c0b0fa2709c3bf1c891435c"
+    },
+    "unicode": {
+      "id": "unicode",
+      "config_path": "conf/benchmark/unicode.yaml",
+      "benchmark_path": "benchmarks/Unicode",
+      "manifest_benchmark_id": "unicode-v2",
+      "root_package": "UnicodeV2",
+      "snapshot_sha256": "a53a4dc72ae431cf1a72516265928b2235591a507f095df232e2d6c239255520"
+    },
+    "verdict": {
+      "id": "verdict",
+      "config_path": "conf/benchmark/verdict.yaml",
+      "benchmark_path": "benchmarks/verdict",
+      "manifest_benchmark_id": "verdict",
+      "root_package": "Verdict",
+      "snapshot_sha256": "721f161de25a8e602fc47de611fdc25fcfb5efb5ead63d8893bb89eecdeee37b"
+    },
+    "verified_bitmasks": {
+      "id": "verified_bitmasks",
+      "config_path": "conf/benchmark/verified_bitmasks.yaml",
+      "benchmark_path": "benchmarks/VerifiedBitmasks",
+      "manifest_benchmark_id": "verified-bitmasks",
+      "root_package": "VerifiedBitmasks",
+      "snapshot_sha256": "721423ff5f26f6351ae031b6132410ec19cf18eb1474d15d2771738c0baea752"
+    },
+    "verified_ironkv": {
+      "id": "verified_ironkv",
+      "config_path": "conf/benchmark/verified_ironkv.yaml",
+      "benchmark_path": "benchmarks/VerifiedIronkv",
+      "manifest_benchmark_id": "verified_ironkv",
+      "root_package": "VerifiedIronkv",
+      "snapshot_sha256": "ee2370264c3aba3fd9b6bf747c4129962555a4c37f40ebe2b03eb3beea825390"
+    },
+    "vest": {
+      "id": "vest",
+      "config_path": "conf/benchmark/vest.yaml",
+      "benchmark_path": "benchmarks/vest",
+      "manifest_benchmark_id": "vest_v2",
+      "root_package": "VestV2",
+      "snapshot_sha256": "74e9cea3bd0abbad5f013526e8b4a307366a54d6cded99aed48e67165ca86a12"
+    }
+  }
+}

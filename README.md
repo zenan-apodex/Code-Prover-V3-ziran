@@ -5,6 +5,8 @@ Lean 4 定理证明评测系统，构建在 [Harbor](https://github.com/harbor-f
 （`ExperimentRunner` / vendored opengauss harness），保留 V2 已验证的任务契约与
 判分语义。架构详见 [DESIGN.md](DESIGN.md)。
 
+V2 的分批迁移、功能取舍和最终退役门槛见 [MIGRATION.md](MIGRATION.md)。
+
 **V3 不再使用 agent skill**（V2 的 `lean4-codeprover`）：纪律约束（spec 只读、禁
 negation）改由 verifier 硬校验，任务说明全部自包含在 `instruction.md` 里，因此任务
 与 agent 解耦——同一套任务可跑 claude-code / codex / terminus-2 / 本地 SFT。注意
@@ -15,7 +17,8 @@ V2 的历史分数是带 skill 跑出来的，与 V3 数字不可直接对比；
 
 ```bash
 # 0) 依赖：docker + docker compose v2 插件、uv；harbor 需要 Python >= 3.13
-uv venv .venv --python 3.13 && uv pip install -p .venv/bin/python harbor
+uv venv .venv --python 3.13
+uv pip install -p .venv/bin/python -r requirements-harbor.txt
 # DSW 的 docker 没有 compose 插件，装一次即可：
 #   mkdir -p ~/.docker/cli-plugins && curl -fsSL -o ~/.docker/cli-plugins/docker-compose \
 #     https://github.com/docker/compose/releases/download/v2.39.4/docker-compose-linux-x86_64 \
@@ -24,8 +27,8 @@ uv venv .venv --python 3.13 && uv pip install -p .venv/bin/python harbor
 # 1) 构建共享基底镜像（预构建包树在 images/lean-mathlib/lean-packages/，V3 自持）
 images/lean-mathlib/build.sh                 # -> code-prover-lean:latest
 
-# 2) 数据集就是 tasks/ 下的 Harbor task 目录（唯一格式，无 JSONL 中间层）。
-#    V2 的 10 个存量 benchmark 已一次性转换完毕，直接用；新数据这样生成：
+# 2) 小型 canonical 数据集直接放在 tasks/。大型 frozen benchmark 的原始数据保留在
+#    本机 pinned checkout，通过 materializer 生成 gitignored Harbor view；不要提交生成目录。
 python3 tools/dataset.py make --from-lean-dir <目录> tasks/<名字>   # 每个 .lean 一个任务
 python3 tools/dataset.py make-math tasks/<名字> --from-jsonl <记录.jsonl>...  # math 题源（单定理+sorry）
 
@@ -36,6 +39,10 @@ export ANTHROPIC_API_KEY=...   # 或 ANTHROPIC_BASE_URL + ANTHROPIC_AUTH_TOKEN �
 # 结果与轨迹
 .venv/bin/harbor view          # web viewer 浏览 trajectory
 cat jobs/<job_name>/result.json
+
+# 可审计汇总：读取 Harbor lock + 每个 trial result/reward + task manifest
+python3 tools/harbor_results.py summarize jobs/<job_name> --tasks-root tasks
+python3 tools/harbor_results.py verify jobs/<job_name>/audit/summary.json
 ```
 
 ## 端到端 smoke（不需要 LLM）
@@ -57,12 +64,62 @@ cat jobs/<job_name>/result.json
 - **manifest**：每个数据集根有 `manifest.json`（每任务 spec 的 sha256 + 聚合
   content_sha256 + lean_profile），`make` 自动生成，spec 变动后用
   `tools/dataset.py manifest tasks/<名字>` 重建；validate 对其 fail-closed。
-- JSONL 中间格式已于 2026-07-17 退役；V2 的 10 个存量 benchmark 已全部转换为 task 目录。
+- JSONL 中间格式已于 2026-07-17 退役；大型外部 benchmark 使用 pinned source +
+  provenance descriptor + ignored Harbor view，不把批量生成 task 提交进 Git。
 - **miniF2F**（2026-07-17 转入）：`minif2f-test-244`（与主线
   benchmarks/manifests/minif2f-test-244.jsonl 字节一致）与 `minif2f-valid-243`
   （从 google-deepmind/miniF2F 上游 Valid.lean 切分：answer(x) 内联为 (x)、剔除 12 个
   .variants.* 变体与 1 道依赖 FormalConjectures nthRoot 的 mathd_algebra_282，
   243/243 在容器内编译通过）。均为 proof-completion（只有 proof 区可写）。
+
+## 外部 benchmark 数据
+
+Git 只保存 materializer/grader、来源 revision、内容 hash、Lean/Mathlib pin 和轻量
+descriptor。机器相关的绝对路径保存在被忽略的 `benchmarks.local.toml`：
+
+```bash
+cp benchmarks.local.toml.example benchmarks.local.toml
+# 编辑 [sources]，填入本机 absolute paths；也可使用 registry 中声明的环境变量。
+python3 tools/benchmark_paths.py putnambench
+
+python3 tools/migrate_putnam_campaign.py verify
+python3 tools/migrate_putnam_campaign.py materialize
+python3 tools/migrate_vericoding_campaign.py verify
+python3 tools/migrate_vericoding_campaign.py materialize
+```
+
+路径解析优先级为显式 CLI 参数、环境变量、本地 TOML。所有 materializer 先校验 pinned
+revision 和 hash chain，再原子生成到 `tasks/_campaign_views/<campaign>/`；该目录不进入
+Git。普通 CI 使用小型 fixture，全量 materialize/compile gate 在配置了本地 source 的
+self-hosted runner 或工作站执行。
+
+## 可审计评测汇总
+
+`tools/harbor_results.py` 不依赖 Harbor Python internals，直接读取持久化产物：
+
+- job `lock.json` 是冻结的 planned-trial 清单；
+- 每个 trial 的 `result.json` 是逐题 runtime 真相；
+- embedded rewards 必须与 `verifier/reward.json` 完全一致；
+- task metadata、dataset `manifest.json`、spec SHA、Harbor task checksum 和 lock
+  digest 分开保存，不把不同 identity 混称；
+- 运行该工具的代码版本从自身 tracked module 反查 Git，无法证明时返回 null 并
+  fail closed，绝不借用 operator cwd 的 commit。
+
+当前持久化 schema 与 smoke/full-run 证据固定在 Harbor 0.20.0，安装入口见
+`requirements-harbor.txt`。汇总器遇到其他 Harbor 版本会保留诊断但 fail closed；升级时
+必须先补对应 fixture/真实 job 验证，再扩充 supported-version 集合。
+
+输出在 `<job>/audit/`：
+
+- `trials.jsonl`：标准化逐 trial 记录；
+- `issues.jsonl`：missing、infra、schema/hash/reward 不一致；
+- `summary.json`：按 agent/model/dataset arm 聚合的 observed strict pass@k、
+  p50/p90 usage/walltime、paired outcomes 和完整 input hash binding。
+
+observed strict pass@k 不是组合估计器：每题实际计划的 k 次尝试中至少一次严格通过才
+算通过。只有所有 k 次均为 scoreable（严格通过或正常失败）时 official `pass_at_k`
+才非 null；infra/missing 时只报告明确命名的 provisional lower bound。默认 incomplete
+退出码为 2；`--allow-incomplete` 只改变退出码，不改变 null 语义。
 
 ## 布局
 
@@ -71,7 +128,10 @@ cat jobs/<job_name>/result.json
 | `images/lean-mathlib/` | 共享基底镜像：elan/Lean(v4.28.0) + 烘焙 Mathlib oleans（`lean-packages/`，V3 自持）+ repl + lean-rs-mcp + claude CLI |
 | `verifier/` | 判分器（每个 task 的 `tests/` 由此拷贝）：五重校验，见下文判分语义 |
 | `tools/dataset.py` | 数据集工具：`make`（从 .lean 目录生成）、`make-math`（math 题源 jsonl → 单定理任务，NL 题面进只读注释，flavor 记在 task.toml）、`refresh`（判分器升级后批量重刷派生文件，spec 不动，按 flavor 选 instruction 模板）、`validate` |
-| `tasks/` | **数据集本体**（canonical 格式，每个子目录一个数据集） |
+| `tools/harbor_results.py` | Harbor-native 可审计 trial/pass@k/paired 汇总与 hash-chain 验证 |
+| `benchmarks/registry.toml` | 外部 benchmark 的逻辑 source key、环境变量和默认 ignored view；不含机器绝对路径 |
+| `migration/v2/` | Frozen campaign 的轻量 provenance、逐题 hash/映射和 toolchain pin |
+| `tasks/` | 小型 canonical 数据集，以及被忽略的 `_campaign_views/` 运行时物化目录 |
 | `configs/` | `harbor run -c` 的 job 配置 |
 | `jobs/` | Harbor 运行输出（每 trial 的 reward、日志、trajectory） |
 
@@ -106,9 +166,9 @@ verifier 的 `tests/` 在 agent 阶段结束后才被上传进容器，agent 无
 
 ## 数据入库政策（2026-07-21 定）
 
-- **基准评测集进 git**（`tasks/verina_canonical_189`、`tasks/minif2f-*`、
-  `tasks/trainset_problems_300` 等）：它们的 Lean spec 源就是 canonical 版本，
-  仓库即唯一事实来源，删了就没了。
+- **小型、人工维护的 canonical 集可进 Git**（`tasks/verina_canonical_189`、
+  `tasks/minif2f-*`、`tasks/trainset_problems_300` 等）。大型 frozen benchmark 的 source
+  checkout 不进 Git，只提交代码与可复现 provenance，并按需物化 ignored view。
 - **批量生成的数据一律放 `/data/`（gitignored）**：蒸馏轮次、rescue 集、SFT 导出
   等由 `tools/distill_ops.py` 从 `data/<dataset>/tasks/` + `rounds_assignment.json`
   重新物化，不进 git。每个数据集目录带 `manifest.json`（per-task spec sha256 +

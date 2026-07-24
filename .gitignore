@@ -17,3 +17,5 @@ solved_problems/
 .venv-aliyun/
 /training-data/
 rl/data/training_data_1000.jsonl
+/benchmarks.local.toml
+/tasks/_campaign_views/
