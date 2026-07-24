@@ -6,14 +6,14 @@ ad-hoc session scripts, as one repo tool.
     .venv/bin/python tools/distill_ops.py status --job jobs/distill-dpsk-round1 [--total 5000]
     .venv/bin/python tools/distill_ops.py config --round 2 [--rescue]
     .venv/bin/python tools/distill_ops.py collect --jobs jobs/distill-dpsk-round1 jobs/distill-dpsk-round1-rescue \
-        --out data/coding-v2.1-full-20260721/sft/round1.jsonl
+        --out data/coding-v2.1-full-20260721/distilled/round1-solved.jsonl
 
 Dataset layout (all under DATASET, gitignored):
     tasks/                    all 25,880 harbor task dirs (source of truth)
     rounds_assignment.json    seeded 6-round split (seed 20260721)
     rounds/round<N>/          materialized per-round datasets
     rounds/<round>_rescue/    tasks of a round that did not finish cleanly
-    sft/                      collected transcripts -> SFT jsonl exports
+    distilled/round<N>-solved.jsonl   collected transcripts -> SFT jsonl exports
 """
 
 from __future__ import annotations
@@ -33,6 +33,13 @@ REPO = Path(__file__).resolve().parent.parent
 DATASET = Path(os.environ.get("DISTILL_DATASET",
                               str(REPO / "data" / "coding-v2.1-full-20260721")))
 CAMPAIGN = os.environ.get("DISTILL_CAMPAIGN", "")
+# Model selection for generated configs (all via the llm-hub gateway, same
+# $DPSK_API_KEY): DISTILL_MODEL + its gateway channel + the job/config name
+# tag, e.g. kimi-k3 -> DISTILL_MODEL=kimi-k3 DISTILL_CHANNEL=12
+# DISTILL_MODEL_TAG=kimi (job names become distill-kimi-<label>).
+MODEL = os.environ.get("DISTILL_MODEL", "deepseek-v4-pro")
+CHANNEL = os.environ.get("DISTILL_CHANNEL", "7")
+MODEL_TAG = os.environ.get("DISTILL_MODEL_TAG", "dpsk")
 
 sys.path.insert(0, str(REPO))
 from tools.dataset import write_manifest  # noqa: E402
@@ -258,7 +265,7 @@ CONFIG_TEMPLATE = """\
 # The company team is shared: sandboxes can be killed by others and creation
 # can fail under contention — the env retries creation, and `distill_ops
 # rescue` re-runs whatever still dies.
-job_name: distill-dpsk-{label}
+job_name: distill-{tag}-{label}
 jobs_dir: jobs
 n_attempts: 1
 # 1024 per Zenan 2026-07-22 (512 validated on round1 rescues; gateway share
@@ -276,17 +283,19 @@ environment:
 
 agents:
   - import_path: agents.thirdparty_agent:ThirdPartyAgent
-    model_name: deepseek-v4-pro
+    model_name: {model}
     kwargs:
       api_base: https://llm-hub.apodex.app/v1
+      # generic llm-hub key (works across channels; kimi-k3@12 验证过)
       api_key: $DPSK_API_KEY
-      extra_headers: {{"X-Llmhub-Channel": "7"}}
+      extra_headers: {{"X-Llmhub-Channel": "{channel}"}}
       max_api_calls: 384
       max_tokens: 16384
       enable_compaction: false
       save_transcript: true
       # thinking is gateway-default-on; pinned so a default flip can never
-      # silently drop the CoT we distill on.
+      # silently drop the CoT we distill on. kimi-k3 也接受此字段
+      # (07-24 验证:reasoning_content 正常返回)。
       extra_request_fields: {{"thinking": {{"type": "enabled"}}}}
 
 datasets:
@@ -300,11 +309,13 @@ def cmd_config(args) -> int:
         + (f"-{args.suffix}" if args.suffix else "")
     ds = DATASET / "rounds" / (f"round{args.round}_rescue" if args.rescue
                                else f"round{args.round}")
-    out = REPO / "configs" / f"distill-dpsk-{label}.yaml"
+    out = REPO / "configs" / f"distill-{MODEL_TAG}-{label}.yaml"
     if out.exists() and not args.force:
         print(f"FATAL: {out} exists — pass --force to overwrite", file=sys.stderr)
         return 1
-    out.write_text(CONFIG_TEMPLATE.format(label=label, dataset=ds.relative_to(REPO)))
+    out.write_text(CONFIG_TEMPLATE.format(label=label, dataset=ds.relative_to(REPO),
+                                          model=MODEL, channel=CHANNEL,
+                                          tag=MODEL_TAG))
     print(f"wrote {out}")
     return 0
 
