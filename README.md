@@ -130,6 +130,7 @@ observed strict pass@k 不是组合估计器：每题实际计划的 k 次尝试
 | `tools/dataset.py` | 数据集工具：`make`（从 .lean 目录生成）、`make-math`（math 题源 jsonl → 单定理任务，NL 题面进只读注释，flavor 记在 task.toml）、`refresh`（判分器升级后批量重刷派生文件，spec 不动，按 flavor 选 instruction 模板）、`validate` |
 | `tools/harbor_results.py` | Harbor-native 可审计 trial/pass@k/paired 汇总与 hash-chain 验证 |
 | `benchmarks/registry.toml` | 外部 benchmark 的逻辑 source key、环境变量和默认 ignored view；不含机器绝对路径 |
+| `rl/MILES_HARBOR.md` | official Miles + V3 Harbor/Aliyun E2B 的插件契约、启动与验证 |
 | `migration/v2/` | Frozen campaign 的轻量 provenance、逐题 hash/映射和 toolchain pin |
 | `tasks/` | 小型 canonical 数据集，以及被忽略的 `_campaign_views/` 运行时物化目录 |
 | `configs/` | `harbor run -c` 的 job 配置 |

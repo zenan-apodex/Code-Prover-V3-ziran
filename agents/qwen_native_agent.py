@@ -130,6 +130,7 @@ class QwenNativeAgent(BaseAgent):
         tool_primer: bool = False,
         extra_headers: dict[str, str] | None = None,
         save_transcript: bool = False,
+        stop_on_length: bool = False,
         extra_request_fields: dict | None = None,
         **kwargs,
     ):
@@ -150,6 +151,7 @@ class QwenNativeAgent(BaseAgent):
         self._max_compactions = int(max_compactions)
         self._summary_max_tokens = int(summary_max_tokens)
         self._save_transcript = bool(save_transcript)
+        self._stop_on_length = bool(stop_on_length)
         self._extra_request_fields = dict(extra_request_fields or {})
 
     @staticmethod
@@ -508,6 +510,16 @@ class QwenNativeAgent(BaseAgent):
                         for tc in decoded.tool_calls
                     ],
                 })
+
+                # TITO-backed clients cannot append another role after a
+                # length-truncated assistant turn: the generated prefix has no
+                # terminal role-boundary token.  They opt into ending the
+                # trajectory here; ordinary endpoints retain the historical
+                # truncation-nudge behavior below.
+                if finish_reason == "length" and self._stop_on_length:
+                    stop_reason = "truncated"
+                    emit("stop", {"reason": stop_reason})
+                    break
 
                 if decoded.errors and not decoded.tool_calls:
                     for i, err in enumerate(decoded.errors):
