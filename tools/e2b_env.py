@@ -228,9 +228,18 @@ class ACRE2BEnvironment(E2BEnvironment):
         if not df.is_file():
             return
         for src, dst in _COPY_RE.findall(df.read_text(encoding="utf-8")):
-            target = dst if not dst.endswith("/") else dst + Path(src).name
-            await self.exec(f"mkdir -p {Path(target).parent}")
-            await self.upload_file(self.environment_dir / src, target)
+            src_path = self.environment_dir / src
+            if src_path.is_dir():
+                # Docker `COPY tree/ /task/` puts the *contents* of tree/
+                # under /task/ — upload_dir has the same relative-path
+                # semantics (repo flavor, 2026-08-05).
+                target = dst.rstrip("/") or "/"
+                await self.exec(f"mkdir -p {target}")
+                await self.upload_dir(src_path, target)
+            else:
+                target = dst if not dst.endswith("/") else dst + Path(src).name
+                await self.exec(f"mkdir -p {Path(target).parent}")
+                await self.upload_file(src_path, target)
             self.logger.debug("Replayed COPY %s -> %s", src, target)
 
     @retry(

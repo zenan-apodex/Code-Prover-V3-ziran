@@ -1,0 +1,31 @@
+# repo-v1.0 agent smoke: 8 tasks across capability tiers/languages, local
+# docker, deepseek-v4-pro (channel 7 — kimi channel 12 is quota-choked).
+# Validates the repo flavor end to end with a real agent before any campaign,
+# including the compaction path (enable_compaction on, as the repo campaign
+# will run it): multi-file trees outgrow the context soft limit, and the
+# CONTINUATION_TEMPLATE wording was written for single-file math tasks —
+# check a compacted transcript reads sanely before scaling out.
+#
+#   set -a && source .env && set +a && PYTHONPATH=$PWD \
+#     .venv/bin/harbor run -c configs/smoke-repo-dpsk.yaml
+
+job_name: smoke-repo-dpsk
+jobs_dir: jobs
+n_attempts: 1
+n_concurrent_trials: 8
+
+agents:
+  - import_path: agents.thirdparty_agent:ThirdPartyAgent
+    model_name: deepseek-v4-pro
+    kwargs:
+      api_base: https://llm-hub.apodex.app/v1
+      api_key: $DPSK_API_KEY
+      extra_headers: {"X-Llmhub-Channel": "7"}
+      max_api_calls: 384
+      max_tokens: 16384
+      enable_compaction: true
+      save_transcript: true
+      extra_request_fields: {"thinking": {"type": "enabled"}}
+
+datasets:
+  - path: data/repo-v1.0-20260804/smoke8
