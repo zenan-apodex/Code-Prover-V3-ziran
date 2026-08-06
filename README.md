@@ -87,7 +87,8 @@ cat jobs/<job_name>/result.json
    声明与 negation 工作流一律判负（移植主线 `acceptance_audit` 禁用构造模式）；
 4. **compiled** — `lake env lean` 零错误；
 5. **axioms_ok** — 原始 spec 中每个定理 `#print axioms` ⊆ {propext, Classical.choice,
-   Quot.sound}。
+   Quot.sound, Lean.ofReduceBool, Lean.trustCompiler}(2026-07-25 放开后两者,
+   允许 bv_decide/native_decide;此前判负)。
 
 verifier 的 `tests/` 在 agent 阶段结束后才被上传进容器，agent 无法篡改判分器或原始 spec。
 
