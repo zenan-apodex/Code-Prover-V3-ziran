@@ -1,0 +1,39 @@
+# book-v1 rescue: the 18 exception trials from round1 (8, JB) + round2 (10,
+# SG), rerun together on JB. round3 had zero exceptions.
+#
+#   set -a && source .env && set +a && PYTHONPATH=$PWD \
+#     .venv-aliyun/bin/harbor run -c configs/distill-book-rescue-jb.yaml
+
+job_name: distill-book-rescue-jb
+jobs_dir: jobs
+n_attempts: 1
+n_concurrent_trials: 18
+environment_build_timeout_multiplier: 3
+
+environment:
+  import_path: tools.e2b_env:ACRE2BEnvironment
+  kwargs:
+    generic_template: zenan-no-internet
+    aliyun_cluster: jb
+    aliyun_image: apodex-sandbox-johor-registry-vpc.ap-southeast-8.cr.aliyuncs.com/math-rl/code-prover-lean:latest
+    sandbox_timeout_sec: 7200
+    claim_timeout_sec: 540
+    wait_ready_timeout_sec: 540
+    create_concurrency: 24
+
+agents:
+  - import_path: agents.thirdparty_agent:ThirdPartyAgent
+    model_name: deepseek-v4-pro
+    kwargs:
+      api_base: https://llm-hub.apodex.app/v1
+      api_key: $DPSK_API_KEY
+      extra_headers: {"X-Llmhub-Channel": "7"}
+      max_api_calls: 384
+      max_tokens: 16384
+      enable_compaction: false
+      save_transcript: true
+      extra_request_fields: {"thinking": {"type": "enabled"}}
+
+datasets:
+  - path: data/book-v1-20260731/rounds/round1_rescue
+  - path: data/book-v1-20260731/rounds/round2_rescue

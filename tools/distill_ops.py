@@ -40,6 +40,22 @@ CAMPAIGN = os.environ.get("DISTILL_CAMPAIGN", "")
 MODEL = os.environ.get("DISTILL_MODEL", "deepseek-v4-pro")
 CHANNEL = os.environ.get("DISTILL_CHANNEL", "7")
 MODEL_TAG = os.environ.get("DISTILL_MODEL_TAG", "dpsk")
+# kimi-k3 hard-rejects any temperature != 1 ("only 1 is allowed",
+# 2026-07-25: 2k concurrent 400s tripped the gateway error-storm breaker).
+TEMPERATURE = os.environ.get("DISTILL_TEMPERATURE", "0.6")
+# kimi-k3 emits tool calls as serving-level special tokens: without a
+# `tools` parameter the server swallows them (empty content, truncated).
+# true -> agent sends OpenAI function schemas + structured history.
+NATIVE_TOOLS = os.environ.get("DISTILL_NATIVE_TOOLS", "false")
+# kimi channel rate limit is far below dpsk's: 2x1024 concurrent trials
+# 429-stormed through the agent backoff (1.6k dead trials, 2026-07-25).
+CONCURRENCY = os.environ.get("DISTILL_CONCURRENCY", "1024")
+# Compaction (summarize-and-restart on the context soft limit). Off for the
+# single-file math/book campaigns: `collect` drops compacted trials by default
+# (non-linear context). Repo-flavor tasks routinely outgrow the window, so
+# repo campaigns set true — and must then collect with --keep-compacted, or a
+# task solved only after compaction leaves the carve pool with no SFT sample.
+COMPACTION = os.environ.get("DISTILL_COMPACTION", "false")
 
 sys.path.insert(0, str(REPO))
 from tools.dataset import write_manifest  # noqa: E402
@@ -270,7 +286,7 @@ jobs_dir: jobs
 n_attempts: 1
 # 1024 per Zenan 2026-07-22 (512 validated on round1 rescues; gateway share
 # is the real throughput cap; sandboxes bill while waiting on 429 backoff).
-n_concurrent_trials: 1024
+n_concurrent_trials: {concurrency}
 
 environment:
   import_path: tools.e2b_env:ACRE2BEnvironment
@@ -289,9 +305,11 @@ agents:
       # generic llm-hub key (works across channels; kimi-k3@12 验证过)
       api_key: $DPSK_API_KEY
       extra_headers: {{"X-Llmhub-Channel": "{channel}"}}
+      temperature: {temperature}
+      native_tools: {native_tools}
       max_api_calls: 384
       max_tokens: 16384
-      enable_compaction: false
+      enable_compaction: {compaction}
       save_transcript: true
       # thinking is gateway-default-on; pinned so a default flip can never
       # silently drop the CoT we distill on. kimi-k3 也接受此字段
@@ -315,7 +333,10 @@ def cmd_config(args) -> int:
         return 1
     out.write_text(CONFIG_TEMPLATE.format(label=label, dataset=ds.relative_to(REPO),
                                           model=MODEL, channel=CHANNEL,
-                                          tag=MODEL_TAG))
+                                          tag=MODEL_TAG, temperature=TEMPERATURE,
+                                          native_tools=NATIVE_TOOLS,
+                                          concurrency=CONCURRENCY,
+                                          compaction=COMPACTION))
     print(f"wrote {out}")
     return 0
 

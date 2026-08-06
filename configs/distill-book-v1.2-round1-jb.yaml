@@ -1,0 +1,49 @@
+# book-v1.2 distillation, JB chain (round1), teacher switched to kimi-k3.
+# Dataset: data/book-v1.2-unsolved-20260802 (4,731 v1.1-unsolved, seed
+# 20260802, rounds 2366/2365). Split-backend with the SG chain (round2).
+# MUST run with the pinned venv (py3.12 + e2b==2.23.0):
+#
+#   set -a && source .env && set +a && \
+#   DISTILL_DATASET=$PWD/data/book-v1.2-unsolved-20260802 LABEL_PREFIX=distill-book-v1.2 \
+#     PYTHONPATH=$PWD nohup tools/run_math_rounds_on.sh \
+#     configs/distill-book-v1.2-round1-jb.yaml round1 .venv-aliyun/bin/harbor 1 \
+#     > jobs/distill-book-v1.2-jb-chain.log 2>&1 & disown
+#
+# Resume: same job_name + jobs_dir skips completed trials.
+
+job_name: distill-book-v1.2-round1-jb
+jobs_dir: jobs
+n_attempts: 1
+n_concurrent_trials: 64
+environment_build_timeout_multiplier: 3
+
+environment:
+  import_path: tools.e2b_env:ACRE2BEnvironment
+  kwargs:
+    generic_template: zenan-no-internet
+    aliyun_cluster: jb
+    aliyun_image: apodex-sandbox-johor-registry-vpc.ap-southeast-8.cr.aliyuncs.com/math-rl/code-prover-lean:latest
+    sandbox_timeout_sec: 7200
+    claim_timeout_sec: 540
+    wait_ready_timeout_sec: 540
+    create_concurrency: 24
+
+agents:
+  - import_path: agents.thirdparty_agent:ThirdPartyAgent
+    model_name: kimi-k3
+    kwargs:
+      api_base: https://llm-hub.apodex.app/v1
+      # generic llm-hub key (works across channels; kimi-k3@12 验证过)
+      api_key: $DPSK_API_KEY
+      extra_headers: {"X-Llmhub-Channel": "12"}
+      temperature: 1
+      native_tools: true
+      max_api_calls: 384
+      max_tokens: 16384
+      enable_compaction: false
+      save_transcript: true
+      # thinking pinned so a gateway default flip can never silently drop CoT
+      extra_request_fields: {"thinking": {"type": "enabled"}}
+
+datasets:
+  - path: data/book-v1.2-unsolved-20260802/rounds/round1

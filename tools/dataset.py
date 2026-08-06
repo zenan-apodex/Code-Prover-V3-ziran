@@ -102,7 +102,8 @@ stray edit outside the editable regions scores ZERO.
 1. `lake env lean {task_path}` (run from `/task`) reports zero errors;
 2. no `sorry` remains anywhere in the file;
 3. every theorem depends only on the standard axioms
-   (`propext`, `Classical.choice`, `Quot.sound`) — check with
+   (`propext`, `Classical.choice`, `Quot.sound`, `Lean.ofReduceBool`,
+   `Lean.trustCompiler` — so `bv_decide`/`native_decide` are allowed) — check with
    `#print axioms <theoremName>`;
 4. the specification is untouched: you may ONLY edit the contents of the
    `-- !benchmark @start/@end` regions named `code`, `proof`, `solution_aux`,
@@ -171,7 +172,8 @@ regions scores ZERO.
 1. `lake env lean {task_path}` (run from `/task`) reports zero errors;
 2. no `sorry` remains anywhere in the file;
 3. the theorem depends only on the standard axioms
-   (`propext`, `Classical.choice`, `Quot.sound`) — check with
+   (`propext`, `Classical.choice`, `Quot.sound`, `Lean.ofReduceBool`,
+   `Lean.trustCompiler` — so `bv_decide`/`native_decide` are allowed) — check with
    `#print axioms <theoremName>`;
 4. the specification is untouched: you may ONLY edit the contents of the
    `-- !benchmark @start/@end` regions named `proof` and `proof_aux`.
