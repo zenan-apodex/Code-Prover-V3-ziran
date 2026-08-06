@@ -209,6 +209,69 @@ def encode_request(api_kwargs: Mapping[str, Any]) -> dict[str, Any]:
     return request
 
 
+def encode_request_native(
+    api_kwargs: Mapping[str, Any], tools_schema: Sequence[Mapping[str, Any]]
+) -> dict[str, Any]:
+    """OpenAI function-calling wire form for models whose serving stack owns
+    the tool grammar (kimi-k3: tool calls ride dedicated special tokens, and
+    without a ``tools`` parameter the server drops them and truncates —
+    2026-07-25). History stays structured; ``<think>`` blocks are stripped
+    from replayed assistant turns (reasoning is never re-sent); the logical
+    transcript kept by the agent remains identical to the text protocol's.
+    """
+    request = {
+        key: value for key, value in api_kwargs.items() if key not in _DROPPED_REQUEST_FIELDS
+    }
+    wire: list[dict[str, Any]] = []
+    for index, message in enumerate(request.get("messages") or ()):
+        if not isinstance(message, Mapping):
+            raise ProtocolEncodingError(f"message {index} must be a mapping")
+        role = message.get("role")
+        if role == "system":
+            continue
+        if role == "tool":
+            wire.append({
+                "role": "tool",
+                "tool_call_id": str(message.get("tool_call_id") or f"call_{index}"),
+                "content": stringify_content(message.get("content")),
+            })
+            continue
+        if role == "user":
+            wire.append({"role": "user", "content": stringify_content(message.get("content"))})
+            continue
+        if role != "assistant":
+            raise ProtocolEncodingError(
+                f"message {index} has unsupported role {role!r}"
+            )
+        content = _THINK_RE.sub("", stringify_content(message.get("content"))).strip()
+        if not content:
+            # moonshot rejects assistant turns with empty content ("must not
+            # be empty", 2026-07-25) — an all-<think> turn cut off by
+            # max_tokens strips to nothing. Keep a factual placeholder.
+            content = "(reasoning elided; no tool call was issued)"
+        out: dict[str, Any] = {"role": "assistant", "content": content}
+        calls = []
+        for ci, tool_call in enumerate(message.get("tool_calls") or ()):
+            function = _field(tool_call, "function", {})
+            name = _field(function, "name", "")
+            if not isinstance(name, str) or not name.strip():
+                raise ProtocolEncodingError("structured tool call is missing function.name")
+            arguments = _field(function, "arguments", "{}")
+            if not isinstance(arguments, str):
+                arguments = json.dumps(arguments, ensure_ascii=False)
+            calls.append({
+                "id": str(_field(tool_call, "id") or f"call_{index}_{ci}"),
+                "type": "function",
+                "function": {"name": name, "arguments": arguments},
+            })
+        if calls:
+            out["tool_calls"] = calls
+        wire.append(out)
+    request["messages"] = wire
+    request["tools"] = list(tools_schema)
+    return request
+
+
 def wire_payload_sha256(api_kwargs: Mapping[str, Any]) -> str:
     """Hash an already encoded provider request using canonical JSON."""
 

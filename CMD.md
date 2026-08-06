@@ -103,10 +103,15 @@ export DISTILL_DATASET=$PWD/data/math-v0-unsolved-20260722
 `pgrep -f run_math_rounds\|run_distill_rounds` 确认没有存活实例,**严禁双开**):
 
 ```bash
-# coding 线(e2b.dev,.venv/bin/harbor)。模型可选:默认 deepseek-v4-pro@7,
-# kimi-k3 走 channel 12(同一把 DPSK_API_KEY,07-24 验证;thinking 字段两家通用):
+# coding 线(e2b.dev,.venv/bin/harbor)。模型可选:默认 deepseek-v4-pro@7。
+# kimi-k3 走 channel 12(同一把 DPSK_API_KEY),必须三件套(07-25 血泪):
+#   DISTILL_TEMPERATURE=1(thinking 模式只准 1;thinking off 只准 0.6)
+#   DISTILL_NATIVE_TOOLS=true(kimi 工具调用走服务端特殊 token,不带 tools
+#     参数会被吞成空 content;文本协议教不会)
+#   新模型放量前必跑 configs/smoke-kimi-native-e2b.yaml 同款单题冒烟
 DISTILL_CAMPAIGN=v2.4 DISTILL_DATASET=$PWD/data/coding-v2.4-unsolved-20260724 \
   DISTILL_MODEL=kimi-k3 DISTILL_CHANNEL=12 DISTILL_MODEL_TAG=kimi \
+  DISTILL_TEMPERATURE=1 DISTILL_NATIVE_TOOLS=true \
   PYTHONPATH=$PWD nohup tools/run_distill_rounds.sh 1 3 \
   > jobs/distill-v2.4-rounds-driver.log 2>&1 & disown
 # math 线(SG,.venv-aliyun/bin/harbor,base=configs/distill-math-round1-sg.yaml):

@@ -78,6 +78,78 @@ MCP_TOOLS = frozenset(
 ALLOWED_TOOLS = CORE_TOOLS | MCP_TOOLS
 MAX_TOOL_RESULT_CHARS = 32_000
 
+
+def build_native_tools_schema() -> list[dict]:
+    """OpenAI function schemas for the union-v1 tool surface.
+
+    Only used in native-tools mode (kimi-k3 etc.); the text protocol never
+    sends schemas. Task/TodoWrite are omitted: they are acknowledge-only
+    shims for replaying old training traces, not real capabilities.
+    """
+    _VALID_TYPES = {"string", "number", "integer", "boolean", "array",
+                    "object", "null"}
+
+    def sanitize(node):
+        """Moonshot-flavored schema validation rejects union types
+        (["string", "null"]) and non-standard scalars ("any") — collapse
+        unions to the first non-null member and map anything unknown to
+        "string". An "array" property also needs an items schema."""
+        if isinstance(node, list):
+            return [sanitize(x) for x in node]
+        if not isinstance(node, dict):
+            return node
+        out = {}
+        for k, v in node.items():
+            if k == "type":
+                if isinstance(v, list):
+                    v = next((t for t in v if t != "null"), "string")
+                if v not in _VALID_TYPES:
+                    v = "string"
+            out[k] = sanitize(v)
+        if out.get("type") == "array" and "items" not in out:
+            out["items"] = {"type": "string"}
+        return out
+
+    def fn(name: str, description: str, properties: dict, required: list) -> dict:
+        return {"type": "function", "function": {
+            "name": name, "description": description,
+            "parameters": {"type": "object", "properties": sanitize(properties),
+                           "required": required}}}
+
+    schema = [
+        fn("Bash", "Run a shell command in the task environment.",
+           {"command": {"type": "string"},
+            "timeout": {"type": "integer",
+                        "description": "timeout in milliseconds (default 300000)"}},
+           ["command"]),
+        fn("Read", "Read a file; returns cat -n numbered lines.",
+           {"file_path": {"type": "string"}}, ["file_path"]),
+        fn("Write", "Create or overwrite a file with the given content.",
+           {"file_path": {"type": "string"}, "content": {"type": "string"}},
+           ["file_path", "content"]),
+        fn("Edit",
+           "Replace old_string with new_string in a file. old_string must "
+           "match exactly and be unique unless replace_all is true.",
+           {"file_path": {"type": "string"}, "old_string": {"type": "string"},
+            "new_string": {"type": "string"}, "replace_all": {"type": "boolean"}},
+           ["file_path", "old_string", "new_string"]),
+        fn("Glob", "List files matching a glob pattern under a directory.",
+           {"pattern": {"type": "string"}, "path": {"type": "string"}},
+           ["pattern"]),
+        fn("Grep", "Search file contents with a regex (ripgrep).",
+           {"pattern": {"type": "string"}, "path": {"type": "string"}},
+           ["pattern"]),
+    ]
+    mcp = json.loads(
+        (Path(__file__).resolve().parent / "lean_mcp_tools.json").read_text())
+    for tool in mcp:
+        name = MCP_PREFIX + tool["name"]
+        if name not in MCP_TOOLS:
+            continue  # only advertise what the decode allowlist accepts
+        schema.append(fn(name, tool.get("description", ""),
+                         tool.get("properties") or {}, tool.get("required") or []))
+    return schema
+
 # Compaction prompts — same semantics as terminus-2's handoff summarization
 # and mainline V2's context_compaction trace event.
 HANDOFF_SUMMARY_PROMPT = (
@@ -108,6 +180,16 @@ CONTINUATION_TEMPLATE = (
     "whole file, never reformat read-only lines. Handoff summary from the "
     "previous session:\n\n{summary}"
 )
+# Some models answer the continuation prompt with a summary of their own and
+# no tool call (deepseek on repo smoke, 2026-08-05: 89 calls of budget thrown
+# away one turn after a compaction). One nudge per compaction: a repeat
+# no-tool reply is then accepted as a genuine final answer.
+POST_COMPACTION_NUDGE_PROMPT = (
+    "That reply contained no tool call, so nothing was executed. Your "
+    "previous edits are already saved in the task file. If the task is "
+    "genuinely complete, say so briefly; otherwise continue working now — "
+    "re-read the task file and call the next tool."
+)
 
 
 class QwenNativeAgent(BaseAgent):
@@ -132,6 +214,7 @@ class QwenNativeAgent(BaseAgent):
         extra_headers: dict[str, str] | None = None,
         save_transcript: bool = False,
         extra_request_fields: dict | None = None,
+        native_tools: bool = False,
         **kwargs,
     ):
         super().__init__(logs_dir, model_name, *args, **kwargs)
@@ -158,6 +241,12 @@ class QwenNativeAgent(BaseAgent):
         self._summary_max_tokens = int(summary_max_tokens)
         self._save_transcript = bool(save_transcript)
         self._extra_request_fields = dict(extra_request_fields or {})
+        # Native OpenAI function calling (kimi-k3 etc.): the serving stack
+        # owns the tool grammar, so requests must carry `tools` and history
+        # must stay structured. The logical transcript is unchanged — only
+        # the wire encoding differs (codec.encode_request_native).
+        self._native_tools = bool(native_tools)
+        self._tools_schema = build_native_tools_schema() if self._native_tools else None
 
     @staticmethod
     def name() -> str:
@@ -447,6 +536,7 @@ class QwenNativeAgent(BaseAgent):
         last_prompt_tokens = 0
         n_compactions = 0
         n_truncation_nudges = 0
+        post_compaction_nudge = False
         stop_reason = "final_answer"
         async with httpx.AsyncClient(timeout=self._request_timeout) as client:
             for call_idx in range(self._max_api_calls):
@@ -463,13 +553,16 @@ class QwenNativeAgent(BaseAgent):
                         client, messages, instruction,
                         last_prompt_tokens, n_compactions, emit)
                     last_prompt_tokens = 0
-                wire = codec.encode_request({
+                    post_compaction_nudge = True
+                api_kwargs = {
                     "model": self.model_name or "code-prover-sft",
                     "messages": messages,
                     "max_tokens": self._max_tokens,
                     "temperature": self._temperature,
                     **self._extra_request_fields,
-                })
+                }
+                wire = (codec.encode_request_native(api_kwargs, self._tools_schema)
+                        if self._native_tools else codec.encode_request(api_kwargs))
                 resp = await self._post_with_retry(client, wire, emit)
                 if resp is None:
                     # Model endpoint unreachable/overloaded: end gracefully so
@@ -517,6 +610,17 @@ class QwenNativeAgent(BaseAgent):
                 })
 
                 if decoded.errors and not decoded.tool_calls:
+                    if self._native_tools:
+                        # An orphan role:"tool" message (id never announced by
+                        # the assistant) is rejected by native-tools servers;
+                        # surface the violation as plain user feedback instead.
+                        messages.append({
+                            "role": "user",
+                            "content": "\n".join(
+                                json.dumps(e.as_dict(), ensure_ascii=False)
+                                for e in decoded.errors),
+                        })
+                        continue
                     for i, err in enumerate(decoded.errors):
                         guard = codec.protocol_error_recovery_call(
                             err, index=i, call_id_namespace=f"call{call_idx}"
@@ -543,8 +647,19 @@ class QwenNativeAgent(BaseAgent):
                         stop_reason = "truncated_without_tool_call"
                         emit("stop", {"reason": stop_reason})
                         break
+                    if post_compaction_nudge:
+                        # First reply after a compaction with no tool call:
+                        # nudge once before treating it as a final answer.
+                        post_compaction_nudge = False
+                        emit("post_compaction_nudge", {"n": n_compactions})
+                        messages.append({
+                            "role": "user",
+                            "content": POST_COMPACTION_NUDGE_PROMPT,
+                        })
+                        continue
                     break  # final answer turn
                 n_truncation_nudges = 0
+                post_compaction_nudge = False
 
                 for tc in decoded.tool_calls:
                     result = await self._dispatch(environment, tc.name, tc.arguments)
