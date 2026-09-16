@@ -151,6 +151,15 @@ class TokenStream:
         self.loss_mask += [1] * len(token_ids)
         self.logprobs += token_logprobs
 
+    def user_turn_tokens(self, content: str) -> list[int]:
+        """Encode one injected tool-response turn without mutating the stream."""
+        assert content.lstrip().startswith("<tool_response>"), (
+            "mid-episode user turns must be <tool_response>-wrapped"
+        )
+        return self.tokenizer(
+            self.glue.user_turn_text(content), add_special_tokens=False
+        )["input_ids"]
+
     def append_user_turn(self, content: str) -> None:
         """Append tool results / nudges as a user turn (not trained on).
 
@@ -162,11 +171,7 @@ class TokenStream:
         assert self.tokens and self.tokens[-1] == self.glue.im_end_id, (
             "append_user_turn requires the previous turn to end with <|im_end|>"
         )
-        assert content.lstrip().startswith("<tool_response>"), (
-            "mid-episode user turns must be <tool_response>-wrapped"
-        )
-        ids = self.tokenizer(self.glue.user_turn_text(content),
-                             add_special_tokens=False)["input_ids"]
+        ids = self.user_turn_tokens(content)
         self.tokens += ids
         self.loss_mask += [0] * len(ids)
         self.logprobs += [0.0] * len(ids)

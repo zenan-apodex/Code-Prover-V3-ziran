@@ -4,7 +4,7 @@
         --task-root tasks/trainset_problems_300 \
         --out rl/data/trainset_problems_300.jsonl
 
-Each line: {"prompt": <instruction.md text>, "metadata": {"task_name": ...}}.
+Each line includes the exact instruction plus task/verifier SHA-256 provenance.
 miles flags: --input-key prompt --metadata-key metadata.
 The rollout function resolves tests/grade.py etc. from
 --prover-task-root/<task_name> at episode time, so the jsonl stays small.
@@ -15,6 +15,11 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
+
+try:
+    from rl.provenance import prompt_record
+except ModuleNotFoundError:  # direct ``python rl/make_prompt_data.py`` invocation
+    from provenance import prompt_record
 
 
 def main() -> int:
@@ -36,15 +41,12 @@ def main() -> int:
             tests = task_dir / "tests" / "grade.py"
             if not instruction.exists() or not tests.exists():
                 continue
-            text = instruction.read_text(encoding="utf-8")
-            # prompt as a messages list: the SFT ckpt is a multimodal wrapper,
-            # so miles loads an AutoProcessor and its Dataset asserts list-form
-            # prompts. Our generate() ignores non-str prompts and reads
-            # metadata.instruction instead (token stream is built there).
-            f.write(json.dumps({
-                "prompt": [{"role": "user", "content": text}],
-                "metadata": {"task_name": task_dir.name, "instruction": text},
-            }, ensure_ascii=False) + "\n")
+            record = prompt_record(task_dir)
+            instruction_text = record["prompt"]
+            # Preserve messages-list prompts for Miles multimodal processors.
+            record["prompt"] = [{"role": "user", "content": instruction_text}]
+            record["metadata"]["instruction"] = instruction_text
+            f.write(json.dumps(record, ensure_ascii=False) + "\n")
             n += 1
     print(f"wrote {n} prompts -> {out}")
     return 0
