@@ -7,8 +7,11 @@
 # so a human can look.
 #
 # Campaign selection via env (see tools/distill_ops.py):
-#   DISTILL_DATASET   dataset root (default data/coding-v2.1-full-20260721)
-#   DISTILL_CAMPAIGN  label prefix, e.g. v2.2 -> distill-dpsk-v2.2-roundN
+#   DISTILL_DATASET    dataset root (default data/coding-v2.1-full-20260721)
+#   DISTILL_CAMPAIGN   label prefix, e.g. v2.2 -> distill-<tag>-v2.2-roundN
+#   DISTILL_MODEL      model name for generated configs (default deepseek-v4-pro)
+#   DISTILL_CHANNEL    llm-hub channel for that model (default 7; kimi-k3 用 12)
+#   DISTILL_MODEL_TAG  job/config name tag (default dpsk; kimi-k3 用 kimi)
 #
 # Usage: set -a && source .env && set +a
 #        PYTHONPATH=$PWD nohup tools/run_distill_rounds.sh 2 6 \
@@ -19,6 +22,7 @@ cd "$(dirname "$0")/.."
 FIRST=${1:-2}
 LAST=${2:-6}
 PREFIX="${DISTILL_CAMPAIGN:+$DISTILL_CAMPAIGN-}"
+TAG="${DISTILL_MODEL_TAG:-dpsk}"
 
 for r in $(seq "$FIRST" "$LAST"); do
     label="${PREFIX}round$r"
@@ -26,8 +30,8 @@ for r in $(seq "$FIRST" "$LAST"); do
     python3 tools/distill_ops.py rounds --round "$r" || exit 1
     python3 tools/distill_ops.py config --round "$r" --force || exit 1
     echo "=== $label: harbor run @ $(date -u +%FT%TZ) ==="
-    .venv/bin/harbor run -c "configs/distill-dpsk-$label.yaml" \
-        > "jobs/distill-dpsk-$label-run.log" 2>&1
+    .venv/bin/harbor run -c "configs/distill-$TAG-$label.yaml" \
+        > "jobs/distill-$TAG-$label-run.log" 2>&1
     rc=$?
     echo "=== $label: harbor exited rc=$rc @ $(date -u +%FT%TZ) ==="
     if [ "$rc" -ne 0 ]; then

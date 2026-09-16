@@ -1,0 +1,46 @@
+# math-v0 distillation round 1 (calibration): 5,000 tasks on the internal
+# Aliyun SG cluster (sandboxset zenan-allow-internet, resized 2c/8GiB
+# 2026-07-23; 500 concurrent creates probed OK, 500/500 in 141s).
+# Rounds come from data/math-v0-unsolved-20260722/rounds_assignment.json
+# (seed 20260723, 8 rounds, pools mixed proportionally).
+# MUST run with the pinned venv (py3.12 + e2b==2.23.0):
+#
+#   set -a && source .env && set +a && PYTHONPATH=$PWD \
+#     .venv-aliyun/bin/harbor run -c configs/distill-math-round1-sg.yaml
+#
+# Resume: same job_name + jobs_dir skips completed trials.
+
+job_name: distill-math-v0.1-round1-sg
+jobs_dir: jobs
+n_attempts: 1
+n_concurrent_trials: 500
+# env-start timeout 1800s counts time queued on the create_concurrency
+# semaphore; at 500 trials / 24 create slots the queue tail exceeds it.
+# 3x (=5400s) covers worst-case queueing. Execution timeouts unaffected.
+environment_build_timeout_multiplier: 3
+
+environment:
+  import_path: tools.e2b_env:ACRE2BEnvironment
+  kwargs:
+    generic_template: zenan-allow-internet
+    aliyun_cluster: sg
+    aliyun_image: miromind-sg-registry-vpc.ap-southeast-1.cr.aliyuncs.com/verifiable-ai-lab/code-prover-lean:latest
+    sandbox_timeout_sec: 7200
+    claim_timeout_sec: 540   # platform ALB hard-timeouts creates at ~600s
+    wait_ready_timeout_sec: 540
+
+agents:
+  - import_path: agents.thirdparty_agent:ThirdPartyAgent
+    model_name: deepseek-v4-pro
+    kwargs:
+      api_base: https://llm-hub.apodex.app/v1
+      api_key: $DPSK_API_KEY
+      extra_headers: {"X-Llmhub-Channel": "7"}
+      max_api_calls: 384
+      max_tokens: 16384
+      enable_compaction: false
+      save_transcript: true
+      extra_request_fields: {"thinking": {"type": "enabled"}}
+
+datasets:
+  - path: data/math-v0.1-unsolved-20260725/rounds/round1

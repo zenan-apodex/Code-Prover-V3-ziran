@@ -19,6 +19,10 @@ job_name: distill-dpsk-v1-round1
 jobs_dir: jobs
 n_attempts: 1
 n_concurrent_trials: 500
+# env-start timeout 1800s counts time queued on the create_concurrency
+# semaphore; at 500 trials / 24 create slots the queue tail exceeds it.
+# 3x (=5400s) covers worst-case queueing. Execution timeouts unaffected.
+environment_build_timeout_multiplier: 3
 
 environment:
   import_path: tools.e2b_env:ACRE2BEnvironment

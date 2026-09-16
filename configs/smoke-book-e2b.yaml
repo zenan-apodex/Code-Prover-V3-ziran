@@ -1,0 +1,36 @@
+# book-v1 smoke: 8 random book tasks on e2b.dev with the campaign agent
+# (ThirdPartyAgent + deepseek-v4-pro), validating the books-v1 conversion
+# end to end (spec compiles in-sandbox, verifier grades, transcript saved)
+# before launching distill-book-round1.
+#
+#   set -a && source .env && set +a && PYTHONPATH=$PWD \
+#     .venv/bin/harbor run -c configs/smoke-book-e2b.yaml
+
+job_name: smoke-book-e2b
+jobs_dir: jobs
+n_attempts: 1
+n_concurrent_trials: 8
+
+environment:
+  import_path: tools.e2b_env:ACRE2BEnvironment
+  override_cpus: 4
+  override_memory_mb: 8192
+  kwargs:
+    generic_template: code-prover-lean-eval-4c8g
+    sandbox_timeout_sec: 7200
+
+agents:
+  - import_path: agents.thirdparty_agent:ThirdPartyAgent
+    model_name: deepseek-v4-pro
+    kwargs:
+      api_base: https://llm-hub.apodex.app/v1
+      api_key: $DPSK_API_KEY
+      extra_headers: {"X-Llmhub-Channel": "7"}
+      max_api_calls: 384
+      max_tokens: 16384
+      enable_compaction: false
+      save_transcript: true
+      extra_request_fields: {"thinking": {"type": "enabled"}}
+
+datasets:
+  - path: data/book-v1-20260731/rounds/smoke8

@@ -1,0 +1,48 @@
+# book-v1 distillation, JB chain base (round 1, split with SG round2).
+# Dataset: data/book-v1.1-unsolved-20260801 (books-v1 textbook theorems, 10,901 specs,
+# seed 20260731, rounds 5000/5000/901). Split-backend with the SG chain
+# (round2). MUST run with the pinned venv (py3.12 + e2b==2.23.0):
+#
+#   set -a && source .env && set +a && \
+#   DISTILL_DATASET=$PWD/data/book-v1.1-unsolved-20260801 LABEL_PREFIX=distill-book \
+#     PYTHONPATH=$PWD nohup tools/run_math_rounds_on.sh \
+#     configs/distill-book-v1.1-round1-jb.yaml round1 .venv-aliyun/bin/harbor 1 3 \
+#     > jobs/distill-book-jb-chain.log 2>&1 & disown
+#
+# Resume: same job_name + jobs_dir skips completed trials.
+
+job_name: distill-book-v1.1-round1-jb
+jobs_dir: jobs
+n_attempts: 1
+n_concurrent_trials: 500
+# env-start timeout 1800s counts time queued on the create_concurrency
+# semaphore; at 500 trials / 24 create slots the queue tail exceeds it.
+environment_build_timeout_multiplier: 3
+
+environment:
+  import_path: tools.e2b_env:ACRE2BEnvironment
+  kwargs:
+    generic_template: zenan-no-internet
+    aliyun_cluster: jb
+    aliyun_image: apodex-sandbox-johor-registry-vpc.ap-southeast-8.cr.aliyuncs.com/math-rl/code-prover-lean:latest
+    sandbox_timeout_sec: 7200
+    claim_timeout_sec: 540   # platform ALB hard-timeouts creates at ~600s
+    wait_ready_timeout_sec: 540
+    # gate concurrent CREATES (JB stampede fix, 2026-07-23)
+    create_concurrency: 24
+
+agents:
+  - import_path: agents.thirdparty_agent:ThirdPartyAgent
+    model_name: deepseek-v4-pro
+    kwargs:
+      api_base: https://llm-hub.apodex.app/v1
+      api_key: $DPSK_API_KEY
+      extra_headers: {"X-Llmhub-Channel": "7"}
+      max_api_calls: 384
+      max_tokens: 16384
+      enable_compaction: false
+      save_transcript: true
+      extra_request_fields: {"thinking": {"type": "enabled"}}
+
+datasets:
+  - path: data/book-v1.1-unsolved-20260801/rounds/round1

@@ -34,6 +34,14 @@ _TOOL_CALL_RE = re.compile(
 _OPEN_TOOL_CALL_RE = re.compile(r"<tool_call>", flags=re.IGNORECASE)
 _CLOSE_TOOL_CALL_RE = re.compile(r"</tool_call>", flags=re.IGNORECASE)
 _THINK_RE = re.compile(r"<think>.*?</think>", flags=re.DOTALL)
+_QWEN_FUNCTION_RE = re.compile(
+    r"^\s*<function=([A-Za-z_][A-Za-z0-9_.:-]*)>\s*(.*?)\s*</function>\s*$",
+    flags=re.DOTALL,
+)
+_QWEN_PARAMETER_RE = re.compile(
+    r"<parameter=([A-Za-z_][A-Za-z0-9_.:-]*)>\s*(.*?)\s*</parameter>",
+    flags=re.DOTALL,
+)
 
 
 class ProtocolEncodingError(ValueError):
@@ -209,6 +217,69 @@ def encode_request(api_kwargs: Mapping[str, Any]) -> dict[str, Any]:
     return request
 
 
+def encode_request_native(
+    api_kwargs: Mapping[str, Any], tools_schema: Sequence[Mapping[str, Any]]
+) -> dict[str, Any]:
+    """OpenAI function-calling wire form for models whose serving stack owns
+    the tool grammar (kimi-k3: tool calls ride dedicated special tokens, and
+    without a ``tools`` parameter the server drops them and truncates —
+    2026-07-25). History stays structured; ``<think>`` blocks are stripped
+    from replayed assistant turns (reasoning is never re-sent); the logical
+    transcript kept by the agent remains identical to the text protocol's.
+    """
+    request = {
+        key: value for key, value in api_kwargs.items() if key not in _DROPPED_REQUEST_FIELDS
+    }
+    wire: list[dict[str, Any]] = []
+    for index, message in enumerate(request.get("messages") or ()):
+        if not isinstance(message, Mapping):
+            raise ProtocolEncodingError(f"message {index} must be a mapping")
+        role = message.get("role")
+        if role == "system":
+            continue
+        if role == "tool":
+            wire.append({
+                "role": "tool",
+                "tool_call_id": str(message.get("tool_call_id") or f"call_{index}"),
+                "content": stringify_content(message.get("content")),
+            })
+            continue
+        if role == "user":
+            wire.append({"role": "user", "content": stringify_content(message.get("content"))})
+            continue
+        if role != "assistant":
+            raise ProtocolEncodingError(
+                f"message {index} has unsupported role {role!r}"
+            )
+        content = _THINK_RE.sub("", stringify_content(message.get("content"))).strip()
+        if not content:
+            # moonshot rejects assistant turns with empty content ("must not
+            # be empty", 2026-07-25) — an all-<think> turn cut off by
+            # max_tokens strips to nothing. Keep a factual placeholder.
+            content = "(reasoning elided; no tool call was issued)"
+        out: dict[str, Any] = {"role": "assistant", "content": content}
+        calls = []
+        for ci, tool_call in enumerate(message.get("tool_calls") or ()):
+            function = _field(tool_call, "function", {})
+            name = _field(function, "name", "")
+            if not isinstance(name, str) or not name.strip():
+                raise ProtocolEncodingError("structured tool call is missing function.name")
+            arguments = _field(function, "arguments", "{}")
+            if not isinstance(arguments, str):
+                arguments = json.dumps(arguments, ensure_ascii=False)
+            calls.append({
+                "id": str(_field(tool_call, "id") or f"call_{index}_{ci}"),
+                "type": "function",
+                "function": {"name": name, "arguments": arguments},
+            })
+        if calls:
+            out["tool_calls"] = calls
+        wire.append(out)
+    request["messages"] = wire
+    request["tools"] = list(tools_schema)
+    return request
+
+
 def wire_payload_sha256(api_kwargs: Mapping[str, Any]) -> str:
     """Hash an already encoded provider request using canonical JSON."""
 
@@ -323,6 +394,50 @@ def _structured_payload(tool_call: object) -> dict[str, Any]:
     }
 
 
+def _qwen_function_payload(raw: str) -> tuple[dict[str, Any] | None, ProtocolError | None]:
+    """Decode the native Qwen3.5 function/parameter XML inside a tool tag.
+
+    This is an opt-in compatibility path for checkpoints that retained the
+    Hugging Face Qwen function-call dialect. The union-v1 JSON contract stays
+    strict by default.
+    """
+    match = _QWEN_FUNCTION_RE.fullmatch(raw)
+    if match is None:
+        return None, ProtocolError(
+            code="malformed_qwen_function_xml",
+            message="tool_call is neither union-v1 JSON nor valid Qwen function XML",
+            raw=raw,
+        )
+
+    name, body = match.groups()
+    parameters = list(_QWEN_PARAMETER_RE.finditer(body))
+    if _QWEN_PARAMETER_RE.sub("", body).strip():
+        return None, ProtocolError(
+            code="malformed_qwen_function_xml",
+            message="Qwen function body contains text outside parameter tags",
+            tool_name=name,
+            raw=raw,
+        )
+
+    arguments: dict[str, Any] = {}
+    for parameter in parameters:
+        parameter_name, value_text = parameter.groups()
+        if parameter_name in arguments:
+            return None, ProtocolError(
+                code="duplicate_tool_parameter",
+                message=f"Qwen function repeats parameter {parameter_name!r}",
+                tool_name=name,
+                raw=raw,
+            )
+        value_text = value_text.strip()
+        try:
+            value = json.loads(value_text)
+        except json.JSONDecodeError:
+            value = value_text
+        arguments[parameter_name] = value
+    return {"name": name, "arguments": arguments}, None
+
+
 def decode_assistant(
     *,
     content: Any,
@@ -330,6 +445,7 @@ def decode_assistant(
     structured_tool_calls: Iterable[object] | None = None,
     allowed_tool_names: Iterable[str] | None = None,
     call_id_namespace: str | None = None,
+    accept_qwen_function_xml: bool = False,
 ) -> DecodedAssistant:
     """Decode an SGLang structured response or raw native-tag fallback.
 
@@ -384,14 +500,20 @@ def decode_assistant(
         try:
             payload = json.loads(raw_payload)
         except json.JSONDecodeError as exc:
-            errors.append(
-                ProtocolError(
-                    code="malformed_tool_json",
-                    message=f"tool_call JSON is invalid: {exc.msg}",
-                    raw=raw_payload,
+            if accept_qwen_function_xml:
+                payload, xml_error = _qwen_function_payload(raw_payload)
+                if xml_error is not None:
+                    errors.append(xml_error)
+                    continue
+            else:
+                errors.append(
+                    ProtocolError(
+                        code="malformed_tool_json",
+                        message=f"tool_call JSON is invalid: {exc.msg}",
+                        raw=raw_payload,
+                    )
                 )
-            )
-            continue
+                continue
         decoded, error = _decoded_call(
             payload,
             index=index,

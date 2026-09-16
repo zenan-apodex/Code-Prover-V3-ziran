@@ -36,7 +36,10 @@ import subprocess
 import sys
 import tempfile
 
-STANDARD_AXIOMS = {"propext", "Classical.choice", "Quot.sound"}
+# Lean.ofReduceBool/trustCompiler admitted per Zenan 2026-07-25: allows
+# bv_decide / native_decide proofs (kernel trusts compiled evaluation).
+STANDARD_AXIOMS = {"propext", "Classical.choice", "Quot.sound",
+                   "Lean.ofReduceBool", "Lean.trustCompiler"}
 
 # Marker sections the agent IS allowed to edit — matches mainline V2
 # EDITABLE_BENCHMARK_SECTIONS exactly. Note: `import` is READ-ONLY.

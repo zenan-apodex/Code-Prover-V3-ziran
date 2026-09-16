@@ -6,14 +6,14 @@ ad-hoc session scripts, as one repo tool.
     .venv/bin/python tools/distill_ops.py status --job jobs/distill-dpsk-round1 [--total 5000]
     .venv/bin/python tools/distill_ops.py config --round 2 [--rescue]
     .venv/bin/python tools/distill_ops.py collect --jobs jobs/distill-dpsk-round1 jobs/distill-dpsk-round1-rescue \
-        --out data/coding-v2.1-full-20260721/sft/round1.jsonl
+        --out data/coding-v2.1-full-20260721/distilled/round1-solved.jsonl
 
 Dataset layout (all under DATASET, gitignored):
     tasks/                    all 25,880 harbor task dirs (source of truth)
     rounds_assignment.json    seeded 6-round split (seed 20260721)
     rounds/round<N>/          materialized per-round datasets
     rounds/<round>_rescue/    tasks of a round that did not finish cleanly
-    sft/                      collected transcripts -> SFT jsonl exports
+    distilled/round<N>-solved.jsonl   collected transcripts -> SFT jsonl exports
 """
 
 from __future__ import annotations
@@ -33,6 +33,29 @@ REPO = Path(__file__).resolve().parent.parent
 DATASET = Path(os.environ.get("DISTILL_DATASET",
                               str(REPO / "data" / "coding-v2.1-full-20260721")))
 CAMPAIGN = os.environ.get("DISTILL_CAMPAIGN", "")
+# Model selection for generated configs (all via the llm-hub gateway, same
+# $DPSK_API_KEY): DISTILL_MODEL + its gateway channel + the job/config name
+# tag, e.g. kimi-k3 -> DISTILL_MODEL=kimi-k3 DISTILL_CHANNEL=12
+# DISTILL_MODEL_TAG=kimi (job names become distill-kimi-<label>).
+MODEL = os.environ.get("DISTILL_MODEL", "deepseek-v4-pro")
+CHANNEL = os.environ.get("DISTILL_CHANNEL", "7")
+MODEL_TAG = os.environ.get("DISTILL_MODEL_TAG", "dpsk")
+# kimi-k3 hard-rejects any temperature != 1 ("only 1 is allowed",
+# 2026-07-25: 2k concurrent 400s tripped the gateway error-storm breaker).
+TEMPERATURE = os.environ.get("DISTILL_TEMPERATURE", "0.6")
+# kimi-k3 emits tool calls as serving-level special tokens: without a
+# `tools` parameter the server swallows them (empty content, truncated).
+# true -> agent sends OpenAI function schemas + structured history.
+NATIVE_TOOLS = os.environ.get("DISTILL_NATIVE_TOOLS", "false")
+# kimi channel rate limit is far below dpsk's: 2x1024 concurrent trials
+# 429-stormed through the agent backoff (1.6k dead trials, 2026-07-25).
+CONCURRENCY = os.environ.get("DISTILL_CONCURRENCY", "1024")
+# Compaction (summarize-and-restart on the context soft limit). Off for the
+# single-file math/book campaigns: `collect` drops compacted trials by default
+# (non-linear context). Repo-flavor tasks routinely outgrow the window, so
+# repo campaigns set true — and must then collect with --keep-compacted, or a
+# task solved only after compaction leaves the carve pool with no SFT sample.
+COMPACTION = os.environ.get("DISTILL_COMPACTION", "false")
 
 sys.path.insert(0, str(REPO))
 from tools.dataset import write_manifest  # noqa: E402
@@ -258,12 +281,12 @@ CONFIG_TEMPLATE = """\
 # The company team is shared: sandboxes can be killed by others and creation
 # can fail under contention — the env retries creation, and `distill_ops
 # rescue` re-runs whatever still dies.
-job_name: distill-dpsk-{label}
+job_name: distill-{tag}-{label}
 jobs_dir: jobs
 n_attempts: 1
 # 1024 per Zenan 2026-07-22 (512 validated on round1 rescues; gateway share
 # is the real throughput cap; sandboxes bill while waiting on 429 backoff).
-n_concurrent_trials: 1024
+n_concurrent_trials: {concurrency}
 
 environment:
   import_path: tools.e2b_env:ACRE2BEnvironment
@@ -276,17 +299,21 @@ environment:
 
 agents:
   - import_path: agents.thirdparty_agent:ThirdPartyAgent
-    model_name: deepseek-v4-pro
+    model_name: {model}
     kwargs:
       api_base: https://llm-hub.apodex.app/v1
+      # generic llm-hub key (works across channels; kimi-k3@12 验证过)
       api_key: $DPSK_API_KEY
-      extra_headers: {{"X-Llmhub-Channel": "7"}}
+      extra_headers: {{"X-Llmhub-Channel": "{channel}"}}
+      temperature: {temperature}
+      native_tools: {native_tools}
       max_api_calls: 384
       max_tokens: 16384
-      enable_compaction: false
+      enable_compaction: {compaction}
       save_transcript: true
       # thinking is gateway-default-on; pinned so a default flip can never
-      # silently drop the CoT we distill on.
+      # silently drop the CoT we distill on. kimi-k3 也接受此字段
+      # (07-24 验证:reasoning_content 正常返回)。
       extra_request_fields: {{"thinking": {{"type": "enabled"}}}}
 
 datasets:
@@ -300,11 +327,16 @@ def cmd_config(args) -> int:
         + (f"-{args.suffix}" if args.suffix else "")
     ds = DATASET / "rounds" / (f"round{args.round}_rescue" if args.rescue
                                else f"round{args.round}")
-    out = REPO / "configs" / f"distill-dpsk-{label}.yaml"
+    out = REPO / "configs" / f"distill-{MODEL_TAG}-{label}.yaml"
     if out.exists() and not args.force:
         print(f"FATAL: {out} exists — pass --force to overwrite", file=sys.stderr)
         return 1
-    out.write_text(CONFIG_TEMPLATE.format(label=label, dataset=ds.relative_to(REPO)))
+    out.write_text(CONFIG_TEMPLATE.format(label=label, dataset=ds.relative_to(REPO),
+                                          model=MODEL, channel=CHANNEL,
+                                          tag=MODEL_TAG, temperature=TEMPERATURE,
+                                          native_tools=NATIVE_TOOLS,
+                                          concurrency=CONCURRENCY,
+                                          compaction=COMPACTION))
     print(f"wrote {out}")
     return 0
 

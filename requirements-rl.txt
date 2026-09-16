@@ -1,0 +1,6 @@
+# Direct E2B backend used by rl/sandbox.py. Keep this exact: the async envd
+# client API is part of the rollout runtime contract.
+e2b==2.34.0
+# Harbor is intentionally excluded from the main RL environment. The RL
+# runtime image exposes its isolated installation through
+# /opt/harbor-0.20.0/bin/python and /usr/local/bin/harbor.
