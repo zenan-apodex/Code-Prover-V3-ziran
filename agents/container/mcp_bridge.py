@@ -15,13 +15,15 @@ from __future__ import annotations
 
 import json
 import os
+import select
 import socket
 import subprocess
 import sys
 import threading
+import time
 
 SOCK = "/tmp/lean-mcp-bridge.sock"
-MCP_CMD = ["/usr/local/bin/lean-mcp"]
+MCP_CMD = [os.environ.get("LEAN_MCP_BIN", "/usr/local/bin/lean-lsp-mcp")]
 CALL_TIMEOUT = 600.0
 
 
@@ -29,7 +31,7 @@ class McpSession:
     def __init__(self) -> None:
         self.proc = subprocess.Popen(
             MCP_CMD, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-            stderr=subprocess.DEVNULL, text=True, bufsize=1,
+            stderr=subprocess.DEVNULL, bufsize=0, cwd="/task",
         )
         self.lock = threading.Lock()
         self.next_id = 0
@@ -42,7 +44,7 @@ class McpSession:
 
     def _send(self, obj: dict) -> None:
         assert self.proc.stdin
-        self.proc.stdin.write(json.dumps(obj) + "\n")
+        self.proc.stdin.write((json.dumps(obj) + "\n").encode("utf-8"))
         self.proc.stdin.flush()
 
     def _notify(self, method: str, params: dict) -> None:
@@ -53,13 +55,18 @@ class McpSession:
         rid = self.next_id
         self._send({"jsonrpc": "2.0", "id": rid, "method": method, "params": params})
         assert self.proc.stdout
+        deadline = time.monotonic() + CALL_TIMEOUT
         while True:
+            remaining = deadline - time.monotonic()
+            if remaining <= 0 or not select.select([self.proc.stdout], [], [], remaining)[0]:
+                self.proc.kill()
+                raise TimeoutError(f"MCP {method} timed out after {CALL_TIMEOUT:g}s")
             line = self.proc.stdout.readline()
             if not line:
                 raise RuntimeError("MCP server closed its stdout")
             try:
-                msg = json.loads(line)
-            except json.JSONDecodeError:
+                msg = json.loads(line.decode("utf-8"))
+            except (UnicodeDecodeError, json.JSONDecodeError):
                 continue
             if msg.get("id") == rid:
                 if "error" in msg:

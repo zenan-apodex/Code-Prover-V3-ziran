@@ -37,9 +37,26 @@ from pathlib import Path
 
 import httpx
 
-from harbor.agents.base import BaseAgent
-from harbor.environments.base import BaseEnvironment
-from harbor.models.agent.context import AgentContext
+try:
+    from harbor.agents.base import BaseAgent
+    from harbor.environments.base import BaseEnvironment
+    from harbor.models.agent.context import AgentContext
+except ModuleNotFoundError as exc:
+    if exc.name and not exc.name.startswith("harbor"):
+        raise
+
+    class BaseAgent:  # type: ignore[no-redef]
+        """Minimal compatibility base for the Harbor-free RL tool surface."""
+
+        def __init__(self, logs_dir: Path, model_name: str | None = None, *_args, **_kwargs):
+            self.logs_dir = Path(logs_dir)
+            self.model_name = model_name
+
+    class BaseEnvironment:  # type: ignore[no-redef]
+        pass
+
+    class AgentContext:  # type: ignore[no-redef]
+        pass
 
 from . import qwen_native_v1 as codec
 from . import spec_guard
@@ -343,7 +360,34 @@ class QwenNativeAgent(BaseAgent):
             out += f"\n[exit code: {r.return_code}]"
         return out[:MAX_TOOL_RESULT_CHARS] or "(no output)"
 
+    def _path_policy_correction(self, name: str, arguments: dict) -> str | None:
+        """Reject the recurrent `/work` hallucination seen in RL traces.
+
+        Formal tasks state the exact `/task/*.lean` verifier path.  Executing
+        commands against a made-up `/work` copy wastes dozens of turns and can
+        never affect reward, so surface an explicit model-facing correction
+        before any command is run.
+        """
+        target = getattr(self, "_guard_path", None)
+        if not target or not target.startswith("/task/"):
+            return None
+        serialized = json.dumps(arguments, ensure_ascii=False)
+        if re.search(r"(?<![A-Za-z0-9_])/work(?:/|\b)", serialized) is None:
+            return None
+        count = getattr(self, "_path_policy_violations", 0) + 1
+        self._path_policy_violations = count
+        return (
+            f"[PATH POLICY correction #{count}] `{name}` was NOT executed. "
+            f"`/work` is not the task workspace. The verifier reads exactly "
+            f"`{target}` and the Lean project root is `/task`. Stop probing or "
+            "reasoning about `/work`; use the authoritative path above (for "
+            f"example: `cd /task && lake env lean {target}`)."
+        )
+
     async def _dispatch(self, env: BaseEnvironment, name: str, a: dict) -> str:
+        path_correction = self._path_policy_correction(name, a)
+        if path_correction is not None:
+            return path_correction
         if name.startswith(MCP_PREFIX):
             payload = json.dumps({"tool": name[len(MCP_PREFIX):], "arguments": a},
                                  ensure_ascii=False)
@@ -397,9 +441,16 @@ class QwenNativeAgent(BaseAgent):
             return await self._exec_capped(
                 env, f"rg -n --max-count 50 {pat} {root} 2>/dev/null | head -200"
             )
-        if name in ("TodoWrite", "Task"):
-            # Training traces contain these; acknowledge without side effects
-            # (Task subagents are not reproduced in V3).
+        if name == "Task":
+            # The SFT distribution contains Task subagent calls, but V3 does
+            # not reproduce subagents.  A bare "ok" makes the model believe
+            # work happened and then spend turns diagnosing the empty result.
+            return (
+                "Task subagents are unavailable in this environment; no work "
+                "was performed. Continue directly with Read/Edit/Bash or the "
+                "mcp_lean_lsp_* tools."
+            )
+        if name == "TodoWrite":
             return "ok"
         return f"tool {name} is not available"
 

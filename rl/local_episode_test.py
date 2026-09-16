@@ -20,20 +20,15 @@ import httpx
 from rl.generate_with_prover import EpisodeConfig, run_episode
 from rl.sandbox import DockerSandbox
 
-DEFAULT_MODEL = (
-    "/mnt/VerifiableAILab/ziran.yang/models/"
-    "codeprover-20260711-agent-proof-256k-qwen3.6-35b-a3b-ep2"
-)
-
 
 def local_generate_fn(api_base: str, max_new_tokens: int, temperature: float):
     client = httpx.AsyncClient(timeout=600.0)
 
-    async def generate_fn(input_ids: list[int]) -> dict:
+    async def generate_fn(input_ids: list[int], remaining_tokens: int) -> dict:
         resp = await client.post(f"{api_base}/generate", json={
             "input_ids": input_ids,
             "sampling_params": {
-                "max_new_tokens": max_new_tokens,
+                "max_new_tokens": min(max_new_tokens, remaining_tokens),
                 "temperature": temperature,
                 "no_stop_trim": True,
             },
@@ -55,7 +50,7 @@ def local_generate_fn(api_base: str, max_new_tokens: int, temperature: float):
 async def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--task", required=True)
-    ap.add_argument("--model-path", default=DEFAULT_MODEL)
+    ap.add_argument("--model-path", required=True)
     ap.add_argument("--api-base", default="http://127.0.0.1:8000")
     ap.add_argument("--image", default="lizenan1995/code-prover-lean:latest")
     ap.add_argument("--max-turns", type=int, default=40)

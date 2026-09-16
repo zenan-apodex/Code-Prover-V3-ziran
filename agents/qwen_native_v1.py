@@ -34,6 +34,14 @@ _TOOL_CALL_RE = re.compile(
 _OPEN_TOOL_CALL_RE = re.compile(r"<tool_call>", flags=re.IGNORECASE)
 _CLOSE_TOOL_CALL_RE = re.compile(r"</tool_call>", flags=re.IGNORECASE)
 _THINK_RE = re.compile(r"<think>.*?</think>", flags=re.DOTALL)
+_QWEN_FUNCTION_RE = re.compile(
+    r"^\s*<function=([A-Za-z_][A-Za-z0-9_.:-]*)>\s*(.*?)\s*</function>\s*$",
+    flags=re.DOTALL,
+)
+_QWEN_PARAMETER_RE = re.compile(
+    r"<parameter=([A-Za-z_][A-Za-z0-9_.:-]*)>\s*(.*?)\s*</parameter>",
+    flags=re.DOTALL,
+)
 
 
 class ProtocolEncodingError(ValueError):
@@ -386,6 +394,50 @@ def _structured_payload(tool_call: object) -> dict[str, Any]:
     }
 
 
+def _qwen_function_payload(raw: str) -> tuple[dict[str, Any] | None, ProtocolError | None]:
+    """Decode the native Qwen3.5 function/parameter XML inside a tool tag.
+
+    This is an opt-in compatibility path for checkpoints that retained the
+    Hugging Face Qwen function-call dialect. The union-v1 JSON contract stays
+    strict by default.
+    """
+    match = _QWEN_FUNCTION_RE.fullmatch(raw)
+    if match is None:
+        return None, ProtocolError(
+            code="malformed_qwen_function_xml",
+            message="tool_call is neither union-v1 JSON nor valid Qwen function XML",
+            raw=raw,
+        )
+
+    name, body = match.groups()
+    parameters = list(_QWEN_PARAMETER_RE.finditer(body))
+    if _QWEN_PARAMETER_RE.sub("", body).strip():
+        return None, ProtocolError(
+            code="malformed_qwen_function_xml",
+            message="Qwen function body contains text outside parameter tags",
+            tool_name=name,
+            raw=raw,
+        )
+
+    arguments: dict[str, Any] = {}
+    for parameter in parameters:
+        parameter_name, value_text = parameter.groups()
+        if parameter_name in arguments:
+            return None, ProtocolError(
+                code="duplicate_tool_parameter",
+                message=f"Qwen function repeats parameter {parameter_name!r}",
+                tool_name=name,
+                raw=raw,
+            )
+        value_text = value_text.strip()
+        try:
+            value = json.loads(value_text)
+        except json.JSONDecodeError:
+            value = value_text
+        arguments[parameter_name] = value
+    return {"name": name, "arguments": arguments}, None
+
+
 def decode_assistant(
     *,
     content: Any,
@@ -393,6 +445,7 @@ def decode_assistant(
     structured_tool_calls: Iterable[object] | None = None,
     allowed_tool_names: Iterable[str] | None = None,
     call_id_namespace: str | None = None,
+    accept_qwen_function_xml: bool = False,
 ) -> DecodedAssistant:
     """Decode an SGLang structured response or raw native-tag fallback.
 
@@ -447,14 +500,20 @@ def decode_assistant(
         try:
             payload = json.loads(raw_payload)
         except json.JSONDecodeError as exc:
-            errors.append(
-                ProtocolError(
-                    code="malformed_tool_json",
-                    message=f"tool_call JSON is invalid: {exc.msg}",
-                    raw=raw_payload,
+            if accept_qwen_function_xml:
+                payload, xml_error = _qwen_function_payload(raw_payload)
+                if xml_error is not None:
+                    errors.append(xml_error)
+                    continue
+            else:
+                errors.append(
+                    ProtocolError(
+                        code="malformed_tool_json",
+                        message=f"tool_call JSON is invalid: {exc.msg}",
+                        raw=raw_payload,
+                    )
                 )
-            )
-            continue
+                continue
         decoded, error = _decoded_call(
             payload,
             index=index,
