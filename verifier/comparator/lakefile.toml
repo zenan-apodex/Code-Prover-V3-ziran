@@ -1,9 +1,12 @@
 name = "CodeProverComparator"
 version = "0.1.0"
-defaultTargets = ["codeprover_comparator", "codeprover_targets", "lean4export"]
+defaultTargets = ["codeprover_comparator", "codeprover_targets", "lean4export", "CodeProverCompile"]
 
 [[lean_lib]]
 name = "Comparator"
+
+[[lean_lib]]
+name = "CodeProverCompile"
 
 [[lean_exe]]
 name = "codeprover_comparator"

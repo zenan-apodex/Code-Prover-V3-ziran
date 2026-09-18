@@ -35,7 +35,7 @@ This compatibility adapter is project-maintained, not an upstream release.
 
 Three fresh Docker containers are created sequentially for each candidate:
 
-1. **Challenge:** compile the trusted original source, discover theorem/definition
+1. **Challenge:** compile the trusted task-author baseline, discover theorem/definition
    targets from the elaborated environment, and export their declarations.
 2. **Solution:** compile only the captured candidate source against the baked
    read-only Mathlib cache; export the trusted target list. This container never
@@ -46,14 +46,32 @@ Three fresh Docker containers are created sequentially for each candidate:
 
 All phases use the same module name (`Main`) in separate containers, so private
 and namespaced declarations retain stable names. Targets come from the trusted
-compiled challenge, not a regex or candidate-supplied list. Definition holes are
+compiled challenge, using Lean declaration source ranges to exclude generated lemmas
+and theorems in editable auxiliary sections. Candidates cannot supply the target list.
+Definition holes are
 original definitions whose bodies contain `sorryAx`. Non-hole dependencies,
 preconditions, postconditions, imports, markers and signatures must stay intact.
 The source check uses **byte-exact read-only projections**, including string
 contents. Markerless or malformed original tasks require normalization before use.
 Only changes to trailing EOF CR/LF counts are tolerated outside editable holes;
 internal whitespace, strings, statements and all other protected bytes remain
-exact. The unmodified source bytes are retained and compiled.
+exact. Original and candidate source bytes are retained without modification.
+
+The trusted entrypoint imports `CodeProverCompile` and scopes Lean's matcher cache
+around the protected precondition/postcondition regions. This prevents an earlier
+editable function from changing the generated matcher names used by the fixed
+specification. It restores earlier cache entries before editable code/proof regions,
+so proof tactics can still reuse implementation matchers. Both sides receive the
+same instrumentation. This is pinned Lean 4.28 compiler integration; upstream
+`compareAt`, axiom validation, and independent kernel replay are unchanged.
+
+Some unfinished templates contain auxiliary examples that cannot compile while
+the implementation is still a hole. A task author may provide `challenge_source`
+in the trusted queue catalog, or `--challenge` for the direct backend. The backend
+requires its protected bytes to match the original exactly, saves `challenge.lean`,
+and records its hash and override mode. Queue clients cannot choose this override.
+Overrides require task-author review; the backend does not automatically erase helpers.
+Preflight every trusted challenge before starting model generation.
 Permitted axioms remain `propext`, `Quot.sound`, `Classical.choice`.
 
 Each container is non-root, has a read-only root filesystem, no network or host
@@ -93,7 +111,14 @@ Add to the existing prover arguments:
 
 Concurrency is per rollout process; plan CPU/RAM for the aggregate across workers.
 A shadow run keeps the legacy reward and records the comparator verdict and any
-disagreement. Unavailable comparator results have `comparator_available=0` and
+disagreement. Compiler child exit codes, elapsed time, peak RSS, and available cgroup memory
+counters are recorded for diagnosing runtime failures. A candidate compiler killed
+by its container's OOM controller is a `solution_memory_limit` rejection under the
+fixed verification budget. This classification requires SIGKILL plus an increased
+kernel `oom_kill` counter; an unexplained kill remains an infrastructure error.
+Trusted challenge failures are always infrastructure errors. Memory-limit rejection
+means the answer could not be verified within budget, not a mathematical counterexample.
+Unavailable comparator results have `comparator_available=0` and
 no `comparator_accepted` score; they are not counted as proof failures.
 Authoritative `comparator` mode skips the old judge and propagates infrastructure
 failures to the rollout's existing failure/retry mechanism, with no fallback.
@@ -185,6 +210,8 @@ The real suite covers Mathlib oracle positives, namespaced/private declarations,
 Verina-style function/specification pairs, no-op and invalid proofs, an answer
 that redefines `False` through notation while still compiling, a direct
 `sorryAx` dependency, and a candidate attempting to write the immutable project.
+Additional runtime tests cover editable helper removal, matcher reuse across
+protected declarations, and reviewed challenge overrides.
 Unit tests cover strict source integrity, source persistence, shadow disagreement,
 infrastructure handling and cancellation. No generated dataset is changed.
 

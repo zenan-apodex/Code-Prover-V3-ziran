@@ -157,6 +157,114 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                               'targets':result.get('targets'), 'seconds':result['duration_sec']}), flush=True)
             return result
 
+    async def test_editable_auxiliary_theorem_is_not_a_task_target(self):
+        original = MATH.replace('namespace Regression',
+            'namespace Regression\n-- !benchmark @start proof_aux\n'
+            'theorem optional_helper : True := by trivial\n-- !benchmark @end proof_aux')
+        final = original.replace('theorem optional_helper : True := by trivial', '').replace('  sorry', '  simp')
+        result = await self.check(original, final)
+        self.assertTrue(result['accepted'])
+        self.assertNotIn('Regression.optional_helper', result['targets']['theorem_names'])
+
+    async def test_editable_matcher_does_not_change_protected_postcondition(self):
+        original = """import Mathlib
+-- !benchmark @start code_aux
+-- !benchmark @end code_aux
+def f (xs : List Nat) : Nat :=
+  -- !benchmark @start code
+  sorry
+  -- !benchmark @end code
+-- !benchmark @start postcond_aux
+-- !benchmark @end postcond_aux
+def post (xs : List Nat) (r : Nat) : Prop :=
+  r = xs.foldl (fun a x => match a with | 0 => x | n+1 => n+1+x) 0
+-- !benchmark @start proof_aux
+-- !benchmark @end proof_aux
+theorem f_spec (xs : List Nat) : post xs (f xs) := by
+  -- !benchmark @start proof
+  sorry
+  -- !benchmark @end proof
+"""
+        final = original.replace('-- !benchmark @start code_aux',
+            '-- !benchmark @start code_aux\ndef helper (xs : List Nat) : Nat := '
+            'xs.foldl (fun a x => match a with | 0 => x | n+1 => n+1+x) 0')
+        final = final.replace('  sorry', '  helper xs', 1).replace('  sorry', '  rfl')
+        self.assertTrue((await self.check(original, final))['accepted'])
+
+    async def test_proof_can_reuse_implementation_matcher_after_protected_spec(self):
+        original = """import Mathlib
+-- !benchmark @start code_aux
+-- !benchmark @end code_aux
+def select (x : Option Nat) : Nat :=
+  -- !benchmark @start code
+  sorry
+  -- !benchmark @end code
+-- !benchmark @start postcond_aux
+-- !benchmark @end postcond_aux
+def selected (r n : Nat) : Prop := r = n
+-- !benchmark @start proof_aux
+-- !benchmark @end proof_aux
+theorem select_spec (x : Option Nat) : selected (select x) (x.getD 0) := by
+  -- !benchmark @start proof
+  sorry
+  -- !benchmark @end proof
+"""
+        final = original.replace('  sorry', '  match x with | some a => a | none => 0', 1)
+        final = final.replace('  sorry', """  unfold select
+  have hres : (match x with | some a => a | none => 0) = x.getD 0 := by cases x <;> rfl
+  rw [hres]
+  rfl""")
+        self.assertTrue((await self.check(original, final))['accepted'])
+
+    async def test_task_author_challenge_repairs_only_editable_template(self):
+        original = MATH.replace('namespace Regression',
+            '-- !benchmark @start code_aux\ndef unused := missingTemplateHelper\n'
+            '-- !benchmark @end code_aux\nnamespace Regression')
+        challenge = original.replace('def unused := missingTemplateHelper', '')
+        final = challenge.replace('  sorry', '  simp')
+        with tempfile.TemporaryDirectory() as folder:
+            result = await judge(original, final, challenge=challenge,
+                image=os.environ['CODEPROVER_COMPARATOR_TEST_IMAGE'], artifacts=Path(folder)/'proof')
+            self.assertTrue(result['accepted'])
+            self.assertEqual((Path(folder)/'proof/original.lean').read_text(), original)
+            self.assertEqual((Path(folder)/'proof/challenge.lean').read_text(), challenge)
+            self.assertEqual(result['challenge_mode'], 'trusted_override')
+        with tempfile.TemporaryDirectory() as folder:
+            with self.assertRaisesRegex(ComparatorInfrastructureError, 'protected task bytes'):
+                await judge(original, final, challenge=challenge.replace('n + 0 = n', 'True'),
+                    image=os.environ['CODEPROVER_COMPARATOR_TEST_IMAGE'], artifacts=Path(folder)/'proof')
+
+    async def test_candidate_oom_is_distinguished_from_challenge_failure(self):
+        from verifier.comparator import backend
+        original = """import Lean
+-- !benchmark @start proof_aux
+-- !benchmark @end proof_aux
+theorem small : True := by
+  -- !benchmark @start proof
+  sorry
+  -- !benchmark @end proof
+"""
+        final = original.replace('-- !benchmark @start proof_aux',
+            '-- !benchmark @start proof_aux\n#eval IO.println (List.range 100000000).length').replace('  sorry', '  trivial')
+        command = backend._command
+        async def bounded_command(args, **kwargs):
+            args = ['--memory=512m' if a == '--memory=8g' else a for a in args]
+            return await command(args, **kwargs)
+        with patch.object(backend, '_command', bounded_command):
+            result = await self.check(original, final)
+            self.assertFalse(result['accepted'])
+            self.assertEqual(result['reason'], 'solution_memory_limit')
+            with self.assertRaisesRegex(ComparatorInfrastructureError, 'trusted challenge failed'):
+                await self.check(final, final)
+
+    async def test_unexplained_candidate_kill_remains_infrastructure(self):
+        original = MATH.replace('namespace Regression',
+            '-- !benchmark @start proof_aux\n-- !benchmark @end proof_aux\nnamespace Regression')
+        final = original.replace('-- !benchmark @start proof_aux',
+            '-- !benchmark @start proof_aux\n#eval IO.Process.run {cmd := "/bin/sh", args := #["-c", "kill -KILL $PPID"]}').replace('  sorry', '  simp')
+        with self.assertRaisesRegex(ComparatorInfrastructureError, 'solution runtime failed'):
+            await self.check(original, final)
+
     async def test_math_oracle_positive(self):
         result = await self.check(MATH, MATH.replace('  sorry', '  simp'))
         self.assertTrue(result['accepted'])

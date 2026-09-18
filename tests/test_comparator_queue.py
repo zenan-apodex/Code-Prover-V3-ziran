@@ -44,6 +44,26 @@ class QueueTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(judge.call_args.args, (ORIGINAL, SOLUTION))
         self.assertEqual(result['queue_request_id'], directory.name)
 
+    async def test_challenge_override_only_comes_from_trusted_catalog(self):
+        self.service.catalog[digest(ORIGINAL.encode())]['challenge_source'] = SOLUTION
+        client, directory = await self.request()
+        request = json.loads((directory/'request.json').read_text())
+        request['challenge_source'] = ORIGINAL.replace('True', 'False')
+        atomic_json(directory/'request.json', request)
+        judge = AsyncMock(return_value={'accepted': True, 'status': 'accepted'})
+        with patch('verifier.comparator.queue.judge', judge):
+            await self.service.process(directory)
+        self.assertTrue((await client)['accepted'])
+        self.assertEqual(judge.call_args.kwargs['challenge'], SOLUTION)
+
+    async def test_catalog_override_cannot_change_protected_statement(self):
+        atomic_json(self.catalog, {digest(ORIGINAL.encode()): {
+            'source': ORIGINAL, 'tasks': ['trusted'],
+            'challenge_source': ORIGINAL.replace('True', 'False'),
+        }})
+        with self.assertRaisesRegex(ValueError, 'protected task bytes'):
+            Service(self.queue, self.catalog, 'image', 2, 60)
+
     async def test_unknown_original_cannot_be_supplied_by_candidate(self):
         client, directory = await self.request()
         request=json.loads((directory/'request.json').read_text())

@@ -4,6 +4,7 @@ FROM ${BASE_IMAGE}
 USER root
 RUN test "$(cat /task/lean-toolchain)" = 'leanprover/lean4:v4.28.0' && chmod a+rx /root
 COPY bin/ /opt/codeprover/bin/
+COPY lean/ /opt/codeprover/lean/
 COPY phase.py /opt/codeprover/phase.py
 ENV HOME=/tmp
 ENV PATH=/root/.elan/toolchains/leanprover--lean4---v4.28.0/bin:/usr/local/bin:/usr/bin:/bin

@@ -20,6 +20,7 @@ import time
 import uuid
 
 from verifier.comparator.backend import ComparatorInfrastructureError, MAX_SOURCE_BYTES, judge
+from verifier.grade import check_spec_intact
 
 REQUEST_ID = re.compile(r'^[0-9a-f]{32}$')
 
@@ -138,6 +139,9 @@ class Service:
         for key, entry in self.catalog.items():
             if key != digest(entry['source'].encode()):
                 raise ValueError('catalog source hash mismatch')
+            if 'challenge_source' in entry and not check_spec_intact(
+                    entry['source'], entry['challenge_source'], strict_bytes=True).get('ok'):
+                raise ValueError('catalog challenge changed protected task bytes')
         self.image = image
         self.concurrency = concurrency
         self.timeout = timeout
@@ -156,7 +160,9 @@ class Service:
                 raise ValueError('invalid request ID')
             if request['catalog_sha256'] != self.catalog_sha:
                 raise ValueError('task catalog changed')
-            original = self.catalog[request['original_sha256']]['source']
+            entry = self.catalog[request['original_sha256']]
+            original = entry['source']
+            challenge_args = {'challenge': entry['challenge_source']} if 'challenge_source' in entry else {}
             source = read_bytes(directory / 'solution.lean')
             if digest(source) != request['source_sha256']:
                 raise ValueError('candidate source hash mismatch')
@@ -168,7 +174,7 @@ class Service:
             for attempt in range(2):
                 try:
                     verdict = await judge(original, source.decode('utf-8'), image=self.image,
-                        artifacts=directory / ('attempt-' + uuid.uuid4().hex), timeout=self.timeout)
+                        artifacts=directory / ('attempt-' + uuid.uuid4().hex), timeout=self.timeout, **challenge_args)
                     break
                 except asyncio.CancelledError:
                     raise

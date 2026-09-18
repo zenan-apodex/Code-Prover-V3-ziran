@@ -142,7 +142,7 @@ def source_checks(original: str, final: str) -> dict:
 
 
 async def judge(original: str, final: str, *, image: str, artifacts: Path,
-                timeout: int = 1200) -> dict:
+                timeout: int = 1200, challenge: str | None = None) -> dict:
     """Persist source/results, pin a local image ID, and return an independent verdict.
 
     Invalid proofs are rejected. Infrastructure failures raise (also recorded);
@@ -157,10 +157,19 @@ async def judge(original: str, final: str, *, image: str, artifacts: Path,
     (artifacts / 'solution.lean').write_bytes(final.encode())
     details = {'comparator_revision': REVISION, 'lean_version': '4.28.0',
                'source_sha256': hashlib.sha256(final.encode()).hexdigest(),
-               'artifact_dir': str(artifacts), 'status': 'infrastructure_error'}
+               'artifact_dir': str(artifacts), 'status': 'infrastructure_error',
+               'resource_limits': {'memory_bytes': 8 * 1024**3, 'cpus': 4, 'pids': 256}}
     try:
         if max(len(original.encode()), len(final.encode())) > MAX_SOURCE_BYTES:
             raise ComparatorInfrastructureError('source exceeds 2 MiB transport limit')
+        trusted = original if challenge is None else challenge
+        if not check_spec_intact(original, trusted, strict_bytes=True).get('ok'):
+            raise ComparatorInfrastructureError('trusted challenge changed protected task bytes')
+        if len(trusted.encode()) > MAX_SOURCE_BYTES:
+            raise ComparatorInfrastructureError('trusted challenge exceeds source size limit')
+        details['challenge_sha256'] = hashlib.sha256(trusted.encode()).hexdigest()
+        details['challenge_mode'] = 'original' if challenge is None else 'trusted_override'
+        (artifacts / 'challenge.lean').write_bytes(trusted.encode())
         checks = source_checks(original, final)
         details['source_checks'] = checks
         if not all(checks[k] for k in ('spec_intact', 'sorry_free', 'forbidden_free')):
@@ -177,7 +186,7 @@ async def judge(original: str, final: str, *, image: str, artifacts: Path,
             for name in ('challenge', 'solution', 'compare'):
                 (root / name).mkdir(mode=0o755)
             out = artifacts
-            (root / 'challenge/Main.lean').write_bytes(original.encode())
+            (root / 'challenge/Main.lean').write_bytes(trusted.encode())
             (root / 'solution/Main.lean').write_bytes(final.encode())
             async with asyncio.timeout(timeout):
                 code = await _container(image_id, 'challenge', root / 'challenge', out, timeout=timeout)
@@ -190,7 +199,9 @@ async def judge(original: str, final: str, *, image: str, artifacts: Path,
                 (artifacts / 'targets.json').write_text(json.dumps(config, indent=2))
                 (root / 'solution/targets.json').write_text(json.dumps(config))
                 code = await _container(image_id, 'solution', root / 'solution', out, timeout=timeout)
-                if code in (10, 11):
+                if code == 12:
+                    details.update(status='rejected', accepted=False, reason='solution_memory_limit')
+                elif code in (10, 11):
                     details.update(status='rejected', accepted=False, reason='solution_build_or_export')
                 elif code:
                     raise ComparatorInfrastructureError(f'solution runtime failed ({code})')
@@ -222,12 +233,14 @@ def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--original', type=Path, required=True)
     p.add_argument('--solution', type=Path, required=True)
+    p.add_argument('--challenge', type=Path, help='optional task-author baseline; never candidate-supplied')
     p.add_argument('--image', required=True)
     p.add_argument('--artifacts', type=Path, required=True)
     p.add_argument('--timeout', type=int, default=1200)
     args = p.parse_args()
     result = asyncio.run(judge(args.original.read_bytes().decode(), args.solution.read_bytes().decode(),
-                              image=args.image, artifacts=args.artifacts, timeout=args.timeout))
+                              image=args.image, artifacts=args.artifacts, timeout=args.timeout,
+                              challenge=args.challenge.read_bytes().decode() if args.challenge else None))
     print(json.dumps(result, ensure_ascii=False))
     return 0 if result['accepted'] else 1
 

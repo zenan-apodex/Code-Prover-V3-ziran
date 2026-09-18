@@ -17,4 +17,4 @@ lake update
 # export, duplicate declaration rejection, missing/partial declaration handling.
 git -C .lake/packages/lean4export apply --check "$here/export-4.28.patch"
 git -C .lake/packages/lean4export apply "$here/export-4.28.patch"
-lake build codeprover_comparator codeprover_targets lean4export
+lake build codeprover_comparator codeprover_targets lean4export CodeProverCompile
