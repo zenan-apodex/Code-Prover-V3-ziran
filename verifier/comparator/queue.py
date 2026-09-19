@@ -147,6 +147,7 @@ class Service:
         self.timeout = timeout
         self.stopping = asyncio.Event()
         self.active = {}
+        self.completed = set()
         self.started = time.time()
 
     async def process(self, directory: Path):
@@ -195,6 +196,38 @@ class Service:
         result['completed_at'] = time.time()
         atomic_json(directory / 'result.json', result)
 
+    def pending(self, active, capacity):
+        """Scan shared storage off the event loop, skipping known finished requests."""
+        pending = []
+        for directory in sorted((self.queue / 'requests').iterdir()):
+            if len(pending) >= capacity:
+                break
+            if (not REQUEST_ID.fullmatch(directory.name) or directory.name in active
+                    or directory.name in self.completed):
+                continue
+            if not directory.is_dir() or directory.is_symlink():
+                continue
+            if (directory / 'result.json').exists():
+                self.completed.add(directory.name)
+            elif (directory / 'request.json').exists():
+                pending.append(directory)
+        return pending
+
+    async def heartbeat(self):
+        try:
+            while not self.stopping.is_set():
+                await asyncio.to_thread(atomic_json, self.queue / 'service.json', {
+                    'state': 'ready', 'pid': os.getpid(), 'heartbeat': time.time(), 'started': self.started,
+                    'active': len(self.active), 'concurrency': self.concurrency,
+                    'catalog_sha256': self.catalog_sha, 'image_id': self.image})
+                try:
+                    await asyncio.wait_for(self.stopping.wait(), timeout=1)
+                except asyncio.TimeoutError:
+                    pass
+        except BaseException:
+            self.stopping.set()
+            raise
+
     async def run(self):
         self.queue.mkdir(parents=True, exist_ok=True)
         (self.queue / 'requests').mkdir(exist_ok=True)
@@ -206,6 +239,7 @@ class Service:
             loop = asyncio.get_running_loop()
             for sig in (signal.SIGINT, signal.SIGTERM):
                 loop.add_signal_handler(sig, self.stopping.set)
+            heartbeat = asyncio.create_task(self.heartbeat())
             try:
                 while not self.stopping.is_set():
                     for name, task in list(self.active.items()):
@@ -215,26 +249,26 @@ class Service:
                             if not task.cancelled():
                                 task.result()
                             del self.active[name]
-                    for directory in sorted((self.queue / 'requests').iterdir()):
-                        if len(self.active) >= self.concurrency:
-                            break
-                        if (REQUEST_ID.fullmatch(directory.name) and directory.is_dir() and not directory.is_symlink()
-                            and directory.name not in self.active and (directory / 'request.json').exists()
-                            and not (directory / 'result.json').exists()):
-                            self.active[directory.name] = asyncio.create_task(self.process(directory))
-                    atomic_json(self.queue / 'service.json', {
-                        'state': 'ready', 'pid': os.getpid(), 'heartbeat': time.time(), 'started': self.started,
-                        'active': len(self.active), 'concurrency': self.concurrency,
-                        'catalog_sha256': self.catalog_sha, 'image_id': self.image})
+                    capacity = self.concurrency - len(self.active)
+                    if capacity:
+                        pending = await asyncio.to_thread(self.pending, set(self.active), capacity)
+                        if not self.stopping.is_set():
+                            for directory in pending:
+                                self.active[directory.name] = asyncio.create_task(self.process(directory))
                     try:
                         await asyncio.wait_for(self.stopping.wait(), timeout=1)
                     except asyncio.TimeoutError:
                         pass
             finally:
-                for task in self.active.values():
-                    task.cancel()
-                await asyncio.gather(*self.active.values(), return_exceptions=True)
-                atomic_json(self.queue / 'service.json', {'state': 'stopped', 'pid': os.getpid(), 'heartbeat': time.time()})
+                self.stopping.set()
+                try:
+                    # Let any in-flight heartbeat write finish before publishing stopped.
+                    await heartbeat
+                finally:
+                    for task in self.active.values():
+                        task.cancel()
+                    await asyncio.gather(*self.active.values(), return_exceptions=True)
+                    atomic_json(self.queue / 'service.json', {'state': 'stopped', 'pid': os.getpid(), 'heartbeat': time.time()})
 
 
 def main():

@@ -153,6 +153,12 @@ sandboxes must not mount it. A kernel-owned lock prevents duplicate dispatchers.
 The worker supports restart/reclaim after a crash. Stopped/expired requests do not
 silently become valid scores.
 
+Directory discovery runs off the asynchronous event loop. A separate heartbeat
+continues while shared storage is slow, and completed requests are cached to
+avoid probing every old result on each scan. Heartbeat write failures stop the
+service; shutdown waits for an in-flight heartbeat before publishing `stopped`.
+The client freshness limit and request identity checks remain unchanged.
+
 Queue reads retry transient `ESTALE` up to six total attempts (1.55 seconds of
 backoff). `EIO` is retried only after an observed `ESTALE`, including when close
 masks the original read exception. Standalone `EIO`, storage-full and permission

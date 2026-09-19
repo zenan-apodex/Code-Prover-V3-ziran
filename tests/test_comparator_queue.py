@@ -3,6 +3,7 @@ import errno
 import json
 from pathlib import Path
 import tempfile
+import threading
 import time
 import unittest
 from unittest.mock import AsyncMock, patch
@@ -173,5 +174,64 @@ class QueueTests(unittest.IsolatedAsyncioTestCase):
         atomic_json(directory/'result.json', {'id':directory.name,'source_sha256':'wrong',
                     'status':'completed','verdict':{'accepted':True}})
         with self.assertRaises(ComparatorInfrastructureError): await client
+
+    async def test_slow_directory_scan_does_not_stall_heartbeat(self):
+        entered, release = threading.Event(), threading.Event()
+        def blocked_scan(active, capacity):
+            entered.set()
+            if not release.wait(5):
+                raise TimeoutError('test scan was not released')
+            return []
+        with patch.object(self.service, 'pending', blocked_scan), \
+                patch('verifier.comparator.backend._checked', AsyncMock(return_value='image')):
+            runner = asyncio.create_task(self.service.run())
+            try:
+                self.assertTrue(await asyncio.to_thread(entered.wait, 2))
+                initial = healthy(self.queue)['heartbeat']
+                deadline = time.monotonic() + 3
+                while healthy(self.queue)['heartbeat'] <= initial:
+                    self.assertLess(time.monotonic(), deadline)
+                    await asyncio.sleep(.05)
+                self.assertFalse(release.is_set())
+                self.assertFalse(runner.done())
+            finally:
+                self.service.stopping.set()
+                release.set()
+                await asyncio.wait_for(runner, 3)
+        self.assertEqual(json.loads((self.queue/'service.json').read_text())['state'], 'stopped')
+
+    async def test_finished_request_scan_avoids_repeated_filesystem_probes(self):
+        completed = self.queue/'requests'/('a'*32)
+        completed.mkdir()
+        atomic_json(completed/'request.json', {})
+        atomic_json(completed/'result.json', {})
+        self.assertEqual(self.service.pending(set(), 2), [])
+        with patch.object(Path, 'is_dir', side_effect=AssertionError('revisited completed request')):
+            self.assertEqual(self.service.pending(set(), 2), [])
+        pending = self.queue/'requests'/('b'*32)
+        pending.mkdir()
+        atomic_json(pending/'request.json', {})
+        self.assertEqual(self.service.pending(set(), 1), [pending])
+        self.assertEqual(self.service.pending({pending.name}, 1), [])
+
+    async def test_scan_failure_stops_service_and_heartbeat(self):
+        with patch.object(self.service, 'pending', side_effect=OSError(errno.EIO, 'scan failed')), \
+                patch('verifier.comparator.backend._checked', AsyncMock(return_value='image')):
+            with self.assertRaisesRegex(OSError, 'scan failed'):
+                await self.service.run()
+        self.assertTrue(self.service.stopping.is_set())
+        self.assertEqual(json.loads((self.queue/'service.json').read_text())['state'], 'stopped')
+
+    async def test_heartbeat_write_failure_stops_dispatcher(self):
+        def write_status(path, value):
+            if value.get('state') == 'ready':
+                raise OSError(errno.EIO, 'heartbeat write failed')
+            return atomic_json(path, value)
+        with patch('verifier.comparator.queue.atomic_json', side_effect=write_status), \
+                patch('verifier.comparator.backend._checked', AsyncMock(return_value='image')):
+            with self.assertRaisesRegex(OSError, 'heartbeat write failed'):
+                await asyncio.wait_for(self.service.run(), 3)
+        self.assertTrue(self.service.stopping.is_set())
+        self.assertEqual(json.loads((self.queue/'service.json').read_text())['state'], 'stopped')
 
 if __name__ == '__main__': unittest.main()
