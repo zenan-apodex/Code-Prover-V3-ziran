@@ -57,11 +57,11 @@ Only changes to trailing EOF CR/LF counts are tolerated outside editable holes;
 internal whitespace, strings, statements and all other protected bytes remain
 exact. Original and candidate source bytes are retained without modification.
 
-The trusted entrypoint imports `CodeProverCompile` and scopes Lean's matcher cache
+The trusted entrypoint imports `CodeProverCompile` and scopes Lean's matcher and auxiliary lemma caches
 around the protected precondition/postcondition regions. This prevents an earlier
-editable function from changing the generated matcher names used by the fixed
+editable function from changing the generated matcher or proof names used by the fixed
 specification. It restores earlier cache entries before editable code/proof regions,
-so proof tactics can still reuse implementation matchers. Both sides receive the
+so proof tactics can still reuse implementation helpers. Both sides receive the
 same instrumentation. This is pinned Lean 4.28 compiler integration; upstream
 `compareAt`, axiom validation, and independent kernel replay are unchanged.
 
@@ -118,6 +118,8 @@ fixed verification budget. This classification requires SIGKILL plus an increase
 kernel `oom_kill` counter; an unexplained kill remains an infrastructure error.
 Trusted challenge failures are always infrastructure errors. Memory-limit rejection
 means the answer could not be verified within budget, not a mathematical counterexample.
+Malformed challenge or solution exports are infrastructure errors: parsing must
+finish before the comparator can issue a mathematical verdict.
 Unavailable comparator results have `comparator_available=0` and
 no `comparator_accepted` score; they are not counted as proof failures.
 Authoritative `comparator` mode skips the old judge and propagates infrastructure

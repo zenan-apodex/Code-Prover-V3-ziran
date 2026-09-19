@@ -67,9 +67,10 @@ def run (args : List String) : IO UInt32 := do
     | throw <| .userError "Expected config.json challenge.ndjson solution.ndjson"
   let cfg ← IO.ofExcept <| fromJson? (← IO.ofExcept <| Json.parse (← IO.FS.readFile configPath))
   let challenge ← readExport challengePath
-  -- Challenge errors are infrastructure failures, never candidate failures.
+  -- Both exports are produced by the trusted exporter/transport pipeline.
+  -- Unreadable exports provide no mathematical verdict, even on the solution side.
+  let solution ← readExport solutionPath
   try
-    let solution ← readExport solutionPath
     verify cfg challenge solution
   catch e =>
     IO.eprintln e.toString

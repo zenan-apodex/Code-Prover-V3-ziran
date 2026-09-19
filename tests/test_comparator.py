@@ -216,6 +216,44 @@ theorem select_spec (x : Option Nat) : selected (select x) (x.getD 0) := by
   rfl""")
         self.assertTrue((await self.check(original, final))['accepted'])
 
+    async def test_implementation_auxiliary_proof_does_not_change_protected_spec(self):
+        original = """import Mathlib
+-- !benchmark @start code_aux
+-- !benchmark @end code_aux
+def ordered (xs : Array Int) : Bool :=
+  -- !benchmark @start code
+  sorry
+  -- !benchmark @end code
+-- !benchmark @start postcond_aux
+-- !benchmark @end postcond_aux
+def ordered_post (xs : Array Int) (result : Bool) : Prop :=
+  (∀ i, (hi : i < xs.size - 1) → xs[i] ≤ xs[i + 1]) ↔ result
+-- !benchmark @start proof_aux
+-- !benchmark @end proof_aux
+theorem ordered_spec (xs : Array Int) : ordered_post xs (ordered xs) := by
+  -- !benchmark @start proof
+  sorry
+  -- !benchmark @end proof
+"""
+        final = original.replace('  sorry',
+            '  decide (∀ i, (hi : i < xs.size - 1) → xs[i] ≤ xs[i + 1])', 1)
+        final = final.replace('  sorry', '  exact decide_eq_true_iff.symm')
+        self.assertTrue((await self.check(original, final))['accepted'])
+
+    async def test_corrupt_solution_export_is_infrastructure(self):
+        from verifier.comparator import backend
+        container = backend._container
+        async def corrupt_export(image, phase, inputs, outputs, **kwargs):
+            code = await container(image, phase, inputs, outputs, **kwargs)
+            if phase == 'solution' and code == 0:
+                # Model an exporter/transport failure after an otherwise valid proof.
+                with (outputs / 'solution.ndjson').open('a') as stream:
+                    stream.write('not a JSON object\n')
+            return code
+        with patch.object(backend, '_container', corrupt_export):
+            with self.assertRaisesRegex(ComparatorInfrastructureError, 'comparator runtime failed'):
+                await self.check(MATH, MATH.replace('  sorry', '  simp'))
+
     async def test_task_author_challenge_repairs_only_editable_template(self):
         original = MATH.replace('namespace Regression',
             '-- !benchmark @start code_aux\ndef unused := missingTemplateHelper\n'
